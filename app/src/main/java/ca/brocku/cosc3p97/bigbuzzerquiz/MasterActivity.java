@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.IntentFilter;
+import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
@@ -12,6 +13,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MasterActivity extends AppCompatActivity implements WifiP2pBroadcastReceiver.WifiP2pBroadcastListener {
@@ -21,6 +27,9 @@ public class MasterActivity extends AppCompatActivity implements WifiP2pBroadcas
     private WifiP2pBroadcastReceiver receiver;
     private ProgressDialog progressDialog;
     private IntentFilter filter;
+    private List<String> peers = new ArrayList<>();
+    private ArrayAdapter<String> deviceListAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +40,14 @@ public class MasterActivity extends AppCompatActivity implements WifiP2pBroadcas
         receiver = new WifiP2pBroadcastReceiver(manager, channel, this);
         filter = new IntentFilter();
         filter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
+
+        ListView list = (ListView) findViewById(R.id.devicesList);
+        deviceListAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1, android.R.id.text1, peers);
+        list.setAdapter(deviceListAdapter);
+
     }
+
 
     @Override
     public void onResume() {
@@ -93,6 +109,8 @@ public class MasterActivity extends AppCompatActivity implements WifiP2pBroadcas
 
                         }
                     });
+        } else {
+            progressDialog.show();
         }
     }
 
@@ -101,5 +119,21 @@ public class MasterActivity extends AppCompatActivity implements WifiP2pBroadcas
         if (progressDialog.isShowing()) {
             progressDialog.dismiss();
         }
+
+        peers.clear();
+        peers.addAll(getNames(devices));
+        deviceListAdapter.notifyDataSetChanged();
+    }
+
+
+    private ArrayList<String> getNames(WifiP2pDeviceList devices) {
+        ArrayList<String> names = new ArrayList<>();
+
+        for(WifiP2pDevice device : devices.getDeviceList()) {
+            names.add(device.deviceName);
+        }
+
+        return names;
+
     }
 }
