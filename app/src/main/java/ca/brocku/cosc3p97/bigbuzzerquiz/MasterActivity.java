@@ -18,7 +18,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,7 +35,7 @@ public class MasterActivity extends AppCompatActivity implements WifiP2pBroadcas
     private IntentFilter filter;
     private WifiP2pDeviceList deviceList = null;
     private List<String> peers = new ArrayList<>();
-    private ArrayAdapter<String> deviceListAdapter;
+    private DeviceListAdapter deviceListAdapter;
 
 
     @Override
@@ -51,8 +50,7 @@ public class MasterActivity extends AppCompatActivity implements WifiP2pBroadcas
         filter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
 
         ListView list = (ListView) findViewById(R.id.devicesList);
-        deviceListAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, android.R.id.text1, peers);
+        deviceListAdapter = new DeviceListAdapter(this, peers);
         list.setAdapter(deviceListAdapter);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
