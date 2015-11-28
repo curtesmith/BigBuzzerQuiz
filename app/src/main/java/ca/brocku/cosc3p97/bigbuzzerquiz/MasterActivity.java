@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,6 +88,21 @@ public class MasterActivity extends AppCompatActivity implements WifiP2pBroadcas
 
                     @Override
                     public void onFailure(int i) {
+                        String message = "";
+
+                        switch(i) {
+                            case WifiP2pManager.P2P_UNSUPPORTED:
+                                message = "Discovery failed. Device does not support Wi-Fi P2P";
+                                break;
+                            case WifiP2pManager.BUSY:
+                                message = "Discovery failed. The framework is busy. Try again.";
+                                break;
+                            case WifiP2pManager.ERROR:
+                                message = "Discovery failed due to an internal error. Try again.";
+                                break;
+                        }
+
+                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
                         Log.e(TAG, "call to discoverPeers failed, code = " + i);
                     }
                 });
@@ -130,10 +146,34 @@ public class MasterActivity extends AppCompatActivity implements WifiP2pBroadcas
         ArrayList<String> names = new ArrayList<>();
 
         for(WifiP2pDevice device : devices.getDeviceList()) {
-            names.add(device.deviceName);
+            names.add(String.format("%s %s", device.deviceName, convertStatus(device.status)));
         }
 
         return names;
 
+    }
+
+    private String convertStatus(int status) {
+        String result = "";
+
+        switch(status) {
+            case WifiP2pDevice.AVAILABLE:
+                result = "AVAILABLE";
+                break;
+            case WifiP2pDevice.FAILED:
+                result = "FAILED";
+                break;
+            case WifiP2pDevice.INVITED:
+                result = "INVITED";
+                break;
+            case WifiP2pDevice.CONNECTED:
+                result = "CONNECTED";
+                break;
+            case WifiP2pDevice.UNAVAILABLE:
+                result = "UNAVAILABLE";
+                break;
+        }
+
+        return result;
     }
 }
