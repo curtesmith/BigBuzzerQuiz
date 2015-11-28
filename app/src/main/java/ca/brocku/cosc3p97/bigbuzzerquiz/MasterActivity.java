@@ -1,6 +1,10 @@
 package ca.brocku.cosc3p97.bigbuzzerquiz;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.IntentFilter;
+import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.os.Bundle;
@@ -10,10 +14,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class MasterActivity extends AppCompatActivity {
+public class MasterActivity extends AppCompatActivity implements WifiP2pBroadcastReceiver.WifiP2pBroadcastListener {
     private WifiP2pManager manager;
     private Channel channel;
     private static final String TAG = "MasterActivity";
+    private WifiP2pBroadcastReceiver receiver;
+    private ProgressDialog progressDialog;
+    private IntentFilter filter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,7 +28,23 @@ public class MasterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_master);
         manager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
         channel = manager.initialize(this, getMainLooper(), null);
+        receiver = new WifiP2pBroadcastReceiver(manager, channel, this);
+        filter = new IntentFilter();
+        filter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        registerReceiver(receiver, filter);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        unregisterReceiver(receiver);
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -43,6 +66,7 @@ public class MasterActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess() {
                         Log.i(TAG, "call to discoverPeers was successful");
+                        showProgressDialog();
                     }
 
                     @Override
@@ -56,5 +80,26 @@ public class MasterActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+    private void showProgressDialog() {
+        if (progressDialog == null) {
+            progressDialog = ProgressDialog.show(this, "Press back to cancel", "searching for peers", true,
+                    true, new DialogInterface.OnCancelListener() {
+
+                        @Override
+                        public void onCancel(DialogInterface dialog) {
+
+                        }
+                    });
+        }
+    }
+
+    @Override
+    public void onPeersAvailable(WifiP2pDeviceList devices) {
+        if (progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
     }
 }
