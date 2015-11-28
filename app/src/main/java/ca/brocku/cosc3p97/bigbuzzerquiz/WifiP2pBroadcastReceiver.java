@@ -3,7 +3,9 @@ package ca.brocku.cosc3p97.bigbuzzerquiz;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.net.NetworkInfo;
 import android.net.wifi.p2p.WifiP2pDeviceList;
+import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.util.Log;
@@ -17,6 +19,7 @@ public class WifiP2pBroadcastReceiver extends BroadcastReceiver{
 
     public interface WifiP2pBroadcastListener {
         void onPeersAvailable(WifiP2pDeviceList devices);
+        void onConnectionInfoAvailable(WifiP2pInfo info);
     }
 
     public WifiP2pBroadcastReceiver(WifiP2pManager manager, Channel channel, WifiP2pBroadcastListener listener) {
@@ -39,6 +42,24 @@ public class WifiP2pBroadcastReceiver extends BroadcastReceiver{
                         listener.onPeersAvailable(wifiP2pDeviceList);
                     }
                 });
+                break;
+            case WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION:
+                Log.i(TAG, "WIFI P2P CONNECTION CHANGED ACTION intent has been captured");
+                NetworkInfo networkInfo = intent.getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
+
+                if (networkInfo.isConnected()) {
+
+                    // we are connected with the other device, request connection
+                    // info to find group owner I
+                    manager.requestConnectionInfo(channel, new WifiP2pManager.ConnectionInfoListener() {
+                        @Override
+                        public void onConnectionInfoAvailable(WifiP2pInfo info) {
+                            Log.i(TAG, "onConnectionInfoAvailable fired with group owner " + info.groupOwnerAddress);
+                            listener.onConnectionInfoAvailable(info);
+                        }
+                    });
+                }
+                break;
         }
     }
 }

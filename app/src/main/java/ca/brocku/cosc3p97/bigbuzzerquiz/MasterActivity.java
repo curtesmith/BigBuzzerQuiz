@@ -4,8 +4,11 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.IntentFilter;
+import android.net.wifi.WpsInfo;
+import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
+import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.os.Bundle;
@@ -13,8 +16,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -28,6 +34,7 @@ public class MasterActivity extends AppCompatActivity implements WifiP2pBroadcas
     private WifiP2pBroadcastReceiver receiver;
     private ProgressDialog progressDialog;
     private IntentFilter filter;
+    private WifiP2pDeviceList deviceList = null;
     private List<String> peers = new ArrayList<>();
     private ArrayAdapter<String> deviceListAdapter;
 
@@ -41,12 +48,44 @@ public class MasterActivity extends AppCompatActivity implements WifiP2pBroadcas
         receiver = new WifiP2pBroadcastReceiver(manager, channel, this);
         filter = new IntentFilter();
         filter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
+        filter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
 
         ListView list = (ListView) findViewById(R.id.devicesList);
         deviceListAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, android.R.id.text1, peers);
         list.setAdapter(deviceListAdapter);
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                WifiP2pDevice device = getDevice(deviceList, position);
+                WifiP2pConfig config = new WifiP2pConfig();
+                config.deviceAddress = device.deviceAddress;
+                config.wps.setup = WpsInfo.PBC;
+                manager.connect(channel, config, new WifiP2pManager.ActionListener() {
+                    @Override
+                    public void onSuccess() {
+                        showProgressDialog();
+                        Log.i(TAG, "call to connect was successful");
+                    }
 
+                    @Override
+                    public void onFailure(int i) {
+                        Log.e(TAG, "call to connect failed with status: " + WifiP2pHelper.convertFailureStatus(i));
+                    }
+                });
+            }
+        });
+
+    }
+
+
+    private static WifiP2pDevice getDevice(WifiP2pDeviceList list, int position) {
+        List<WifiP2pDevice> l = new ArrayList<>();
+        for (WifiP2pDevice d : list.getDeviceList()) {
+            l.add(d);
+        }
+
+        return l.get(position);
     }
 
 
@@ -117,9 +156,8 @@ public class MasterActivity extends AppCompatActivity implements WifiP2pBroadcas
 
     private void showProgressDialog() {
         if (progressDialog == null) {
-            progressDialog = ProgressDialog.show(this, "Press back to cancel", "searching for peers", true,
+            progressDialog = ProgressDialog.show(this, "Press back to cancel", "Working ...", true,
                     true, new DialogInterface.OnCancelListener() {
-
                         @Override
                         public void onCancel(DialogInterface dialog) {
 
@@ -136,9 +174,37 @@ public class MasterActivity extends AppCompatActivity implements WifiP2pBroadcas
             progressDialog.dismiss();
         }
 
+        refreshDeviceList(devices);
+    }
+
+
+    private void refreshDeviceList(WifiP2pDeviceList devices) {
+        deviceList = devices;
         peers.clear();
         peers.addAll(getNames(devices));
         deviceListAdapter.notifyDataSetChanged();
+    }
+
+
+    @Override
+    public void onConnectionInfoAvailable(WifiP2pInfo info) {
+        if(progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
+
+        if(deviceList == null) {
+            manager.requestPeers(channel, new WifiP2pManager.PeerListListener() {
+                @Override
+                public void onPeersAvailable(WifiP2pDeviceList devices) {
+                    refreshDeviceList(devices);
+                }
+            });
+        }
+
+        ((TextView) findViewById(R.id.groupOwnerFyiTextView))
+                .setText(info.isGroupOwner ? R.string.message_group_owner : R.string.message_not_group_owner);
+
+        ((TextView) findViewById(R.id.groupOwnerTextView)).setText(info.groupOwnerAddress.getHostAddress());
     }
 
 
@@ -146,34 +212,10 @@ public class MasterActivity extends AppCompatActivity implements WifiP2pBroadcas
         ArrayList<String> names = new ArrayList<>();
 
         for(WifiP2pDevice device : devices.getDeviceList()) {
-            names.add(String.format("%s %s", device.deviceName, convertStatus(device.status)));
+            names.add(String.format("%s (%s)", device.deviceName, WifiP2pHelper.convertStatus(device.status)));
         }
 
         return names;
 
-    }
-
-    private String convertStatus(int status) {
-        String result = "";
-
-        switch(status) {
-            case WifiP2pDevice.AVAILABLE:
-                result = "AVAILABLE";
-                break;
-            case WifiP2pDevice.FAILED:
-                result = "FAILED";
-                break;
-            case WifiP2pDevice.INVITED:
-                result = "INVITED";
-                break;
-            case WifiP2pDevice.CONNECTED:
-                result = "CONNECTED";
-                break;
-            case WifiP2pDevice.UNAVAILABLE:
-                result = "UNAVAILABLE";
-                break;
-        }
-
-        return result;
     }
 }

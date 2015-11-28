@@ -1,7 +1,10 @@
 <resources>
-    <string name="app_name">BigBuzzerQuiz</string>
+    <string name="app_name">Big Buzzer Quiz</string>
 
-    <string name="hello_world">Hello world!</string>
+    <string name="group_owner_label">Group Owner Address:</string>
+    <string name="peers_label">Peers:</string>
     <string name="action_settings">Settings</string>
     <string name="action_discover">Discover peers</string>
+    <string name="message_group_owner">You are the group owner</string>
+    <string name="message_not_group_owner">You are not the group owner</string>
 </resources>
