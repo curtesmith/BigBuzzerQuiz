@@ -46,7 +46,7 @@ public class MasterActivity extends AppCompatActivity
         ListView list = (ListView) findViewById(R.id.devicesList);
         deviceListAdapter = new DeviceListAdapter(this, manager, channel, peers);
         list.setAdapter(deviceListAdapter);
-        //deviceListAdapter.registerDataSetObserver(new DeviceListDataSetObserver(this));
+        deviceListAdapter.registerDataSetObserver(new DeviceListDataSetObserver(this));
 
         Button scanWifi = (Button) findViewById(R.id.scanWifiButton);
         scanWifi.setOnClickListener(this);
