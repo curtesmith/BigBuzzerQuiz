@@ -73,37 +73,48 @@ public class DeviceListAdapter extends BaseAdapter {
 
         CheckBox checkBox = (CheckBox) view.findViewById(R.id.deviceNameCheckBox);
         checkBox.setText(peers.get(index).deviceName);
-        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                if(!isChecked) {
-                    return;
-                }
-
-                WifiP2pDevice device = peers.get(index);
-                WifiP2pConfig config = new WifiP2pConfig();
-                config.deviceAddress = device.deviceAddress;
-                config.wps.setup = WpsInfo.PBC;
-
-                manager.connect(channel, config, new WifiP2pManager.ActionListener() {
-                    @Override
-                    public void onSuccess() {
-                        peers.get(index).isConnecting = true;
-                        notifyDataSetChanged();
-                        Log.i(TAG, "call to connect was successful");
-                    }
-
-                    @Override
-                    public void onFailure(int i) {
-                        Log.e(TAG, "call to connect failed with status: " + WifiP2pHelper.convertFailureStatus(i));
-                    }
-                });
-            }
-        });
+        checkBox.setOnCheckedChangeListener(getOnCheckedChangeListener(index));
 
         ((TextView) view.findViewById(R.id.statusTextView)).setText(WifiP2pHelper.convertStatus(peers.get(index).status));
+
         ((ProgressBar) view.findViewById(R.id.progressBar)).setVisibility(peers.get(index).isConnecting ? View.VISIBLE : View.INVISIBLE);
 
         return view;
+    }
+
+    private CompoundButton.OnCheckedChangeListener getOnCheckedChangeListener(final int index) {
+        return new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if (!isChecked) {
+                    return;
+                }
+
+                switch (peers.get(index).status) {
+                    case WifiP2pDevice.AVAILABLE:
+                        WifiP2pDevice device = peers.get(index);
+                        WifiP2pConfig config = new WifiP2pConfig();
+                        config.deviceAddress = device.deviceAddress;
+                        config.wps.setup = WpsInfo.PBC;
+
+                        manager.connect(channel, config, new WifiP2pManager.ActionListener() {
+                            @Override
+                            public void onSuccess() {
+                                peers.get(index).isConnecting = true;
+                                notifyDataSetChanged();
+                                Log.i(TAG, "call to connect was successful");
+                            }
+
+                            @Override
+                            public void onFailure(int i) {
+                                Log.e(TAG, "call to connect failed with status: " + WifiP2pHelper.convertFailureStatus(i));
+                            }
+                        });
+
+                        break;
+                }
+
+            }
+        };
     }
 }

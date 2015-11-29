@@ -1,10 +1,11 @@
 <resources>
     <string name="app_name">Big Buzzer Quiz</string>
 
-    <string name="group_owner_label">Group Owner Address:</string>
+    <string name="message_instructions">You can add players that are in the same Wi-Fi Direct network as you to a Game.</string>
     <string name="peers_label">Peers:</string>
     <string name="action_settings">Settings</string>
     <string name="action_discover">Discover peers</string>
     <string name="message_group_owner">You are the group owner</string>
     <string name="message_not_group_owner">You are not the group owner</string>
+    <string name="button_new_game">Continue</string>
 </resources>

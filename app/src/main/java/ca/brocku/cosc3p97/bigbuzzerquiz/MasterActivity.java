@@ -165,8 +165,6 @@ public class MasterActivity extends AppCompatActivity implements WifiP2pBroadcas
 
         ((TextView) findViewById(R.id.groupOwnerFyiTextView))
                 .setText(info.isGroupOwner ? R.string.message_group_owner : R.string.message_not_group_owner);
-
-        ((TextView) findViewById(R.id.groupOwnerTextView)).setText(info.groupOwnerAddress.getHostAddress());
     }
 
 
