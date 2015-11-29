@@ -34,7 +34,7 @@ public class MasterActivity extends AppCompatActivity implements WifiP2pBroadcas
     private ProgressDialog progressDialog;
     private IntentFilter filter;
     private WifiP2pDeviceList deviceList = null;
-    private List<WifiP2pDevice> peers = new ArrayList<>();
+    private List<WifiP2pDeviceDecorator> peers = new ArrayList<>();
     private DeviceListAdapter deviceListAdapter;
 
 
