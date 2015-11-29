@@ -132,6 +132,12 @@ public class MasterActivity extends AppCompatActivity
     public void updateSelectedPlayers() {
         String selected = String.format("%s/%s", WifiP2pDeviceDecorator.countSelected(peers), peers.size());
         ((TextView) findViewById(R.id.selectedPlayersTextView)).setText(selected);
+
+        if(WifiP2pDeviceDecorator.countSelected(peers) > 0) {
+            findViewById(R.id.newGameButton).setEnabled(true);
+        } else {
+            findViewById(R.id.newGameButton).setEnabled(false);
+        }
     }
 
 
