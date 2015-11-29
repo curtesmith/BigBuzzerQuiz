@@ -14,6 +14,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MasterActivity extends AppCompatActivity implements WifiP2pBroadcastReceiver.WifiP2pBroadcastListener {
+public class MasterActivity extends AppCompatActivity implements WifiP2pBroadcastReceiver.WifiP2pBroadcastListener, View.OnClickListener {
     private WifiP2pManager manager;
     private Channel channel;
     private static final String TAG = "MasterActivity";
@@ -48,6 +50,9 @@ public class MasterActivity extends AppCompatActivity implements WifiP2pBroadcas
         ListView list = (ListView) findViewById(R.id.devicesList);
         deviceListAdapter = new DeviceListAdapter(this, manager, channel, peers);
         list.setAdapter(deviceListAdapter);
+
+        Button scanWifi = (Button) findViewById(R.id.scanWifiButton);
+        scanWifi.setOnClickListener(this);
     }
 
 
@@ -79,40 +84,42 @@ public class MasterActivity extends AppCompatActivity implements WifiP2pBroadcas
         int id = item.getItemId();
 
         switch (item.getItemId()) {
-            case R.id.action_discover:
-                manager.discoverPeers(channel, new WifiP2pManager.ActionListener() {
-                    @Override
-                    public void onSuccess() {
-                        Log.i(TAG, "call to discoverPeers was successful");
-                        showProgressDialog();
-                    }
-
-                    @Override
-                    public void onFailure(int i) {
-                        String message = "";
-
-                        switch(i) {
-                            case WifiP2pManager.P2P_UNSUPPORTED:
-                                message = "Discovery failed. Device does not support Wi-Fi P2P";
-                                break;
-                            case WifiP2pManager.BUSY:
-                                message = "Discovery failed. The framework is busy. Try again.";
-                                break;
-                            case WifiP2pManager.ERROR:
-                                message = "Discovery failed due to an internal error. Try again.";
-                                break;
-                        }
-
-                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-                        Log.e(TAG, "call to discoverPeers failed, code = " + i);
-                    }
-                });
-                return true;
             case R.id.action_settings:
                 return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+    private void discoverPeers() {
+        manager.discoverPeers(channel, new WifiP2pManager.ActionListener() {
+            @Override
+            public void onSuccess() {
+                Log.i(TAG, "call to discoverPeers was successful");
+                showProgressDialog();
+            }
+
+            @Override
+            public void onFailure(int i) {
+                String message = "";
+
+                switch(i) {
+                    case WifiP2pManager.P2P_UNSUPPORTED:
+                        message = "Discovery failed. Device does not support Wi-Fi P2P";
+                        break;
+                    case WifiP2pManager.BUSY:
+                        message = "Discovery failed. The framework is busy. Try again.";
+                        break;
+                    case WifiP2pManager.ERROR:
+                        message = "Discovery failed due to an internal error. Try again.";
+                        break;
+                }
+
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                Log.e(TAG, "call to discoverPeers failed, code = " + i);
+            }
+        });
     }
 
 
@@ -132,7 +139,7 @@ public class MasterActivity extends AppCompatActivity implements WifiP2pBroadcas
 
     @Override
     public void onPeersAvailable(WifiP2pDeviceList devices) {
-        if (progressDialog.isShowing()) {
+        if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
         }
 
@@ -177,5 +184,14 @@ public class MasterActivity extends AppCompatActivity implements WifiP2pBroadcas
 
         return names;
 
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch(view.getId()) {
+            case R.id.scanWifiButton:
+                discoverPeers();
+                break;
+        }
     }
 }
