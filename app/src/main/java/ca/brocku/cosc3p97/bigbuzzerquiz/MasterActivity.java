@@ -2,7 +2,6 @@ package ca.brocku.cosc3p97.bigbuzzerquiz;
 
 import android.content.Context;
 import android.content.IntentFilter;
-import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
@@ -59,6 +58,7 @@ public class MasterActivity extends AppCompatActivity implements WifiP2pBroadcas
         registerReceiver(receiver, filter);
     }
 
+
     @Override
     public void onPause() {
         super.onPause();
@@ -68,18 +68,12 @@ public class MasterActivity extends AppCompatActivity implements WifiP2pBroadcas
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_master, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
         switch (item.getItemId()) {
             case R.id.action_settings:
                 return true;
@@ -101,7 +95,7 @@ public class MasterActivity extends AppCompatActivity implements WifiP2pBroadcas
             public void onFailure(int i) {
                 String message = "";
 
-                switch(i) {
+                switch (i) {
                     case WifiP2pManager.P2P_UNSUPPORTED:
                         message = "Discovery failed. Device does not support Wi-Fi P2P";
                         break;
@@ -123,15 +117,16 @@ public class MasterActivity extends AppCompatActivity implements WifiP2pBroadcas
     @Override
     public void onPeersAvailable(WifiP2pDeviceList devices) {
         setScanningWidgetVisibility(false);
-
         refreshDeviceList(devices);
     }
 
 
     private void refreshDeviceList(WifiP2pDeviceList devices) {
         deviceList = devices;
-        peers.clear();
-        peers.addAll(DeviceListAdapter.copy(devices));
+        //peers.clear();
+        //peers.addAll(DeviceListAdapter.copy(devices));
+
+        WifiP2pDeviceDecorator.copy(devices, peers);
         deviceListAdapter.notifyDataSetChanged();
     }
 
@@ -151,17 +146,6 @@ public class MasterActivity extends AppCompatActivity implements WifiP2pBroadcas
                 .setText(info.isGroupOwner ? R.string.message_group_owner : R.string.message_not_group_owner);
     }
 
-
-    private ArrayList<String> getNames(WifiP2pDeviceList devices) {
-        ArrayList<String> names = new ArrayList<>();
-
-        for(WifiP2pDevice device : devices.getDeviceList()) {
-            names.add(String.format("%s (%s)", device.deviceName, WifiP2pHelper.convertStatus(device.status)));
-        }
-
-        return names;
-
-    }
 
     @Override
     public void onClick(View view) {
