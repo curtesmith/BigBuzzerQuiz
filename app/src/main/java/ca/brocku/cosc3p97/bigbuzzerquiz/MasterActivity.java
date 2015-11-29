@@ -34,7 +34,7 @@ public class MasterActivity extends AppCompatActivity implements WifiP2pBroadcas
     private ProgressDialog progressDialog;
     private IntentFilter filter;
     private WifiP2pDeviceList deviceList = null;
-    private List<String> peers = new ArrayList<>();
+    private List<WifiP2pDevice> peers = new ArrayList<>();
     private DeviceListAdapter deviceListAdapter;
 
 
@@ -179,7 +179,7 @@ public class MasterActivity extends AppCompatActivity implements WifiP2pBroadcas
     private void refreshDeviceList(WifiP2pDeviceList devices) {
         deviceList = devices;
         peers.clear();
-        peers.addAll(getNames(devices));
+        peers.addAll(DeviceListAdapter.copy(devices));
         deviceListAdapter.notifyDataSetChanged();
     }
 
