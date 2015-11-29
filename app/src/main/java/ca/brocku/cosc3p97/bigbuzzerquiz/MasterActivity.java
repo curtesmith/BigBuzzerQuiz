@@ -1,8 +1,6 @@
 package ca.brocku.cosc3p97.bigbuzzerquiz;
 
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.IntentFilter;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
@@ -29,7 +27,6 @@ public class MasterActivity extends AppCompatActivity implements WifiP2pBroadcas
     private Channel channel;
     private static final String TAG = "MasterActivity";
     private WifiP2pBroadcastReceiver receiver;
-    private ProgressDialog progressDialog;
     private IntentFilter filter;
     private WifiP2pDeviceList deviceList = null;
     private List<WifiP2pDeviceDecorator> peers = new ArrayList<>();
@@ -97,7 +94,7 @@ public class MasterActivity extends AppCompatActivity implements WifiP2pBroadcas
             @Override
             public void onSuccess() {
                 Log.i(TAG, "call to discoverPeers was successful");
-                showProgressDialog();
+                setScanningWidgetVisibility(true);
             }
 
             @Override
@@ -123,25 +120,9 @@ public class MasterActivity extends AppCompatActivity implements WifiP2pBroadcas
     }
 
 
-    private void showProgressDialog() {
-        if (progressDialog == null) {
-            progressDialog = ProgressDialog.show(this, "Press back to cancel", "Working ...", true,
-                    true, new DialogInterface.OnCancelListener() {
-                        @Override
-                        public void onCancel(DialogInterface dialog) {
-
-                        }
-                    });
-        } else {
-            progressDialog.show();
-        }
-    }
-
     @Override
     public void onPeersAvailable(WifiP2pDeviceList devices) {
-        if (progressDialog != null && progressDialog.isShowing()) {
-            progressDialog.dismiss();
-        }
+        setScanningWidgetVisibility(false);
 
         refreshDeviceList(devices);
     }
@@ -157,10 +138,6 @@ public class MasterActivity extends AppCompatActivity implements WifiP2pBroadcas
 
     @Override
     public void onConnectionInfoAvailable(WifiP2pInfo info) {
-        if(progressDialog != null && progressDialog.isShowing()) {
-            progressDialog.dismiss();
-        }
-
         if(deviceList == null) {
             manager.requestPeers(channel, new WifiP2pManager.PeerListListener() {
                 @Override
@@ -193,5 +170,19 @@ public class MasterActivity extends AppCompatActivity implements WifiP2pBroadcas
                 discoverPeers();
                 break;
         }
+    }
+
+
+    private void setScanningWidgetVisibility(boolean isVisible) {
+        if(isVisible) {
+            findViewById(R.id.scanWifiButton).setVisibility(View.INVISIBLE);
+            findViewById(R.id.scanWifiTextView).setVisibility(View.VISIBLE);
+            findViewById(R.id.scanWifiProgressBar).setVisibility(View.VISIBLE);
+        } else {
+            findViewById(R.id.scanWifiButton).setVisibility(View.VISIBLE);
+            findViewById(R.id.scanWifiTextView).setVisibility(View.GONE);
+            findViewById(R.id.scanWifiProgressBar).setVisibility(View.GONE);
+        }
+
     }
 }
