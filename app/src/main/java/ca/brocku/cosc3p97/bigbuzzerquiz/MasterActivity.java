@@ -46,7 +46,7 @@ public class MasterActivity extends AppCompatActivity implements WifiP2pBroadcas
         filter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
 
         ListView list = (ListView) findViewById(R.id.devicesList);
-        deviceListAdapter = new DeviceListAdapter(this, peers);
+        deviceListAdapter = new DeviceListAdapter(this, manager, channel, peers);
         list.setAdapter(deviceListAdapter);
     }
 
