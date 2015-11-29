@@ -4,8 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.IntentFilter;
-import android.net.wifi.WpsInfo;
-import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pInfo;
@@ -16,8 +14,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,38 +48,6 @@ public class MasterActivity extends AppCompatActivity implements WifiP2pBroadcas
         ListView list = (ListView) findViewById(R.id.devicesList);
         deviceListAdapter = new DeviceListAdapter(this, peers);
         list.setAdapter(deviceListAdapter);
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                WifiP2pDevice device = getDevice(deviceList, position);
-                WifiP2pConfig config = new WifiP2pConfig();
-                config.deviceAddress = device.deviceAddress;
-                config.wps.setup = WpsInfo.PBC;
-                manager.connect(channel, config, new WifiP2pManager.ActionListener() {
-                    @Override
-                    public void onSuccess() {
-                        showProgressDialog();
-                        Log.i(TAG, "call to connect was successful");
-                    }
-
-                    @Override
-                    public void onFailure(int i) {
-                        Log.e(TAG, "call to connect failed with status: " + WifiP2pHelper.convertFailureStatus(i));
-                    }
-                });
-            }
-        });
-
-    }
-
-
-    private static WifiP2pDevice getDevice(WifiP2pDeviceList list, int position) {
-        List<WifiP2pDevice> l = new ArrayList<>();
-        for (WifiP2pDevice d : list.getDeviceList()) {
-            l.add(d);
-        }
-
-        return l.get(position);
     }
 
 

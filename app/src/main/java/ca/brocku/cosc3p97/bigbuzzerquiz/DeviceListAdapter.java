@@ -9,8 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,14 +57,40 @@ public class DeviceListAdapter extends BaseAdapter {
 
 
     @Override
-    public View getView(int index, View view, ViewGroup viewGroup) {
+    public View getView(final int index, View view, ViewGroup viewGroup) {
         if (view == null) {
             view = inflater.inflate(R.layout.peer_list_item, null);
         }
 
-        ((CheckBox) view.findViewById(R.id.deviceNameCheckBox)).setText(peers.get(index).deviceName);
+        CheckBox checkBox = (CheckBox) view.findViewById(R.id.deviceNameCheckBox);
+        checkBox.setText(peers.get(index).deviceName);
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                Toast.makeText(activity, "oncheckchanged for index " + index, Toast.LENGTH_SHORT).show();
+//                WifiP2pDevice device = getDevice(deviceList, position);
+//                WifiP2pConfig config = new WifiP2pConfig();
+//                config.deviceAddress = device.deviceAddress;
+//                config.wps.setup = WpsInfo.PBC;
+//                manager.connect(channel, config, new WifiP2pManager.ActionListener() {
+//                    @Override
+//                    public void onSuccess() {
+//                        //showProgressDialog();
+//                        Log.i(TAG, "call to connect was successful");
+//                    }
+//
+//                    @Override
+//                    public void onFailure(int i) {
+//                        Log.e(TAG, "call to connect failed with status: " + WifiP2pHelper.convertFailureStatus(i));
+//                    }
+//                });
+            }
+        });
+
         ((TextView) view.findViewById(R.id.statusTextView)).setText(WifiP2pHelper.convertStatus(peers.get(index).status));
         ((ProgressBar) view.findViewById(R.id.progressBar)).setVisibility(peers.get(index).isConnecting ? View.VISIBLE : View.INVISIBLE);
+
+
 
         return view;
     }
