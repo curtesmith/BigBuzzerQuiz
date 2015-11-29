@@ -86,9 +86,7 @@ public class DeviceListAdapter extends BaseAdapter {
         return new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                if (!isChecked) {
-                    return;
-                }
+                peers.get(index).isSelected = isChecked;
 
                 switch (peers.get(index).status) {
                     case WifiP2pDevice.AVAILABLE:
@@ -114,6 +112,7 @@ public class DeviceListAdapter extends BaseAdapter {
                         break;
                 }
 
+                notifyDataSetChanged();
             }
         };
     }

@@ -21,13 +21,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MasterActivity extends AppCompatActivity implements WifiP2pBroadcastReceiver.WifiP2pBroadcastListener, View.OnClickListener {
+public class MasterActivity extends AppCompatActivity
+        implements WifiP2pBroadcastReceiver.WifiP2pBroadcastListener, View.OnClickListener {
     private WifiP2pManager manager;
     private Channel channel;
     private static final String TAG = "MasterActivity";
     private WifiP2pBroadcastReceiver receiver;
     private IntentFilter filter;
-    private WifiP2pDeviceList deviceList = null;
     private List<WifiP2pDeviceDecorator> peers = new ArrayList<>();
     private DeviceListAdapter deviceListAdapter;
 
@@ -46,6 +46,7 @@ public class MasterActivity extends AppCompatActivity implements WifiP2pBroadcas
         ListView list = (ListView) findViewById(R.id.devicesList);
         deviceListAdapter = new DeviceListAdapter(this, manager, channel, peers);
         list.setAdapter(deviceListAdapter);
+        //deviceListAdapter.registerDataSetObserver(new DeviceListDataSetObserver(this));
 
         Button scanWifi = (Button) findViewById(R.id.scanWifiButton);
         scanWifi.setOnClickListener(this);
@@ -122,18 +123,21 @@ public class MasterActivity extends AppCompatActivity implements WifiP2pBroadcas
 
 
     private void refreshDeviceList(WifiP2pDeviceList devices) {
-        deviceList = devices;
-        //peers.clear();
-        //peers.addAll(DeviceListAdapter.copy(devices));
-
+        //deviceList = devices;
         WifiP2pDeviceDecorator.copy(devices, peers);
         deviceListAdapter.notifyDataSetChanged();
+
+    }
+
+    public void updateSelectedPlayers() {
+        String selected = String.format("%s/%s", WifiP2pDeviceDecorator.countSelected(peers), peers.size());
+        ((TextView) findViewById(R.id.selectedPlayersTextView)).setText(selected);
     }
 
 
     @Override
     public void onConnectionInfoAvailable(WifiP2pInfo info) {
-        if(deviceList == null) {
+        if(peers.size() == 0) {
             manager.requestPeers(channel, new WifiP2pManager.PeerListListener() {
                 @Override
                 public void onPeersAvailable(WifiP2pDeviceList devices) {

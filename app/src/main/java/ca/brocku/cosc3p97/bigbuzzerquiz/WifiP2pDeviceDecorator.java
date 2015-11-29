@@ -10,10 +10,12 @@ import java.util.List;
 public class WifiP2pDeviceDecorator extends WifiP2pDevice {
     private static final String TAG = "WifiP2pDeviceDecorator";
     public boolean isConnecting;
+    public boolean isSelected;
 
     public WifiP2pDeviceDecorator(WifiP2pDevice source) {
         super(source);
         isConnecting = false;
+        isSelected = false;
     }
 
 
@@ -21,13 +23,14 @@ public class WifiP2pDeviceDecorator extends WifiP2pDevice {
         return deviceName.equals(device.deviceName);
     }
 
+
     public static List<WifiP2pDeviceDecorator> copy(WifiP2pDeviceList from, List<WifiP2pDeviceDecorator> to) {
         ArrayList<WifiP2pDeviceDecorator> list = new ArrayList<>();
 
         for(WifiP2pDevice device : from.getDeviceList()) {
-            WifiP2pDeviceDecorator dd = new WifiP2pDeviceDecorator(device);
-            dd.update(to);
-            list.add(dd);
+            WifiP2pDeviceDecorator decorator = new WifiP2pDeviceDecorator(device);
+            decorator.update(to);
+            list.add(decorator);
         }
 
         to.clear();
@@ -44,7 +47,20 @@ public class WifiP2pDeviceDecorator extends WifiP2pDevice {
                 } else {
                     isConnecting = device.isConnecting;
                 }
+
+                isSelected = device.isSelected;
             }
         }
+    }
+
+
+    public static int countSelected(List<WifiP2pDeviceDecorator> list) {
+        int count = 0;
+        for(WifiP2pDeviceDecorator device : list) {
+            if (device.isSelected) {
+                count++;
+            }
+        }
+        return count;
     }
 }

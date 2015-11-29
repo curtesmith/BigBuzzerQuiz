@@ -10,4 +10,5 @@
     <string name="button_new_game">Continue</string>
     <string name="button_scan_wifi">Scan WiFi</string>
     <string name="label_scan_wifi">Scanning WiFi</string>
+    <string name="label_selected_players">Players:</string>
 </resources>
