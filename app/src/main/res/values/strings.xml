@@ -21,5 +21,25 @@
     <string name="choseCategories">Chose your categories:</string>
     <string name="startGame">Start Game</string>
 
+    <!-- For the Database -->
+     <string name="createTableQuestionsQuery">
+        CREATE TABLE IF NOT EXISTS Questions(
+         _id INTEGER PRIMARY KEY
+         Question VARCHAR,
+         Answer0 VARCHAR,
+         Answer1 VARCHAR
+         Answer2 VARCHAR
+         Answer3 VARCHAR
+         rightAnswer INTEGER
+         Category INTEGER REFERENCES Categories
+         );
+    </string>
+    <string name="createTableCategoriesQuery">
+        CREATE TABLE IF NOT EXISTS Categories(
+        _id INTEGER PRIMARY KEY
+        Name VARCHAR
+        );
+    </string>
+
 
 </resources>

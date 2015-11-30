@@ -7,6 +7,8 @@ import android.view.MenuItem;
 
 public class MasterSetupActivity extends AppCompatActivity {
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
