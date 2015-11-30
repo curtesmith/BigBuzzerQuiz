@@ -11,4 +11,15 @@
     <string name="button_scan_wifi">Scan WiFi</string>
     <string name="label_scan_wifi">Scanning WiFi</string>
     <string name="label_selected_players">Players:</string>
+
+    <!-- Activity Master Setup -->
+    <string name="title_activity_master_setup">Set up a Game</string>
+    <string name="checkboxArt">Art and Culture</string>
+    <string name="checkboxScience"> Science </string>
+    <string name="checkboxGeography"> Geography </string>
+    <string name="questionAmount">Amount of questions:</string>
+    <string name="choseCategories">Chose your categories:</string>
+    <string name="startGame">Start Game</string>
+
+
 </resources>
