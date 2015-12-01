@@ -7,6 +7,8 @@ import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -22,7 +24,8 @@ import java.util.List;
 
 
 public class MasterActivity extends AppCompatActivity
-        implements WifiP2pBroadcastReceiver.WifiP2pBroadcastListener, View.OnClickListener {
+        implements WifiP2pBroadcastReceiver.WifiP2pBroadcastListener, View.OnClickListener,
+Handler.Callback{
     private WifiP2pManager manager;
     private Channel channel;
     private static final String TAG = "MasterActivity";
@@ -30,6 +33,7 @@ public class MasterActivity extends AppCompatActivity
     private IntentFilter filter;
     private List<WifiP2pDeviceDecorator> peers = new ArrayList<>();
     private DeviceListAdapter deviceListAdapter;
+    private Handler handler = new Handler(this);
 
 
     @Override
@@ -154,6 +158,8 @@ public class MasterActivity extends AppCompatActivity
 
         ((TextView) findViewById(R.id.groupOwnerFyiTextView))
                 .setText(info.isGroupOwner ? R.string.message_group_owner : R.string.message_not_group_owner);
+        
+        
     }
 
 
@@ -178,5 +184,12 @@ public class MasterActivity extends AppCompatActivity
             findViewById(R.id.scanWifiProgressBar).setVisibility(View.GONE);
         }
 
+    }
+
+    
+    @Override
+    public boolean handleMessage(Message msg) {
+        // TODO: 2015-11-30 Add some logic to handle messages from the tcp layer 
+        return false;
     }
 }
