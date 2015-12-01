@@ -1,6 +1,16 @@
 <resources>
     <string name="app_name">Big Buzzer Quiz</string>
 
+
+    <!-- Start Activity -->
+    <string name="title_activity_start">Big Buzzer Quiz </string>
+    <string name="choseMode"> Please chose your mode </string>
+    <string name="masterDescription"> The Master Mode adds the other players and sets up the game.
+        The master can play the quiz as well. </string>
+    <string name="playerDescription"> The Player plays the game without setting up anything. </string>
+
+
+    <!-- Master Activity -->
     <string name="message_instructions">You can add players that are in the same Wi-Fi Direct network as you to a Game.</string>
     <string name="peers_label">Peers:</string>
     <string name="action_settings">Settings</string>

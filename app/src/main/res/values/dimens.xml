@@ -7,5 +7,6 @@
     <dimen name ="defaultTextSize"> 20dp </dimen>
     <dimen name ="defaultHeadingSize"> 24dp </dimen>
     <dimen name ="defaultButtonSize"> 22dp </dimen>
+    <dimen name ="defaultHintSize"> 16dp </dimen>
 
 </resources>
