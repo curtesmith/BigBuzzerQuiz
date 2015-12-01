@@ -6,9 +6,8 @@
     <string name="title_activity_start">Big Buzzer Quiz </string>
     <string name="choseMode"> Please chose your mode </string>
     <string name="masterDescription"> The Master Mode adds the other players and sets up the game.
-        The master can play the quiz as well. </string>
+        The master can play the quiz as well. You need one person with master mode per game </string>
     <string name="playerDescription"> The Player plays the game without setting up anything. </string>
-
 
     <!-- Master Activity -->
     <string name="message_instructions">You can add players that are in the same Wi-Fi Direct network as you to a Game.</string>
@@ -31,6 +30,9 @@
     <string name="choseCategories">Chose your categories:</string>
     <string name="startGame">Start Game</string>
 
+    <!--- Start Player Activity -->
+    <string name="playerHint"> Just Wait  </string>
+
     <!-- For the Database -->
      <string name="createTableQuestionsQuery">
         CREATE TABLE IF NOT EXISTS Questions(
@@ -50,6 +52,7 @@
         Name VARCHAR
         );
     </string>
+    <string name="title_activity_start_player">StartPlayerActivity</string>
 
 
 </resources>
