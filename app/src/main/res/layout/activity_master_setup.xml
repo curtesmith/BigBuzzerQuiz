@@ -21,21 +21,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/checkboxArt"
-        android:textSize="@dimen/defaultTextSize"/>
+        android:textSize="@dimen/defaultTextSize"
+        android:onClick="clickCheckbox"/>
 
     <CheckBox
         android:id="@+id/CheckboxScience"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/checkboxScience"
-        android:textSize="@dimen/defaultTextSize" />
+        android:textSize="@dimen/defaultTextSize"
+        android:onClick="clickCheckbox"/>
 
     <CheckBox
         android:id="@+id/CheckboxGeography"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/checkboxGeography"
-        android:textSize="@dimen/defaultTextSize" />
+        android:textSize="@dimen/defaultTextSize"
+        android:onClick="clickCheckbox"/>
 
     <TextView
         android:layout_marginTop="20dp"
@@ -55,7 +58,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="-"
-            android:textSize="@dimen/defaultButtonSize"/>
+            android:textSize="@dimen/defaultButtonSize"
+            android:onClick="clickLess"/>
 
         <TextView
             android:id="@+id/questionAmount"
@@ -63,7 +67,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="10"
+            android:text="0"
             android:textSize="@dimen/defaultHeadingSize"/>
 
         <Button
@@ -72,7 +76,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="+"
-            android:textSize="@dimen/defaultButtonSize"/>
+            android:textSize="@dimen/defaultButtonSize"
+            android:onClick="clickMore"/>
 
     </LinearLayout>
 
