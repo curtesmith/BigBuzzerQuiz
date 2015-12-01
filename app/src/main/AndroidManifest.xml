@@ -23,6 +23,16 @@
             android:name=".MasterActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".MasterSetupActivity"
+            android:label="@string/title_activity_master_setup"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".StartActivity"
+            android:label="@string/title_activity_start"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -30,8 +40,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MasterSetupActivity"
-            android:label="@string/title_activity_master_setup" >
+            android:name=".StartPlayerActivity"
+            android:label="@string/title_activity_start_player" >
         </activity>
     </application>
 
