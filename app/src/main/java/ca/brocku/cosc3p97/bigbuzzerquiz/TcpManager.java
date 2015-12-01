@@ -15,8 +15,9 @@ public class TcpManager implements Runnable {
     public static final int TCP_MESSAGE_READ = 2;
     public static final int PORT = 8988;
 
-    public interface ClientConnectionListener {
+    public interface ConnectionListener {
         void onClientConnected();
+        void onServerConnected();
     }
 
     public TcpManager(Socket socket, Handler handler) {

@@ -26,7 +26,7 @@ import java.util.List;
 
 public class MasterActivity extends AppCompatActivity
         implements WifiP2pBroadcastReceiver.WifiP2pBroadcastListener, View.OnClickListener,
-Handler.Callback, TcpManager.ClientConnectionListener {
+Handler.Callback, TcpManager.ConnectionListener {
     private WifiP2pManager manager;
     private Channel channel;
     private static final String TAG = "MasterActivity";
@@ -36,7 +36,7 @@ Handler.Callback, TcpManager.ClientConnectionListener {
     private DeviceListAdapter deviceListAdapter;
     private Handler handler = new Handler(this);
     private TcpManager tcpManager;
-    private TcpManager.ClientConnectionListener clientConnectionListener;
+    private TcpManager.ConnectionListener clientListener, serverListener;
 
 
     @Override
@@ -169,13 +169,13 @@ Handler.Callback, TcpManager.ClientConnectionListener {
             try {
                 socketHandler = new ServerSocketHandler(this.handler);
                 socketHandler.start();
+                serverListener = this;
             } catch (IOException e) {
                 Log.d(TAG,
                         "Failed to create a server thread - " + e.getMessage());
-                return;
             }
         } else {
-            clientConnectionListener = this;
+            clientListener = this;
             socketHandler = new ClientSocketHandler(this.handler, info.groupOwnerAddress);
             socketHandler.start();
 
@@ -212,14 +212,18 @@ Handler.Callback, TcpManager.ClientConnectionListener {
         switch(msg.what) {
             case TcpManager.TCP_HANDLE:
                 tcpManager = (TcpManager) msg.obj;
-                if(clientConnectionListener != null) {
-                    clientConnectionListener.onClientConnected();
+                if(clientListener != null) {
+                    clientListener.onClientConnected();
                 }
                 break;
             case TcpManager.TCP_MESSAGE_READ:
                 byte[] readBuf = (byte[]) msg.obj;
                 String readMessage = new String(readBuf, 0, msg.arg1);
                 Toast.makeText(this, readMessage, Toast.LENGTH_SHORT).show();
+
+                if (serverListener != null) {
+                    serverListener.onServerConnected();
+                }
         }
 
         return true;
@@ -227,7 +231,12 @@ Handler.Callback, TcpManager.ClientConnectionListener {
 
     @Override
     public void onClientConnected() {
-        tcpManager.write("Hey buddy!".getBytes());
+        tcpManager.write("Hey Server (from the Client)".getBytes());
+    }
+
+    @Override
+    public void onServerConnected() {
+        tcpManager.write("Hello Client (from the Server)".getBytes());
     }
 
 }
