@@ -52,7 +52,13 @@
         Name VARCHAR
         );
     </string>
+
+    <!-- Start Player Activity -->
     <string name="title_activity_start_player">StartPlayerActivity</string>
+
+    <!-- Question Activity -->
+    <string name="title_activity_question_activity">QuestionActivity</string>
+
 
 
 </resources>
