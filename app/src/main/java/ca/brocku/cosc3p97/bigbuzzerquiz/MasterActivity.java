@@ -19,13 +19,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class MasterActivity extends AppCompatActivity
         implements WifiP2pBroadcastReceiver.WifiP2pBroadcastListener, View.OnClickListener,
-Handler.Callback{
+Handler.Callback, TcpManager.ClientConnectionListener {
     private WifiP2pManager manager;
     private Channel channel;
     private static final String TAG = "MasterActivity";
@@ -34,6 +35,8 @@ Handler.Callback{
     private List<WifiP2pDeviceDecorator> peers = new ArrayList<>();
     private DeviceListAdapter deviceListAdapter;
     private Handler handler = new Handler(this);
+    private TcpManager tcpManager;
+    private TcpManager.ClientConnectionListener clientConnectionListener;
 
 
     @Override
@@ -158,8 +161,25 @@ Handler.Callback{
 
         ((TextView) findViewById(R.id.groupOwnerFyiTextView))
                 .setText(info.isGroupOwner ? R.string.message_group_owner : R.string.message_not_group_owner);
-        
-        
+
+        Thread socketHandler;
+
+        if (info.isGroupOwner) {
+            Log.d(TAG, "Connected as group owner");
+            try {
+                socketHandler = new ServerSocketHandler(this.handler);
+                socketHandler.start();
+            } catch (IOException e) {
+                Log.d(TAG,
+                        "Failed to create a server thread - " + e.getMessage());
+                return;
+            }
+        } else {
+            clientConnectionListener = this;
+            socketHandler = new ClientSocketHandler(this.handler, info.groupOwnerAddress);
+            socketHandler.start();
+
+        }
     }
 
 
@@ -189,7 +209,25 @@ Handler.Callback{
     
     @Override
     public boolean handleMessage(Message msg) {
-        // TODO: 2015-11-30 Add some logic to handle messages from the tcp layer 
-        return false;
+        switch(msg.what) {
+            case TcpManager.TCP_HANDLE:
+                tcpManager = (TcpManager) msg.obj;
+                if(clientConnectionListener != null) {
+                    clientConnectionListener.onClientConnected();
+                }
+                break;
+            case TcpManager.TCP_MESSAGE_READ:
+                byte[] readBuf = (byte[]) msg.obj;
+                String readMessage = new String(readBuf, 0, msg.arg1);
+                Toast.makeText(this, readMessage, Toast.LENGTH_SHORT).show();
+        }
+
+        return true;
     }
+
+    @Override
+    public void onClientConnected() {
+        tcpManager.write("Hey buddy!".getBytes());
+    }
+
 }
