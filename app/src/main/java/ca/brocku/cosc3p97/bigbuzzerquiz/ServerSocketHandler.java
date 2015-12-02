@@ -2,17 +2,22 @@ package ca.brocku.cosc3p97.bigbuzzerquiz;
 
 
 import android.os.Handler;
+import android.util.Log;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 public class ServerSocketHandler extends Thread {
+    private static final String TAG = "ServerSocketHandler";
     private static final int THREAD_COUNT = 10;
     private ServerSocket socket;
     private Handler handler;
+    private List<ServerSocketListener> listeners = new ArrayList<>();
 
 
     private final ThreadPoolExecutor pool = new ThreadPoolExecutor(
@@ -20,12 +25,21 @@ public class ServerSocketHandler extends Thread {
             new LinkedBlockingQueue<Runnable>());
 
 
+    public interface ServerSocketListener {
+        void onSetup();
+    }
+
+
+    public void addListener(ServerSocketListener listener) {
+        listeners.add(listener);
+    }
+
     public ServerSocketHandler(Handler handler) throws IOException {
         try {
             socket = new ServerSocket(TcpManager.PORT);
-            socket.getLocalPort();
             this.handler = handler;
-        } catch (IOException e) {
+        } catch (Exception e) {
+            Log.e(TAG, "message = {" + e.getMessage() + "}");
             e.printStackTrace();
             pool.shutdownNow();
             throw e;
@@ -35,9 +49,12 @@ public class ServerSocketHandler extends Thread {
 
     @Override
     public void run() {
+        callback();
+
         while (true) {
             try {
-                pool.execute(new TcpManager(socket.accept(), handler));
+                pool.execute(new TcpManager(socket.accept(), handler, TcpManager.SERVER_MODE));
+                Log.i(TAG, "getPoolSize={" + pool.getPoolSize() + "}, getCompletedTaskCount={" + pool.getCompletedTaskCount() + "}");
             } catch (IOException e) {
                 try {
                     if (socket != null && !socket.isClosed())
@@ -51,4 +68,14 @@ public class ServerSocketHandler extends Thread {
             }
         }
     }
+
+
+    private void callback() {
+        Log.i(TAG, "callback to onSetup listeners");
+        for(ServerSocketListener listener : listeners) {
+            listener.onSetup();
+        }
+    }
+
+
 }

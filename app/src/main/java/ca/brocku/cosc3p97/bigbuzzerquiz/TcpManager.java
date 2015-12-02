@@ -2,6 +2,7 @@ package ca.brocku.cosc3p97.bigbuzzerquiz;
 
 
 import android.os.Handler;
+import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,20 +10,25 @@ import java.io.OutputStream;
 import java.net.Socket;
 
 public class TcpManager implements Runnable {
+    private static final String TAG = "TcpManager";
     private Socket socket;
     private Handler handler;
-    public static final int TCP_HANDLE = 1;
-    public static final int TCP_MESSAGE_READ = 2;
+    private Thread thread;
+    private int mode;
+    public static final int HANDLE = 1;
+    public static final int MESSAGE_READ = 2;
+    public static final int DISCONNECTED = 3;
     public static final int PORT = 8988;
+    public static final int SERVER_MODE = 1;
+    public static final int CLIENT_MODE = 2;
 
-    public interface ConnectionListener {
-        void onClientConnected();
-        void onServerConnected();
-    }
 
-    public TcpManager(Socket socket, Handler handler) {
+    public TcpManager(Socket socket, Handler handler, int mode) {
+
         this.socket = socket;
         this.handler = handler;
+        this.mode = mode;
+        this.thread = Thread.currentThread();
     }
 
 
@@ -32,24 +38,25 @@ public class TcpManager implements Runnable {
 
     @Override
     public void run() {
+        Log.i(TAG, "run called");
+
         try {
 
             in = socket.getInputStream();
             out = socket.getOutputStream();
             byte[] buffer = new byte[1024];
             int bytes;
-            handler.obtainMessage(TCP_HANDLE, this)
-                    .sendToTarget();
-
+            handler.obtainMessage(HANDLE, mode, -1, this).sendToTarget();
             while (true) {
                 try {
                     bytes = in.read(buffer);
                     if (bytes == -1) {
+                        handler.obtainMessage(DISCONNECTED, mode, -1, this).sendToTarget();
                         break;
                     }
 
-                    handler.obtainMessage(TCP_MESSAGE_READ,
-                            bytes, -1, buffer).sendToTarget();
+                    handler.obtainMessage(MESSAGE_READ, mode,
+                            bytes, buffer).sendToTarget();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

@@ -7,8 +7,6 @@ import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -19,14 +17,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class MasterActivity extends AppCompatActivity
-        implements WifiP2pBroadcastReceiver.WifiP2pBroadcastListener, View.OnClickListener,
-Handler.Callback, TcpManager.ConnectionListener {
+        implements WifiP2pBroadcastReceiver.WifiP2pBroadcastListener, View.OnClickListener {
     private WifiP2pManager manager;
     private Channel channel;
     private static final String TAG = "MasterActivity";
@@ -34,9 +30,8 @@ Handler.Callback, TcpManager.ConnectionListener {
     private IntentFilter filter;
     private List<WifiP2pDeviceDecorator> peers = new ArrayList<>();
     private DeviceListAdapter deviceListAdapter;
-    private Handler handler = new Handler(this);
-    private TcpManager tcpManager;
-    private TcpManager.ConnectionListener clientListener, serverListener;
+    private GameServer gameServer;
+    private Player player;
 
 
     @Override
@@ -130,11 +125,10 @@ Handler.Callback, TcpManager.ConnectionListener {
 
 
     private void refreshDeviceList(WifiP2pDeviceList devices) {
-        //deviceList = devices;
         WifiP2pDeviceDecorator.copy(devices, peers);
         deviceListAdapter.notifyDataSetChanged();
-
     }
+
 
     public void updateSelectedPlayers() {
         String selected = String.format("%s/%s", WifiP2pDeviceDecorator.countSelected(peers), peers.size());
@@ -149,7 +143,7 @@ Handler.Callback, TcpManager.ConnectionListener {
 
 
     @Override
-    public void onConnectionInfoAvailable(WifiP2pInfo info) {
+    public void onConnectionInfoAvailable(final WifiP2pInfo info) {
         if(peers.size() == 0) {
             manager.requestPeers(channel, new WifiP2pManager.PeerListListener() {
                 @Override
@@ -162,23 +156,20 @@ Handler.Callback, TcpManager.ConnectionListener {
         ((TextView) findViewById(R.id.groupOwnerFyiTextView))
                 .setText(info.isGroupOwner ? R.string.message_group_owner : R.string.message_not_group_owner);
 
-        Thread socketHandler;
 
         if (info.isGroupOwner) {
             Log.d(TAG, "Connected as group owner");
-            try {
-                socketHandler = new ServerSocketHandler(this.handler);
-                socketHandler.start();
-                serverListener = this;
-            } catch (IOException e) {
-                Log.d(TAG,
-                        "Failed to create a server thread - " + e.getMessage());
-            }
+            gameServer = GameServer.getInstance();
+            gameServer.addListener(new GameServer.GameServerListener() {
+                @Override
+                public void onSetup() {
+                    Log.i(TAG, "game server is ready, creating player");
+                    player = Player.getInstance(info.groupOwnerAddress, gameServer.getHandler());
+                }
+            });
         } else {
-            clientListener = this;
-            socketHandler = new ClientSocketHandler(this.handler, info.groupOwnerAddress);
-            socketHandler.start();
-
+            Log.d(TAG, "Connected as a client");
+            player = Player.getInstance(info.groupOwnerAddress);
         }
     }
 
@@ -204,39 +195,6 @@ Handler.Callback, TcpManager.ConnectionListener {
             findViewById(R.id.scanWifiProgressBar).setVisibility(View.GONE);
         }
 
-    }
-
-    
-    @Override
-    public boolean handleMessage(Message msg) {
-        switch(msg.what) {
-            case TcpManager.TCP_HANDLE:
-                tcpManager = (TcpManager) msg.obj;
-                if(clientListener != null) {
-                    clientListener.onClientConnected();
-                }
-                break;
-            case TcpManager.TCP_MESSAGE_READ:
-                byte[] readBuf = (byte[]) msg.obj;
-                String readMessage = new String(readBuf, 0, msg.arg1);
-                Toast.makeText(this, readMessage, Toast.LENGTH_SHORT).show();
-
-                if (serverListener != null) {
-                    serverListener.onServerConnected();
-                }
-        }
-
-        return true;
-    }
-
-    @Override
-    public void onClientConnected() {
-        tcpManager.write("Hey Server (from the Client)".getBytes());
-    }
-
-    @Override
-    public void onServerConnected() {
-        tcpManager.write("Hello Client (from the Server)".getBytes());
     }
 
 }
