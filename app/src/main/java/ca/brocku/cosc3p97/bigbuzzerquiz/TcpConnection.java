@@ -4,16 +4,16 @@ package ca.brocku.cosc3p97.bigbuzzerquiz;
 import android.os.Handler;
 import android.util.Log;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.Socket;
 
 public class TcpConnection implements Runnable {
     private static final String TAG = "TcpConnection";
     private Socket socket;
     private Handler handler;
-    private Thread thread;
     private int mode;
     public static final int HANDLE = 1;
     public static final int MESSAGE_READ = 2;
@@ -24,16 +24,14 @@ public class TcpConnection implements Runnable {
 
 
     public TcpConnection(Socket socket, Handler handler, int mode) {
-
         this.socket = socket;
         this.handler = handler;
         this.mode = mode;
-        this.thread = Thread.currentThread();
     }
 
 
-    private InputStream in;
-    private OutputStream out;
+    private BufferedReader in;
+    private PrintWriter out;
 
 
     @Override
@@ -42,21 +40,22 @@ public class TcpConnection implements Runnable {
 
         try {
 
-            in = socket.getInputStream();
-            out = socket.getOutputStream();
-            byte[] buffer = new byte[1024];
-            int bytes;
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            out = new PrintWriter(socket.getOutputStream(), true);
+            String message;
             handler.obtainMessage(HANDLE, mode, -1, this).sendToTarget();
+
             while (true) {
                 try {
-                    bytes = in.read(buffer);
-                    if (bytes == -1) {
+                    message = in.readLine();
+
+                    if (message == null) {
                         handler.obtainMessage(DISCONNECTED, mode, -1, this).sendToTarget();
                         break;
                     }
 
-                    handler.obtainMessage(MESSAGE_READ, mode,
-                            bytes, buffer).sendToTarget();
+                    handler.obtainMessage(MESSAGE_READ, mode, -1, message).sendToTarget();
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -72,11 +71,7 @@ public class TcpConnection implements Runnable {
         }
     }
 
-    public void write(byte[] buffer) {
-        try {
-            out.write(buffer);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void write(String message) {
+        out.println(message);
     }
 }

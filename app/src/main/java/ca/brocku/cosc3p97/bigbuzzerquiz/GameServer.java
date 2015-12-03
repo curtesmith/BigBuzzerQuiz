@@ -80,15 +80,15 @@ public class GameServer implements Handler.Callback {
             case TcpConnection.HANDLE:
                 if(msg.arg1 == TcpConnection.SERVER_MODE) {
                     tcpManagers.add((TcpConnection) msg.obj);
-                    ((TcpConnection) msg.obj).write(("Hello client#" + tcpManagers.size() + ", from the server").getBytes());
+                    Log.i(TAG, "write hello client");
+                    ((TcpConnection) msg.obj).write("Hello client#" + tcpManagers.size() + ", from the server");
                 } else {
-                    ((TcpConnection) msg.obj).write("Hello Server, from the client".getBytes());
+                    Log.i(TAG, "write hello server");
+                    ((TcpConnection) msg.obj).write("Hello Server, from the client");
                 }
                 break;
             case TcpConnection.MESSAGE_READ:
-                byte[] readBuf = (byte[]) msg.obj;
-                String readMessage = new String(readBuf, 0, msg.arg2);
-                Log.i(TAG, "A message has been read {" + readMessage + "}");
+                Log.i(TAG, "A message has been read {" + msg.obj + "}");
                 break;
             case TcpConnection.DISCONNECTED:
                 if(msg.arg1 == TcpConnection.SERVER_MODE) {
@@ -111,7 +111,7 @@ public class GameServer implements Handler.Callback {
 
     public void write(String message) {
         for(TcpConnection tcpManager : tcpManagers) {
-            tcpManager.write(message.getBytes());
+            tcpManager.write(message);
         }
     }
 

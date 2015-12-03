@@ -55,13 +55,11 @@ public class Player implements Handler.Callback{
             case TcpConnection.HANDLE:
                 Log.i(TAG, "HANDLE caught");
                 tcpManager = (TcpConnection) msg.obj;
-                ((TcpConnection) msg.obj).write("Hello Server, from the client".getBytes());
+                ((TcpConnection) msg.obj).write("Hello Server, from the client");
                 break;
             case TcpConnection.MESSAGE_READ:
                 Log.i(TAG, "MESSAGE_READ caught");
-                byte[] readBuf = (byte[]) msg.obj;
-                String readMessage = new String(readBuf, 0, msg.arg2);
-                Log.i(TAG, "message received ={" + readMessage + "}");
+                Log.i(TAG, "message received ={" + msg.obj + "}");
         }
 
         return true;
