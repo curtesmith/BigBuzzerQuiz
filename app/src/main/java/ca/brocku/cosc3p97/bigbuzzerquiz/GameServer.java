@@ -82,12 +82,12 @@ public class GameServer implements Handler.Callback {
             case TcpConnection.HANDLE:
                 t = (TcpConnection) msg.obj;
                 if(t.type == TcpConnection.Type.SERVER) {
-                    tcpManagers.add((TcpConnection) msg.obj);
+                    tcpManagers.add(t);
                     Log.i(TAG, "write hello CLIENT");
-                    ((TcpConnection) msg.obj).write("Hello CLIENT#" + tcpManagers.size() + ", from the SERVER");
+                    t.write("Hello CLIENT#" + tcpManagers.size() + ", from the SERVER");
                 } else {
                     Log.i(TAG, "write hello SERVER");
-                    ((TcpConnection) msg.obj).write("Hello Server, from the CLIENT");
+                    t.write("Hello Server, from the CLIENT");
                 }
                 break;
             case TcpConnection.MESSAGE_READ:
@@ -96,7 +96,7 @@ public class GameServer implements Handler.Callback {
             case TcpConnection.DISCONNECTED:
                 t = (TcpConnection) msg.obj;
                 if(t.type == TcpConnection.Type.SERVER) {
-                    tcpManagers.remove(msg.obj);
+                    tcpManagers.remove(t);
                     Log.i(TAG, "TcpConnection is disconnected so removing him from the list. Size is now " + tcpManagers.size());
                 }
                 break;
