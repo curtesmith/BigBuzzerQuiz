@@ -14,19 +14,21 @@ public class TcpConnection implements Runnable {
     private static final String TAG = "TcpConnection";
     private Socket socket;
     private Handler handler;
-    private int mode;
+    public Type type;
     public static final int HANDLE = 1;
     public static final int MESSAGE_READ = 2;
     public static final int DISCONNECTED = 3;
     public static final int PORT = 8988;
-    public static final int SERVER_MODE = 1;
-    public static final int CLIENT_MODE = 2;
+    
+    public enum Type {
+        CLIENT, SERVER
+    }
 
 
-    public TcpConnection(Socket socket, Handler handler, int mode) {
+    public TcpConnection(Socket socket, Handler handler, Type tyoe) {
         this.socket = socket;
         this.handler = handler;
-        this.mode = mode;
+        this.type = tyoe;
     }
 
 
@@ -43,18 +45,18 @@ public class TcpConnection implements Runnable {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
             String message;
-            handler.obtainMessage(HANDLE, mode, -1, this).sendToTarget();
+            handler.obtainMessage(HANDLE, this).sendToTarget();
 
             while (true) {
                 try {
                     message = in.readLine();
 
                     if (message == null) {
-                        handler.obtainMessage(DISCONNECTED, mode, -1, this).sendToTarget();
+                        handler.obtainMessage(DISCONNECTED, this).sendToTarget();
                         break;
                     }
 
-                    handler.obtainMessage(MESSAGE_READ, mode, -1, message).sendToTarget();
+                    handler.obtainMessage(MESSAGE_READ, message).sendToTarget();
 
                 } catch (IOException e) {
                     e.printStackTrace();

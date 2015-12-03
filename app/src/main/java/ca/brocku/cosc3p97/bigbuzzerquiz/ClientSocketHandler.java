@@ -27,7 +27,7 @@ public class ClientSocketHandler extends Thread {
             socket.bind(null);
             socket.connect(new InetSocketAddress(serverAddress.getHostAddress(),
                     TcpConnection.PORT), 5000);
-            tcpManager = new TcpConnection(socket, handler, TcpConnection.CLIENT_MODE);
+            tcpManager = new TcpConnection(socket, handler, TcpConnection.Type.CLIENT);
             new Thread(tcpManager).start();
         } catch (IOException e) {
             e.printStackTrace();

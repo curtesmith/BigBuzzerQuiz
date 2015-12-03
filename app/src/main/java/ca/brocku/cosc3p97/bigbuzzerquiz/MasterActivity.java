@@ -163,12 +163,12 @@ public class MasterActivity extends AppCompatActivity
             gameServer.addListener(new GameServer.GameServerListener() {
                 @Override
                 public void onSetup() {
-                    Log.i(TAG, "game server is ready, creating player");
+                    Log.i(TAG, "game SERVER is ready, creating player");
                     player = Player.getInstance(info.groupOwnerAddress, gameServer.getHandler());
                 }
             });
         } else {
-            Log.d(TAG, "Connected as a client");
+            Log.d(TAG, "Connected as a CLIENT");
             player = Player.getInstance(info.groupOwnerAddress);
         }
     }

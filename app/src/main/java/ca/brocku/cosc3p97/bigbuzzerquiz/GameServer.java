@@ -61,7 +61,7 @@ public class GameServer implements Handler.Callback {
             socketHandler.addListener(new ServerSocketHandler.ServerSocketListener() {
                 @Override
                 public void onSetup() {
-                    Log.i(TAG, "server socket is ready, initiating callback");
+                    Log.i(TAG, "SERVER socket is ready, initiating callback");
                     callback();
                 }
             });
@@ -76,22 +76,26 @@ public class GameServer implements Handler.Callback {
 
     @Override
     public boolean handleMessage(Message msg) {
+        TcpConnection t;
+
         switch(msg.what) {
             case TcpConnection.HANDLE:
-                if(msg.arg1 == TcpConnection.SERVER_MODE) {
+                t = (TcpConnection) msg.obj;
+                if(t.type == TcpConnection.Type.SERVER) {
                     tcpManagers.add((TcpConnection) msg.obj);
-                    Log.i(TAG, "write hello client");
-                    ((TcpConnection) msg.obj).write("Hello client#" + tcpManagers.size() + ", from the server");
+                    Log.i(TAG, "write hello CLIENT");
+                    ((TcpConnection) msg.obj).write("Hello CLIENT#" + tcpManagers.size() + ", from the SERVER");
                 } else {
-                    Log.i(TAG, "write hello server");
-                    ((TcpConnection) msg.obj).write("Hello Server, from the client");
+                    Log.i(TAG, "write hello SERVER");
+                    ((TcpConnection) msg.obj).write("Hello Server, from the CLIENT");
                 }
                 break;
             case TcpConnection.MESSAGE_READ:
                 Log.i(TAG, "A message has been read {" + msg.obj + "}");
                 break;
             case TcpConnection.DISCONNECTED:
-                if(msg.arg1 == TcpConnection.SERVER_MODE) {
+                t = (TcpConnection) msg.obj;
+                if(t.type == TcpConnection.Type.SERVER) {
                     tcpManagers.remove(msg.obj);
                     Log.i(TAG, "TcpConnection is disconnected so removing him from the list. Size is now " + tcpManagers.size());
                 }
