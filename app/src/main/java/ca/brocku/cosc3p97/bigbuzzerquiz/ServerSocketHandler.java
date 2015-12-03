@@ -36,7 +36,7 @@ public class ServerSocketHandler extends Thread {
 
     public ServerSocketHandler(Handler handler) throws IOException {
         try {
-            socket = new ServerSocket(TcpManager.PORT);
+            socket = new ServerSocket(TcpConnection.PORT);
             this.handler = handler;
         } catch (Exception e) {
             Log.e(TAG, "message = {" + e.getMessage() + "}");
@@ -53,7 +53,7 @@ public class ServerSocketHandler extends Thread {
 
         while (true) {
             try {
-                pool.execute(new TcpManager(socket.accept(), handler, TcpManager.SERVER_MODE));
+                pool.execute(new TcpConnection(socket.accept(), handler, TcpConnection.SERVER_MODE));
                 Log.i(TAG, "getPoolSize={" + pool.getPoolSize() + "}, getCompletedTaskCount={" + pool.getCompletedTaskCount() + "}");
             } catch (IOException e) {
                 try {

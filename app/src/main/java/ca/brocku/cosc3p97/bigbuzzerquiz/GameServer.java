@@ -14,7 +14,7 @@ public class GameServer implements Handler.Callback {
 
     private List<Player> players;
     private ServerSocketHandler socketHandler;
-    private List<TcpManager> tcpManagers = new ArrayList<>();
+    private List<TcpConnection> tcpManagers = new ArrayList<>();
     private Handler handler = new Handler(this);
     private static GameServer instance = null;
     private List<GameServerListener> listeners = new ArrayList<>();
@@ -77,23 +77,23 @@ public class GameServer implements Handler.Callback {
     @Override
     public boolean handleMessage(Message msg) {
         switch(msg.what) {
-            case TcpManager.HANDLE:
-                if(msg.arg1 == TcpManager.SERVER_MODE) {
-                    tcpManagers.add((TcpManager) msg.obj);
-                    ((TcpManager) msg.obj).write(("Hello client#" + tcpManagers.size() + ", from the server").getBytes());
+            case TcpConnection.HANDLE:
+                if(msg.arg1 == TcpConnection.SERVER_MODE) {
+                    tcpManagers.add((TcpConnection) msg.obj);
+                    ((TcpConnection) msg.obj).write(("Hello client#" + tcpManagers.size() + ", from the server").getBytes());
                 } else {
-                    ((TcpManager) msg.obj).write("Hello Server, from the client".getBytes());
+                    ((TcpConnection) msg.obj).write("Hello Server, from the client".getBytes());
                 }
                 break;
-            case TcpManager.MESSAGE_READ:
+            case TcpConnection.MESSAGE_READ:
                 byte[] readBuf = (byte[]) msg.obj;
                 String readMessage = new String(readBuf, 0, msg.arg2);
                 Log.i(TAG, "A message has been read {" + readMessage + "}");
                 break;
-            case TcpManager.DISCONNECTED:
-                if(msg.arg1 == TcpManager.SERVER_MODE) {
+            case TcpConnection.DISCONNECTED:
+                if(msg.arg1 == TcpConnection.SERVER_MODE) {
                     tcpManagers.remove(msg.obj);
-                    Log.i(TAG, "TcpManager is disconnected so removing him from the list. Size is now " + tcpManagers.size());
+                    Log.i(TAG, "TcpConnection is disconnected so removing him from the list. Size is now " + tcpManagers.size());
                 }
                 break;
         }
@@ -110,7 +110,7 @@ public class GameServer implements Handler.Callback {
 
 
     public void write(String message) {
-        for(TcpManager tcpManager : tcpManagers) {
+        for(TcpConnection tcpManager : tcpManagers) {
             tcpManager.write(message.getBytes());
         }
     }

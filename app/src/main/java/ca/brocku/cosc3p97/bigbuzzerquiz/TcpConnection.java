@@ -9,8 +9,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
-public class TcpManager implements Runnable {
-    private static final String TAG = "TcpManager";
+public class TcpConnection implements Runnable {
+    private static final String TAG = "TcpConnection";
     private Socket socket;
     private Handler handler;
     private Thread thread;
@@ -23,7 +23,7 @@ public class TcpManager implements Runnable {
     public static final int CLIENT_MODE = 2;
 
 
-    public TcpManager(Socket socket, Handler handler, int mode) {
+    public TcpConnection(Socket socket, Handler handler, int mode) {
 
         this.socket = socket;
         this.handler = handler;

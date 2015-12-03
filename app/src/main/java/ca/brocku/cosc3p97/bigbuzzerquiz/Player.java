@@ -12,7 +12,7 @@ public class Player implements Handler.Callback{
     private String name;
     private ClientSocketHandler socketHandler;
     private static Player instance = null;
-    private TcpManager tcpManager;
+    private TcpConnection tcpManager;
 
     private Player(InetAddress host, Handler handler) {
         Log.i(TAG, "ctor invoked");
@@ -45,15 +45,19 @@ public class Player implements Handler.Callback{
     }
 
 
+    public void getListOfPlayers() {
+
+    }
+
     @Override
     public boolean handleMessage(Message msg) {
         switch(msg.what) {
-            case TcpManager.HANDLE:
+            case TcpConnection.HANDLE:
                 Log.i(TAG, "HANDLE caught");
-                tcpManager = (TcpManager) msg.obj;
-                ((TcpManager) msg.obj).write("Hello Server, from the client".getBytes());
+                tcpManager = (TcpConnection) msg.obj;
+                ((TcpConnection) msg.obj).write("Hello Server, from the client".getBytes());
                 break;
-            case TcpManager.MESSAGE_READ:
+            case TcpConnection.MESSAGE_READ:
                 Log.i(TAG, "MESSAGE_READ caught");
                 byte[] readBuf = (byte[]) msg.obj;
                 String readMessage = new String(readBuf, 0, msg.arg2);

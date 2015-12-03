@@ -12,7 +12,7 @@ public class ClientSocketHandler extends Thread {
 
     private static final String TAG = "ClientSocketHandler";
     private Handler handler;
-    private TcpManager tcpManager;
+    private TcpConnection tcpManager;
     private InetAddress serverAddress;
 
     public ClientSocketHandler(Handler handler, InetAddress serverAddress) {
@@ -26,8 +26,8 @@ public class ClientSocketHandler extends Thread {
         try {
             socket.bind(null);
             socket.connect(new InetSocketAddress(serverAddress.getHostAddress(),
-                    TcpManager.PORT), 5000);
-            tcpManager = new TcpManager(socket, handler, TcpManager.CLIENT_MODE);
+                    TcpConnection.PORT), 5000);
+            tcpManager = new TcpConnection(socket, handler, TcpConnection.CLIENT_MODE);
             new Thread(tcpManager).start();
         } catch (IOException e) {
             e.printStackTrace();
