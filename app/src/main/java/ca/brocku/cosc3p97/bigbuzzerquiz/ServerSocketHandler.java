@@ -53,7 +53,7 @@ public class ServerSocketHandler extends Thread {
 
         while (true) {
             try {
-                pool.execute(new TcpConnection(socket.accept(), handler, TcpConnection.Type.SERVER));
+                pool.execute(new TcpConnection(socket.accept(), handler, TcpConnection.SERVER));
                 Log.i(TAG, "getPoolSize={" + pool.getPoolSize() + "}, getCompletedTaskCount={" + pool.getCompletedTaskCount() + "}");
             } catch (IOException e) {
                 try {

@@ -14,24 +14,30 @@ public class TcpConnection implements Runnable {
     private static final String TAG = "TcpConnection";
     private Socket socket;
     private Handler handler;
-    public Type type;
+    public int type;
     public static final int HANDLE = 1;
     public static final int MESSAGE_READ = 2;
     public static final int DISCONNECTED = 3;
     public static final int PORT = 8988;
-    
-    public enum Type {
-        CLIENT, SERVER
+    public static final int SERVER = 1;
+    public static final int CLIENT = 2;
+
+    public interface TcpListener {
+        void onConnected(TcpConnection connection);
+        void onRead(String message);
+        void onDisconnected();
     }
+
 
     public interface ReadListener {
         void onRead(String message);
     }
 
-    public TcpConnection(Socket socket, Handler handler, Type tyoe) {
+
+    public TcpConnection(Socket socket, Handler handler, int type) {
         this.socket = socket;
         this.handler = handler;
-        this.type = tyoe;
+        this.type = type;
     }
 
 
@@ -48,18 +54,20 @@ public class TcpConnection implements Runnable {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
             String message;
-            handler.obtainMessage(HANDLE, this).sendToTarget();
+            handler.obtainMessage(HANDLE, type, -1, this).sendToTarget();
 
             while (true) {
                 try {
                     message = in.readLine();
 
                     if (message == null) {
-                        handler.obtainMessage(DISCONNECTED, this).sendToTarget();
+                        handler.obtainMessage(DISCONNECTED, type, -1, this).sendToTarget();
                         break;
                     }
+                    Log.i(TAG, "MESSAGE READ by type {" + type +  "}, value is {" +
+                        message + "}");
 
-                    handler.obtainMessage(MESSAGE_READ, message).sendToTarget();
+                    handler.obtainMessage(MESSAGE_READ, type, -1, message).sendToTarget();
 
                 } catch (IOException e) {
                     e.printStackTrace();

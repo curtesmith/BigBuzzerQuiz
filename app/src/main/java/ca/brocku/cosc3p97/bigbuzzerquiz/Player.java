@@ -2,30 +2,19 @@ package ca.brocku.cosc3p97.bigbuzzerquiz;
 
 
 import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 
 import java.net.InetAddress;
-import java.util.ArrayList;
-import java.util.List;
 
-public class Player implements Handler.Callback {
+public class Player {
     private static final String TAG = "Player";
-    private String name;
-    private ClientSocketHandler socketHandler;
     private static Player instance = null;
-    private TcpConnection tcpManager;
-    private List<TcpConnection.ReadListener> readListeners = new ArrayList<>();
-
+    private GameProxy gameProxy;
 
 
     private Player(InetAddress host, Handler handler) {
         Log.i(TAG, "ctor invoked");
-        if (handler == null) {
-            handler = new Handler(this);
-        }
-        socketHandler = new ClientSocketHandler(handler, host);
-        socketHandler.start();
+        gameProxy = new GameProxy(host, handler);
     }
 
 
@@ -52,42 +41,19 @@ public class Player implements Handler.Callback {
             return instance;
         }
     }
+    
 
-
-    public String getName() {
-        return name;
+    public void getPlayers(final CallbackListener callback) {
+        gameProxy.getPlayers(new CallbackListener() {
+            @Override
+            public void onCallback(Object result) {
+                callback.onCallback(result);
+            }
+        });
     }
 
 
-    @Override
-    public boolean handleMessage(Message msg) {
-        switch (msg.what) {
-            case TcpConnection.HANDLE:
-                Log.i(TAG, "HANDLE caught");
-                tcpManager = (TcpConnection) msg.obj;
-                ((TcpConnection) msg.obj).write("Hello Server, from the CLIENT");
-                break;
-            case TcpConnection.MESSAGE_READ:
-                Log.i(TAG, "MESSAGE_READ caught");
-                Log.i(TAG, "message received ={" + msg.obj + "}");
-                for(TcpConnection.ReadListener listener : readListeners) {
-                    listener.onRead((String) msg.obj);
-                }
-        }
-
-        return true;
-    }
-
-
-    public void write(String message) {
-        tcpManager.write(message);
-    }
-
-    public List<String> getPlayers() {
-        List<String> players = new ArrayList<>();
-        for(String player : new String[]  { "Matthew", "Mark"}) {
-            players.add(player);
-        }
-        return players;
+    public interface CallbackListener {
+        void onCallback(Object result);
     }
 }

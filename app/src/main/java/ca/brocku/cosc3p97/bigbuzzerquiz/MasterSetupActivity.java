@@ -11,6 +11,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.List;
+
 /**
  * This Activity provides setting for the master-player to setup the game
  */
@@ -27,15 +29,25 @@ public class MasterSetupActivity extends AppCompatActivity {
         try {
             player = Player.getInstance();
 
-            ListView listView = (ListView) findViewById(R.id.playerListView);
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                    android.R.layout.simple_list_item_1, android.R.id.text1, player.getPlayers());
-            listView.setAdapter(adapter);
+            player.getPlayers(new Player.CallbackListener() {
+                @Override
+                public void onCallback(Object players) {
+                    loadListView((List<String>) players);
+                }
+            });
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+    }
+
+
+    private void loadListView(List<String> players) {
+        final ListView listView = (ListView) findViewById(R.id.playerListView);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1, android.R.id.text1, players);
+        listView.setAdapter(adapter);
     }
 
 
