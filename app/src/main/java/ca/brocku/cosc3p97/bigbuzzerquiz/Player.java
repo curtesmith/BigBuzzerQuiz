@@ -1,7 +1,6 @@
 package ca.brocku.cosc3p97.bigbuzzerquiz;
 
 
-import android.os.Handler;
 import android.util.Log;
 
 import java.net.InetAddress;
@@ -12,9 +11,8 @@ public class Player {
     private GameProxy gameProxy;
 
 
-    private Player(InetAddress host, Handler handler) {
-        Log.i(TAG, "ctor invoked");
-        gameProxy = new GameProxy(host, handler);
+    private Player(InetAddress host, GameServer gameServer) {
+        gameProxy = new GameProxy(host, gameServer);
     }
 
 
@@ -32,16 +30,15 @@ public class Player {
     }
 
 
-    public static Player getInstance(InetAddress host, Handler handler) {
-        Log.i(TAG, "getInstance invoked");
+    public static Player getInstance(InetAddress host, GameServer gameServer) {
+        Log.i(TAG, "getInstance with gameServer argument");
         if (instance == null) {
-            instance = new Player(host, handler);
-            return instance;
-        } else {
-            return instance;
+            instance = new Player(host, gameServer);
         }
+
+        return instance;
     }
-    
+
 
     public void getPlayers(final CallbackListener callback) {
         gameProxy.getPlayers(new CallbackListener() {
