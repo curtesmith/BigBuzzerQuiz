@@ -17,6 +17,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,10 +73,13 @@ public class DeviceListAdapter extends BaseAdapter {
         }
 
         CheckBox checkBox = (CheckBox) view.findViewById(R.id.deviceNameCheckBox);
+
+        checkBox.setChecked(peers.get(index).status == WifiP2pDevice.CONNECTED);
         checkBox.setText(peers.get(index).deviceName);
         checkBox.setOnCheckedChangeListener(getOnCheckedChangeListener(index));
 
         ((TextView) view.findViewById(R.id.statusTextView)).setText(WifiP2pHelper.convertStatus(peers.get(index).status));
+        ((TextView) view.findViewById(R.id.ownerTextView)).setText(peers.get(index).isGroupOwner() ? "Y" : "N");
 
         ((ProgressBar) view.findViewById(R.id.progressBar)).setVisibility(peers.get(index).isConnecting ? View.VISIBLE : View.INVISIBLE);
 
@@ -106,6 +110,9 @@ public class DeviceListAdapter extends BaseAdapter {
                             @Override
                             public void onFailure(int i) {
                                 Log.e(TAG, "call to connect failed with status: " + WifiP2pHelper.convertFailureStatus(i));
+                                Toast.makeText(activity, "Call to connect failed with status: " + WifiP2pHelper.convertFailureStatus(i), Toast.LENGTH_SHORT).show();
+                                peers.get(index).isConnecting = false;
+                                notifyDataSetChanged();
                             }
                         });
 

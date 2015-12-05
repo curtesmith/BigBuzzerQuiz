@@ -24,6 +24,9 @@ public class TcpConnection implements Runnable {
         CLIENT, SERVER
     }
 
+    public interface ReadListener {
+        void onRead(String message);
+    }
 
     public TcpConnection(Socket socket, Handler handler, Type tyoe) {
         this.socket = socket;

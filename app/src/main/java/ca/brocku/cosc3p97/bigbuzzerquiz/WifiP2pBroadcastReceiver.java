@@ -48,9 +48,6 @@ public class WifiP2pBroadcastReceiver extends BroadcastReceiver{
                 NetworkInfo networkInfo = intent.getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
 
                 if (networkInfo.isConnected()) {
-
-                    // we are connected with the other device, request connection
-                    // info to find group owner I
                     manager.requestConnectionInfo(channel, new WifiP2pManager.ConnectionInfoListener() {
                         @Override
                         public void onConnectionInfoAvailable(WifiP2pInfo info) {
@@ -58,6 +55,8 @@ public class WifiP2pBroadcastReceiver extends BroadcastReceiver{
                             listener.onConnectionInfoAvailable(info);
                         }
                     });
+                } else {
+                    listener.onConnectionInfoAvailable(null);
                 }
                 break;
         }

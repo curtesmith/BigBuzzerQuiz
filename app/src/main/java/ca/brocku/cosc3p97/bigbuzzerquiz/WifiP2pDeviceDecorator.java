@@ -2,6 +2,7 @@ package ca.brocku.cosc3p97.bigbuzzerquiz;
 
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,7 @@ public class WifiP2pDeviceDecorator extends WifiP2pDevice {
 
     public WifiP2pDeviceDecorator(WifiP2pDevice source) {
         super(source);
+        Log.i(TAG, "ctor name={" + source.deviceName + "}, isGroupOwner={" + source.isGroupOwner() + "}");
         isConnecting = false;
         isSelected = false;
     }
@@ -29,6 +31,7 @@ public class WifiP2pDeviceDecorator extends WifiP2pDevice {
 
         for(WifiP2pDevice device : from.getDeviceList()) {
             WifiP2pDeviceDecorator decorator = new WifiP2pDeviceDecorator(device);
+            Log.i(TAG, "copy device name={" + decorator.deviceName + "}, isgroupowner={" + decorator.isGroupOwner() + "}");
             decorator.update(to);
             list.add(decorator);
         }

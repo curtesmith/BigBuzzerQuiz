@@ -50,4 +50,11 @@
         android:text="@string/playerDescription"
         android:layout_marginTop="5dp"/>
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Wi-Fi Setup"
+        android:textSize="@dimen/defaultButtonSize"
+        android:id="@+id/wiFiSetupButton" />
+
 </LinearLayout>

@@ -18,6 +18,8 @@ public class GameServer implements Handler.Callback {
     private Handler handler = new Handler(this);
     private static GameServer instance = null;
     private List<GameServerListener> listeners = new ArrayList<>();
+    private List<TcpConnection.ReadListener> readListeners = new ArrayList<>();
+
 
     static {
         try {
@@ -33,8 +35,14 @@ public class GameServer implements Handler.Callback {
         void onSetup();
     }
 
+
     public void addListener(GameServerListener listener) {
         listeners.add(listener);
+    }
+
+
+    public void addReadListener(TcpConnection.ReadListener listener) {
+        readListeners.add(listener);
     }
 
 
@@ -92,6 +100,9 @@ public class GameServer implements Handler.Callback {
                 break;
             case TcpConnection.MESSAGE_READ:
                 Log.i(TAG, "A message has been read {" + msg.obj + "}");
+                for(TcpConnection.ReadListener listener : readListeners) {
+                    listener.onRead((String) msg.obj);
+                }
                 break;
             case TcpConnection.DISCONNECTED:
                 t = (TcpConnection) msg.obj;

@@ -6,13 +6,18 @@ import android.os.Message;
 import android.util.Log;
 
 import java.net.InetAddress;
+import java.util.ArrayList;
+import java.util.List;
 
-public class Player implements Handler.Callback{
+public class Player implements Handler.Callback {
     private static final String TAG = "Player";
     private String name;
     private ClientSocketHandler socketHandler;
     private static Player instance = null;
     private TcpConnection tcpManager;
+    private List<TcpConnection.ReadListener> readListeners = new ArrayList<>();
+
+
 
     private Player(InetAddress host, Handler handler) {
         Log.i(TAG, "ctor invoked");
@@ -21,6 +26,15 @@ public class Player implements Handler.Callback{
         }
         socketHandler = new ClientSocketHandler(handler, host);
         socketHandler.start();
+    }
+
+
+    public static Player getInstance() throws Exception {
+        if (instance != null) {
+            return instance;
+        } else {
+            throw new Exception("instance cannot be null");
+        }
     }
 
 
@@ -45,13 +59,9 @@ public class Player implements Handler.Callback{
     }
 
 
-    public void getListOfPlayers() {
-
-    }
-
     @Override
     public boolean handleMessage(Message msg) {
-        switch(msg.what) {
+        switch (msg.what) {
             case TcpConnection.HANDLE:
                 Log.i(TAG, "HANDLE caught");
                 tcpManager = (TcpConnection) msg.obj;
@@ -60,8 +70,24 @@ public class Player implements Handler.Callback{
             case TcpConnection.MESSAGE_READ:
                 Log.i(TAG, "MESSAGE_READ caught");
                 Log.i(TAG, "message received ={" + msg.obj + "}");
+                for(TcpConnection.ReadListener listener : readListeners) {
+                    listener.onRead((String) msg.obj);
+                }
         }
 
         return true;
+    }
+
+
+    public void write(String message) {
+        tcpManager.write(message);
+    }
+
+    public List<String> getPlayers() {
+        List<String> players = new ArrayList<>();
+        for(String player : new String[]  { "Matthew", "Mark"}) {
+            players.add(player);
+        }
+        return players;
     }
 }
