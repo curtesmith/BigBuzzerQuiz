@@ -25,12 +25,7 @@ public class TcpConnection implements Runnable {
     public interface TcpListener {
         void onConnected(TcpConnection connection);
         void onRead(String message);
-        void onDisconnected();
-    }
-
-
-    public interface ReadListener {
-        void onRead(String message);
+        void onDisconnected(TcpConnection connection);
     }
 
 
@@ -64,9 +59,8 @@ public class TcpConnection implements Runnable {
                         handler.obtainMessage(DISCONNECTED, type, -1, this).sendToTarget();
                         break;
                     }
-                    Log.i(TAG, "MESSAGE READ by type {" + type +  "}, value is {" +
-                        message + "}");
 
+                    Log.i(TAG, String.format("run: type[%s], message[%s]", type, message));
                     handler.obtainMessage(MESSAGE_READ, type, -1, message).sendToTarget();
 
                 } catch (IOException e) {
