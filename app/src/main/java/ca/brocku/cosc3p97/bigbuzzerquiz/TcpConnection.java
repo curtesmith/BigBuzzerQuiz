@@ -42,7 +42,7 @@ public class TcpConnection implements Runnable {
 
     @Override
     public void run() {
-        Log.i(TAG, "run called");
+        Log.i(TAG, "run: invoked");
 
         try {
 
@@ -60,7 +60,6 @@ public class TcpConnection implements Runnable {
                         break;
                     }
 
-                    Log.i(TAG, String.format("run: type[%s], message[%s]", type, message));
                     handler.obtainMessage(MESSAGE_READ, type, -1, message).sendToTarget();
 
                 } catch (IOException e) {

@@ -17,7 +17,6 @@ import java.util.List;
  * This Activity provides setting for the master-player to setup the game
  */
 public class MasterSetupActivity extends AppCompatActivity {
-
     Player player;
 
 
@@ -39,7 +38,6 @@ public class MasterSetupActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
 
@@ -57,6 +55,7 @@ public class MasterSetupActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_master_setup, menu);
         return true;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

@@ -10,17 +10,23 @@ import java.util.List;
 
 public class GameServer {
     private static final String TAG = "GameServer";
-
-    private List<TcpConnection> tcpManagers = new ArrayList<>();
     private static GameServer instance = null;
     private List<ClientProxy.SetupListener> listeners = new ArrayList<>();
-    private TcpConnection.TcpListener tcpListener;
-
     private ClientProxy clientProxy;
+    private List<String> players = new ArrayList<>();
+
+
+    public void addPlayer(String name) {
+        players.add(name);
+    }
+
+
+    public List<String> getPlayers() {
+        return players;
+    }
 
 
     public void addListener(ClientProxy.SetupListener listener) {
-        Log.i(TAG, "addListener: invoked");
         listeners.add(listener);
     }
 
@@ -33,12 +39,13 @@ public class GameServer {
     private GameServer(ClientProxy.SetupListener listener) throws Exception {
         Log.i(TAG, "ctor: invoked");
         addListener(listener);
-        clientProxy = new ClientProxy(listener);
+        clientProxy = new ClientProxy(this, listener);
+        clientProxy.setRequestHandler(new ServerProcessor(this, clientProxy));
     }
 
 
     public static GameServer getInstance(ClientProxy.SetupListener listener) {
-        if(instance == null) {
+        if (instance == null) {
             try {
                 return new GameServer(listener);
             } catch (Exception e) {
