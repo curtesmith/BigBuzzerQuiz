@@ -58,10 +58,6 @@ public class Host implements HostActions {
         players.add(name);
     }
 
-    @Override
-    public List<String> getPlayers() {
-        return players;
-    }
 
     @Override
     public void getPlayers(GetPlayersCallback callback) {

@@ -27,14 +27,7 @@ public class MasterSetupActivity extends AppCompatActivity {
 
         try {
             player = Player.getInstance();
-
-            player.getPlayers(new Player.CallbackListener() {
-                @Override
-                public void onCallback(Object players) {
-                    loadListView((List<String>) players);
-                }
-            });
-
+            loadListView(player.getPlayers());
         } catch (Exception e) {
             e.printStackTrace();
         }

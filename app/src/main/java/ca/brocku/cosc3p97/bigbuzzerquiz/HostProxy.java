@@ -9,7 +9,7 @@ import org.json.JSONException;
 
 import java.net.InetAddress;
 
-public class HostProxy implements Handler.Callback, TcpConnection.Listener {
+public class HostProxy implements Handler.Callback, TcpConnection.Listener, HostActions {
     private static final String TAG = "HostProxy";
     private ClientSocketThread socketHandler;
     private TcpConnection tcpManager;
@@ -18,9 +18,11 @@ public class HostProxy implements Handler.Callback, TcpConnection.Listener {
 
     public HostProxy(InetAddress hostAddress, Host host) {
         if(host != null) {
+            Log.i(TAG, "ctor: host is not null");
             host.setTcpListener(this);
             socketHandler = new ClientSocketThread(host.getHandler(), hostAddress);
         } else {
+            Log.i(TAG, "ctor: host is null");
             socketHandler = new ClientSocketThread(new Handler(this), hostAddress);
         }
 
@@ -110,6 +112,17 @@ public class HostProxy implements Handler.Callback, TcpConnection.Listener {
 
     @Override
     public void onDisconnected(TcpConnection connection) {
+
+    }
+
+    @Override
+    public void addPlayer(String name) {
+
+    }
+
+
+    @Override
+    public void getPlayers(GetPlayersCallback callback) {
 
     }
 }

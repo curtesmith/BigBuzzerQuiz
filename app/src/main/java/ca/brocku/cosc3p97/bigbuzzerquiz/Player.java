@@ -4,15 +4,17 @@ package ca.brocku.cosc3p97.bigbuzzerquiz;
 import android.util.Log;
 
 import java.net.InetAddress;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Player {
     private static final String TAG = "Player";
     private static Player instance = null;
-    private HostProxy hostProxy;
+    private HostActions host;
 
 
     private Player(InetAddress hostAddress, Host host) {
-        hostProxy = new HostProxy(hostAddress, host);
+        this.host = new HostProxy(hostAddress, host);
     }
 
 
@@ -40,17 +42,27 @@ public class Player {
     }
 
 
-    public void getPlayers(final CallbackListener callback) {
-        hostProxy.getPlayers(new CallbackListener() {
+    public List<String> getPlayers() {
+        Log.i(TAG, "getPlayers: invoked");
+        final List<String> result = new ArrayList<>();
+
+        host.getPlayers(new HostActions.GetPlayersCallback() {
             @Override
-            public void onCallback(Object result) {
-                callback.onCallback(result);
+            public void callback(List<String> names) {
+                Log.i(TAG, String.format("getPlayers callback invoked with %s names", names.size()));
+                for(String name : names) {
+                    result.add(name);
+                }
             }
         });
+
+        Log.i(TAG, "getPlayers: completed");
+        return result;
     }
 
 
     public interface CallbackListener {
-        void onCallback(Object result);
+        void onCallback(Object object);
     }
+
 }
