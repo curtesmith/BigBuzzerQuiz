@@ -57,9 +57,4 @@ public class HostMessageProcessor implements HostMessageInterface {
 
         return response;
     }
-
-    @Override
-    public void getPlayers(GetPlayersCallback callback) {
-
-    }
 }
