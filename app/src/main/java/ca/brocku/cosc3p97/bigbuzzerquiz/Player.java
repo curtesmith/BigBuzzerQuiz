@@ -61,6 +61,10 @@ public class Player {
     }
 
 
+    public void startGame() {
+
+    }
+
     public interface CallbackListener {
         void onCallback(Object object);
     }
