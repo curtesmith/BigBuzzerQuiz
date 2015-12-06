@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class Host {
+public class Host implements HostActions {
     private static final String TAG = "Host";
     private static Host instance = null;
     private List<PlayerProxy.SetupListener> listeners = new ArrayList<>();
@@ -20,7 +20,7 @@ public class Host {
         Log.i(TAG, "ctor: invoked");
         addListener(listener);
         playerProxy = new PlayerProxy(this, listener);
-        playerProxy.setRequestHandler(new ServerProcessor(this, playerProxy));
+        playerProxy.setRequestHandler(new HostMessageProcessor(this, playerProxy));
     }
 
 
@@ -37,15 +37,6 @@ public class Host {
         }
     }
 
-    public void addPlayer(String name) {
-        players.add(name);
-    }
-
-
-    public List<String> getPlayers() {
-        return players;
-    }
-
 
     public void addListener(PlayerProxy.SetupListener listener) {
         listeners.add(listener);
@@ -59,6 +50,22 @@ public class Host {
 
     public Handler getHandler() {
         return playerProxy.getThreadHandler();
+    }
+
+
+    @Override
+    public void addPlayer(String name) {
+        players.add(name);
+    }
+
+    @Override
+    public List<String> getPlayers() {
+        return players;
+    }
+
+    @Override
+    public void getPlayers(GetPlayersCallback callback) {
+        callback.callback(players);
     }
 
 }

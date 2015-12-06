@@ -11,17 +11,17 @@ import java.net.InetAddress;
 
 public class HostProxy implements Handler.Callback, TcpConnection.Listener {
     private static final String TAG = "HostProxy";
-    private ClientSocketHandler socketHandler;
+    private ClientSocketThread socketHandler;
     private TcpConnection tcpManager;
     private Player.CallbackListener getPlayerCallback;
 
 
-    public HostProxy(InetAddress host, Host gameServer) {
-        if(gameServer != null) {
-            gameServer.setTcpListener(this);
-            socketHandler = new ClientSocketHandler(gameServer.getHandler(), host);
+    public HostProxy(InetAddress hostAddress, Host host) {
+        if(host != null) {
+            host.setTcpListener(this);
+            socketHandler = new ClientSocketThread(host.getHandler(), hostAddress);
         } else {
-            socketHandler = new ClientSocketHandler(new Handler(this), host);
+            socketHandler = new ClientSocketThread(new Handler(this), hostAddress);
         }
 
         socketHandler.start();
@@ -35,7 +35,7 @@ public class HostProxy implements Handler.Callback, TcpConnection.Listener {
                 onConnected((TcpConnection) msg.obj);
                 break;
             case TcpConnection.MESSAGE_READ:
-                onRead((String) msg.obj);
+                onRead((TcpConnection.ReadObject) msg.obj);
                 break;
             case TcpConnection.DISCONNECTED:
                 onDisconnected((TcpConnection) msg.obj);
@@ -65,11 +65,11 @@ public class HostProxy implements Handler.Callback, TcpConnection.Listener {
 
 
     @Override
-    public void onRead(String string) {
-        Log.i(TAG, String.format("onRead: invoked with string {%s}", string));
+    public void onRead(TcpConnection.ReadObject obj) {
+        Log.i(TAG, String.format("onRead: invoked with string {%s}", obj.message));
 
         try {
-            JsonMessage message = new JsonMessage(string);
+            JsonMessage message = new JsonMessage(obj.message);
             Log.i(TAG, String.format("onRead: message type is {%s}", message.getType()));
 
             if (Request.is(message)) {

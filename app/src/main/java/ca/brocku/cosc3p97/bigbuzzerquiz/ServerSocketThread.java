@@ -15,33 +15,27 @@ import java.util.concurrent.TimeUnit;
 public class ServerSocketThread extends Thread {
     private static final String TAG = "ServerSocketThread";
     private static final int THREAD_COUNT = 10;
-    private ServerSocket socket;
-    private Handler handler;
+    private ServerSocket serverSocket;
+    private Handler threadHandler;
     private List<ServerSocketListener> listeners = new ArrayList<>();
-
-
-    private final ThreadPoolExecutor pool = new ThreadPoolExecutor(
-            THREAD_COUNT, THREAD_COUNT, 10, TimeUnit.SECONDS,
-            new LinkedBlockingQueue<Runnable>());
-
 
     public interface ServerSocketListener {
         void onSetup();
     }
 
+    private final ThreadPoolExecutor threadPool = new ThreadPoolExecutor(
+            THREAD_COUNT, THREAD_COUNT, 10, TimeUnit.SECONDS,
+            new LinkedBlockingQueue<Runnable>());
 
-    public void addListener(ServerSocketListener listener) {
-        listeners.add(listener);
-    }
 
-    public ServerSocketThread(Handler handler) throws IOException {
+    public ServerSocketThread(Handler threadHandler) throws IOException {
         try {
-            socket = new ServerSocket(TcpConnection.PORT);
-            this.handler = handler;
+            serverSocket = new ServerSocket(TcpConnection.PORT);
+            this.threadHandler = threadHandler;
         } catch (Exception e) {
             Log.e(TAG, "message = {" + e.getMessage() + "}");
             e.printStackTrace();
-            pool.shutdownNow();
+            threadPool.shutdownNow();
             throw e;
         }
     }
@@ -53,17 +47,17 @@ public class ServerSocketThread extends Thread {
 
         while (true) {
             try {
-                pool.execute(new TcpConnection(socket.accept(), handler, TcpConnection.SERVER));
-                Log.i(TAG, "getPoolSize={" + pool.getPoolSize() + "}, getCompletedTaskCount={" + pool.getCompletedTaskCount() + "}");
+                threadPool.execute(new TcpConnection(serverSocket.accept(), threadHandler, TcpConnection.SERVER));
+                Log.i(TAG, "getPoolSize={" + threadPool.getPoolSize() + "}, getCompletedTaskCount={" + threadPool.getCompletedTaskCount() + "}");
             } catch (IOException e) {
                 try {
-                    if (socket != null && !socket.isClosed())
-                        socket.close();
+                    if (serverSocket != null && !serverSocket.isClosed())
+                        serverSocket.close();
                 } catch (IOException ioe) {
 
                 }
                 e.printStackTrace();
-                pool.shutdownNow();
+                threadPool.shutdownNow();
                 break;
             }
         }
@@ -78,4 +72,7 @@ public class ServerSocketThread extends Thread {
     }
 
 
+    public void addListener(ServerSocketListener listener) {
+        listeners.add(listener);
+    }
 }

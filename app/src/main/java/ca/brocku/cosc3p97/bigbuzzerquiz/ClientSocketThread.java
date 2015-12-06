@@ -8,15 +8,15 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
-public class ClientSocketHandler extends Thread {
+public class ClientSocketThread extends Thread {
 
-    private static final String TAG = "ClientSocketHandler";
-    private Handler handler;
-    private TcpConnection tcpManager;
+    private static final String TAG = "ClientSocketThread";
+    private Handler threadHandler;
+    private TcpConnection tcpConnection;
     private InetAddress serverAddress;
 
-    public ClientSocketHandler(Handler handler, InetAddress serverAddress) {
-        this.handler = handler;
+    public ClientSocketThread(Handler threadHandler, InetAddress serverAddress) {
+        this.threadHandler = threadHandler;
         this.serverAddress = serverAddress;
     }
 
@@ -27,8 +27,8 @@ public class ClientSocketHandler extends Thread {
             socket.bind(null);
             socket.connect(new InetSocketAddress(serverAddress.getHostAddress(),
                     TcpConnection.PORT), 5000);
-            tcpManager = new TcpConnection(socket, handler, TcpConnection.CLIENT);
-            new Thread(tcpManager).start();
+            tcpConnection = new TcpConnection(socket, threadHandler, TcpConnection.CLIENT);
+            new Thread(tcpConnection).start();
         } catch (IOException e) {
             e.printStackTrace();
             try {

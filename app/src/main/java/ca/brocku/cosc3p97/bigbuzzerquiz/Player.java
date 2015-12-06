@@ -11,8 +11,8 @@ public class Player {
     private HostProxy hostProxy;
 
 
-    private Player(InetAddress host, Host gameServer) {
-        hostProxy = new HostProxy(host, gameServer);
+    private Player(InetAddress hostAddress, Host host) {
+        hostProxy = new HostProxy(hostAddress, host);
     }
 
 
@@ -25,15 +25,15 @@ public class Player {
     }
 
 
-    public static Player getInstance(InetAddress host) {
-        return getInstance(host, null);
+    public static Player getInstance(InetAddress hostAddress) {
+        return getInstance(hostAddress, null);
     }
 
 
-    public static Player getInstance(InetAddress host, Host gameServer) {
+    public static Player getInstance(InetAddress hostAddress, Host host) {
         Log.i(TAG, "getInstance with host argument");
         if (instance == null) {
-            instance = new Player(host, gameServer);
+            instance = new Player(hostAddress, host);
         }
 
         return instance;

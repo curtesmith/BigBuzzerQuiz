@@ -5,8 +5,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
-import org.json.JSONException;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +17,7 @@ public class PlayerProxy implements Handler.Callback, TcpConnection.Listener {
     private Handler threadHandler = new Handler(this);
     private List<SetupListener> listeners = new ArrayList<>();
     private TcpConnection.Listener playerTcpListener;
-    private ClientRequestHandler requestHandler;
+    private HostMessageInterface requestHandler;
     private Host host;
 
 
@@ -56,7 +54,7 @@ public class PlayerProxy implements Handler.Callback, TcpConnection.Listener {
         }
     }
 
-    public void setRequestHandler(ClientRequestHandler requestHandler) {
+    public void setRequestHandler(HostMessageInterface requestHandler) {
         this.requestHandler = requestHandler;
     }
 
@@ -86,9 +84,9 @@ public class PlayerProxy implements Handler.Callback, TcpConnection.Listener {
                 break;
             case TcpConnection.MESSAGE_READ:
                 if (msg.arg1 == TcpConnection.SERVER) {
-                    onRead((String) msg.obj);
+                    onRead((TcpConnection.ReadObject) msg.obj);
                 } else {
-                    playerTcpListener.onRead((String) msg.obj);
+                    playerTcpListener.onRead((TcpConnection.ReadObject) msg.obj);
                 }
                 break;
             case TcpConnection.DISCONNECTED:
@@ -111,26 +109,18 @@ public class PlayerProxy implements Handler.Callback, TcpConnection.Listener {
         callback();
     }
 
-
     @Override
-    public void onRead(String string) {
-        Log.i(TAG, String.format("onRead: invoked with string {%s}", string));
+    public void onRead(final TcpConnection.ReadObject obj) {
+        Log.i(TAG, String.format("onRead: invoked with string {%s}", obj.message));
 
-        try {
-            JsonMessage message = new JsonMessage(string);
-
-            if (Request.is(message)) {
-                requestHandler.execute(new Request(message.toString()));
-            } else {
-                handleClientResponse(message);
+        requestHandler.execute(obj.message, new Callback() {
+            @Override
+            public void done(String message) {
+                if (message != null) {
+                    write(obj.conn, message);
+                }
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    private void handleClientResponse(JsonMessage json) {
+        });
 
     }
 
@@ -150,6 +140,11 @@ public class PlayerProxy implements Handler.Callback, TcpConnection.Listener {
     }
 
 
+    public void write(TcpConnection conn, String message) {
+        conn.write(message);
+    }
+
+
     public interface SetupListener {
         void onSetup();
     }
@@ -162,4 +157,8 @@ public class PlayerProxy implements Handler.Callback, TcpConnection.Listener {
         }
     }
 
+
+    interface Callback {
+        void done(String message);
+    }
 }
