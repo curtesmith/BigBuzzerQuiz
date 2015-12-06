@@ -6,10 +6,10 @@ import org.json.JSONException;
 
 public class ServerProcessor implements ClientRequestHandler{
     ClientProxy clientProxy;
-    GameServer gameServer;
+    Host host;
 
-    public ServerProcessor(GameServer server, ClientProxy clientProxy) {
-        gameServer = server;
+    public ServerProcessor(Host server, ClientProxy clientProxy) {
+        host = server;
         this.clientProxy = clientProxy;
     }
 
@@ -37,7 +37,7 @@ public class ServerProcessor implements ClientRequestHandler{
 
         try {
             JSONArray names = new JSONArray();
-            for (String name : gameServer.getPlayers()) {
+            for (String name : host.getPlayers()) {
                 names.put(name);
             }
             response.put("NAMES", names);

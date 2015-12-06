@@ -9,14 +9,14 @@ import org.json.JSONException;
 
 import java.net.InetAddress;
 
-public class GameProxy implements Handler.Callback, TcpConnection.TcpListener {
-    private static final String TAG = "GameProxy";
+public class HostProxy implements Handler.Callback, TcpConnection.TcpListener {
+    private static final String TAG = "HostProxy";
     private ClientSocketHandler socketHandler;
     private TcpConnection tcpManager;
     private Player.CallbackListener getPlayerCallback;
 
 
-    public GameProxy(InetAddress host, GameServer gameServer) {
+    public HostProxy(InetAddress host, Host gameServer) {
         if(gameServer != null) {
             gameServer.setTcpListener(this);
             socketHandler = new ClientSocketHandler(gameServer.getHandler(), host);

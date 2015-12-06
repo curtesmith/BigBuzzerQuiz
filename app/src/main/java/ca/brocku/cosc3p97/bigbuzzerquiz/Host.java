@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class GameServer {
-    private static final String TAG = "GameServer";
-    private static GameServer instance = null;
+public class Host {
+    private static final String TAG = "Host";
+    private static Host instance = null;
     private List<ClientProxy.SetupListener> listeners = new ArrayList<>();
     private ClientProxy clientProxy;
     private List<String> players = new ArrayList<>();
@@ -36,7 +36,7 @@ public class GameServer {
     }
 
 
-    private GameServer(ClientProxy.SetupListener listener) throws Exception {
+    private Host(ClientProxy.SetupListener listener) throws Exception {
         Log.i(TAG, "ctor: invoked");
         addListener(listener);
         clientProxy = new ClientProxy(this, listener);
@@ -44,10 +44,10 @@ public class GameServer {
     }
 
 
-    public static GameServer getInstance(ClientProxy.SetupListener listener) {
+    public static Host getInstance(ClientProxy.SetupListener listener) {
         if (instance == null) {
             try {
-                return new GameServer(listener);
+                return new Host(listener);
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;

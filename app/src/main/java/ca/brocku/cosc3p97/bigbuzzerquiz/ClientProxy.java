@@ -20,12 +20,12 @@ public class ClientProxy implements Handler.Callback, TcpConnection.TcpListener 
     private List<SetupListener> listeners = new ArrayList<>();
     private TcpConnection.TcpListener tcpListener;
     private ClientRequestHandler requestHandler;
-    private GameServer gameServer;
+    private Host host;
 
 
-    public ClientProxy(GameServer gamseServer, SetupListener listener) throws Exception {
+    public ClientProxy(Host gamseServer, SetupListener listener) throws Exception {
         Log.i(TAG, "ctor: invoked");
-        this.gameServer = gamseServer;
+        this.host = gamseServer;
         addListener(listener);
         startServerSocket();
     }
@@ -108,7 +108,7 @@ public class ClientProxy implements Handler.Callback, TcpConnection.TcpListener 
     @Override
     public void onConnected(TcpConnection connection) {
         tcpConnections.add(connection);
-        gameServer.addPlayer(String.format("Player #%d", tcpConnections.size()));
+        host.addPlayer(String.format("Player #%d", tcpConnections.size()));
         callback();
     }
 

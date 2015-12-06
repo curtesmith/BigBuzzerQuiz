@@ -8,11 +8,11 @@ import java.net.InetAddress;
 public class Player {
     private static final String TAG = "Player";
     private static Player instance = null;
-    private GameProxy gameProxy;
+    private HostProxy hostProxy;
 
 
-    private Player(InetAddress host, GameServer gameServer) {
-        gameProxy = new GameProxy(host, gameServer);
+    private Player(InetAddress host, Host gameServer) {
+        hostProxy = new HostProxy(host, gameServer);
     }
 
 
@@ -30,8 +30,8 @@ public class Player {
     }
 
 
-    public static Player getInstance(InetAddress host, GameServer gameServer) {
-        Log.i(TAG, "getInstance with gameServer argument");
+    public static Player getInstance(InetAddress host, Host gameServer) {
+        Log.i(TAG, "getInstance with host argument");
         if (instance == null) {
             instance = new Player(host, gameServer);
         }
@@ -41,7 +41,7 @@ public class Player {
 
 
     public void getPlayers(final CallbackListener callback) {
-        gameProxy.getPlayers(new CallbackListener() {
+        hostProxy.getPlayers(new CallbackListener() {
             @Override
             public void onCallback(Object result) {
                 callback.onCallback(result);

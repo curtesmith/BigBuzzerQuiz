@@ -26,7 +26,7 @@ public class WiFiConnectionsModel extends Observable implements WifiP2pBroadcast
     private WifiP2pBroadcastReceiver receiver;
     private IntentFilter filter;
     private DeviceListAdapter deviceListAdapter;
-    private GameServer gameServer;
+    private Host host;
     private Player player;
     private boolean isScanning = false;
 
@@ -146,11 +146,11 @@ public class WiFiConnectionsModel extends Observable implements WifiP2pBroadcast
         if(info != null) {
             if (info.isGroupOwner) {
                 Log.i(TAG, "Connected as group owner");
-                gameServer = GameServer.getInstance(new ClientProxy.SetupListener() {
+                host = Host.getInstance(new ClientProxy.SetupListener() {
                     @Override
                     public void onSetup() {
                         Log.i(TAG, "game SERVER is ready, creating player");
-                        player = Player.getInstance(info.groupOwnerAddress, gameServer);
+                        player = Player.getInstance(info.groupOwnerAddress, host);
                     }
                 });
             } else {
