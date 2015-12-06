@@ -8,16 +8,18 @@ import android.util.Log;
 import org.json.JSONException;
 
 import java.net.InetAddress;
+import java.util.List;
 
 public class HostProxy implements Handler.Callback, TcpConnection.Listener, HostActions {
     private static final String TAG = "HostProxy";
     private ClientSocketThread socketHandler;
     private TcpConnection tcpManager;
     private Player.CallbackListener getPlayerCallback;
+    private PlayerMessageProcessor messageProcessor;
 
 
     public HostProxy(InetAddress hostAddress, Host host) {
-        if(host != null) {
+        if (host != null) {
             Log.i(TAG, "ctor: host is not null");
             host.setTcpListener(this);
             socketHandler = new ClientSocketThread(host.getHandler(), hostAddress);
@@ -25,6 +27,8 @@ public class HostProxy implements Handler.Callback, TcpConnection.Listener, Host
             Log.i(TAG, "ctor: host is null");
             socketHandler = new ClientSocketThread(new Handler(this), hostAddress);
         }
+
+        messageProcessor = new PlayerMessageProcessor(this);
 
         socketHandler.start();
     }
@@ -48,15 +52,8 @@ public class HostProxy implements Handler.Callback, TcpConnection.Listener, Host
     }
 
 
-    private void write(String message) {
+    public void write(String message) {
         tcpManager.write(message);
-    }
-
-
-    public void getPlayers(Player.CallbackListener callback) {
-        getPlayerCallback = callback;
-        Request request = new GetPlayersRequest();
-        write(request.toString());
     }
 
 
@@ -77,7 +74,7 @@ public class HostProxy implements Handler.Callback, TcpConnection.Listener, Host
             if (Request.is(message)) {
                 handleServerRequest(message);
             } else {
-                handleServerResponse(message);
+                messageProcessor.handleServerResponse(message);
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -88,25 +85,6 @@ public class HostProxy implements Handler.Callback, TcpConnection.Listener, Host
     private void handleServerRequest(JsonMessage request) {
         Log.i(TAG, String.format("handleServerRequest: invoked for request identifier [%s]",
                 request.getIdentifier()));
-    }
-
-
-    private void handleServerResponse(JsonMessage jsonMessage) {
-        Log.i(TAG, String.format("handleServerResponse: invoked with response identifier {%s}",
-                jsonMessage.getIdentifier()));
-
-        switch (jsonMessage.getIdentifier()) {
-            case GetPlayersResponse.IDENTIFIER:
-                if (getPlayerCallback != null) {
-                    try {
-                        GetPlayersResponse response = new GetPlayersResponse(jsonMessage.toString());
-                        getPlayerCallback.onCallback(response.getResult());
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    break;
-                }
-        }
     }
 
 
@@ -121,8 +99,31 @@ public class HostProxy implements Handler.Callback, TcpConnection.Listener, Host
     }
 
 
+    // This is the one we want to keep
     @Override
-    public void getPlayers(GetPlayersCallback callback) {
+    public void getPlayers(final GetPlayersCallback callback) {
+        messageProcessor.createRequest(HostMessageInterface.GET_PLAYERS,
+                new Player.CallbackListener() {
+                    @Override
+                    public void onCallback(Object object) {
+                        callback.callback(((List<String>) object));
+                    }
+                });
 
+//        getPlayers(new Player.CallbackListener() {
+//            @Override
+//            public void onCallback(Object object) {
+//                callback.callback(((List<String>) object));
+//            }
+//        });
     }
+
+
+    //this is the one we want to trash
+    public void getPlayers(Player.CallbackListener callback) {
+        getPlayerCallback = callback;
+        Request request = new GetPlayersRequest();
+        write(request.toString());
+    }
+
 }
