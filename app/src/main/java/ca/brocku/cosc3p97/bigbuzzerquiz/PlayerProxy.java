@@ -11,21 +11,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ClientProxy implements Handler.Callback, TcpConnection.TcpListener {
-    private static final String TAG = "ClientProxy";
+public class PlayerProxy implements Handler.Callback, TcpConnection.Listener {
+    private static final String TAG = "PlayerProxy";
 
     private ServerSocketHandler socketHandler;
     private List<TcpConnection> tcpConnections = new ArrayList<>();
     private Handler handler = new Handler(this);
     private List<SetupListener> listeners = new ArrayList<>();
-    private TcpConnection.TcpListener tcpListener;
+    private TcpConnection.Listener tcpListener;
     private ClientRequestHandler requestHandler;
     private Host host;
 
 
-    public ClientProxy(Host gamseServer, SetupListener listener) throws Exception {
+    public PlayerProxy(Host host, SetupListener listener) throws Exception {
         Log.i(TAG, "ctor: invoked");
-        this.host = gamseServer;
+        this.host = host;
         addListener(listener);
         startServerSocket();
     }
@@ -62,7 +62,7 @@ public class ClientProxy implements Handler.Callback, TcpConnection.TcpListener 
     }
 
 
-    public void setTcpListener(TcpConnection.TcpListener listener) {
+    public void setTcpListener(TcpConnection.Listener listener) {
         tcpListener = listener;
     }
 

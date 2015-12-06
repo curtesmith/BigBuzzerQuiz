@@ -22,7 +22,7 @@ public class TcpConnection implements Runnable {
     public static final int SERVER = 1;
     public static final int CLIENT = 2;
 
-    public interface TcpListener {
+    public interface Listener {
         void onConnected(TcpConnection connection);
         void onRead(String message);
         void onDisconnected(TcpConnection connection);

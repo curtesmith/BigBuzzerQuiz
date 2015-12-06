@@ -9,7 +9,7 @@ import org.json.JSONException;
 
 import java.net.InetAddress;
 
-public class HostProxy implements Handler.Callback, TcpConnection.TcpListener {
+public class HostProxy implements Handler.Callback, TcpConnection.Listener {
     private static final String TAG = "HostProxy";
     private ClientSocketHandler socketHandler;
     private TcpConnection tcpManager;

@@ -5,12 +5,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 public class ServerProcessor implements ClientRequestHandler{
-    ClientProxy clientProxy;
+    PlayerProxy playerProxy;
     Host host;
 
-    public ServerProcessor(Host server, ClientProxy clientProxy) {
+    public ServerProcessor(Host server, PlayerProxy playerProxy) {
         host = server;
-        this.clientProxy = clientProxy;
+        this.playerProxy = playerProxy;
     }
 
 
@@ -45,7 +45,7 @@ public class ServerProcessor implements ClientRequestHandler{
             e.printStackTrace();
         }
 
-        clientProxy.write(response.toString());
+        playerProxy.write(response.toString());
     }
 
 
