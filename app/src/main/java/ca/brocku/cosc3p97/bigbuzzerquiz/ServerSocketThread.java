@@ -12,8 +12,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-public class ServerSocketHandler extends Thread {
-    private static final String TAG = "ServerSocketHandler";
+public class ServerSocketThread extends Thread {
+    private static final String TAG = "ServerSocketThread";
     private static final int THREAD_COUNT = 10;
     private ServerSocket socket;
     private Handler handler;
@@ -34,7 +34,7 @@ public class ServerSocketHandler extends Thread {
         listeners.add(listener);
     }
 
-    public ServerSocketHandler(Handler handler) throws IOException {
+    public ServerSocketThread(Handler handler) throws IOException {
         try {
             socket = new ServerSocket(TcpConnection.PORT);
             this.handler = handler;

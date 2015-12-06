@@ -14,11 +14,11 @@ import java.util.List;
 public class PlayerProxy implements Handler.Callback, TcpConnection.Listener {
     private static final String TAG = "PlayerProxy";
 
-    private ServerSocketHandler socketHandler;
+    private ServerSocketThread serverSocketThread;
     private List<TcpConnection> tcpConnections = new ArrayList<>();
-    private Handler handler = new Handler(this);
+    private Handler threadHandler = new Handler(this);
     private List<SetupListener> listeners = new ArrayList<>();
-    private TcpConnection.Listener tcpListener;
+    private TcpConnection.Listener playerTcpListener;
     private ClientRequestHandler requestHandler;
     private Host host;
 
@@ -28,11 +28,6 @@ public class PlayerProxy implements Handler.Callback, TcpConnection.Listener {
         this.host = host;
         addListener(listener);
         startServerSocket();
-    }
-
-
-    public void setRequestHandler(ClientRequestHandler requestHandler) {
-        this.requestHandler = requestHandler;
     }
 
 
@@ -46,14 +41,14 @@ public class PlayerProxy implements Handler.Callback, TcpConnection.Listener {
         Log.i(TAG, "startServerSocket: invoked");
 
         try {
-            socketHandler = new ServerSocketHandler(handler);
-            socketHandler.addListener(new ServerSocketHandler.ServerSocketListener() {
+            serverSocketThread = new ServerSocketThread(threadHandler);
+            serverSocketThread.addListener(new ServerSocketThread.ServerSocketListener() {
                 @Override
                 public void onSetup() {
                     callback();
                 }
             });
-            socketHandler.start();
+            serverSocketThread.start();
         } catch (Exception e) {
             Log.e(TAG, "exception message = {" + e.getMessage() + "}");
             e.printStackTrace();
@@ -61,14 +56,18 @@ public class PlayerProxy implements Handler.Callback, TcpConnection.Listener {
         }
     }
 
-
-    public void setTcpListener(TcpConnection.Listener listener) {
-        tcpListener = listener;
+    public void setRequestHandler(ClientRequestHandler requestHandler) {
+        this.requestHandler = requestHandler;
     }
 
 
-    public Handler getHandler() {
-        return handler;
+    public void setPlayerTcpListener(TcpConnection.Listener listener) {
+        playerTcpListener = listener;
+    }
+
+
+    public Handler getThreadHandler() {
+        return threadHandler;
     }
 
 
@@ -82,21 +81,21 @@ public class PlayerProxy implements Handler.Callback, TcpConnection.Listener {
                 if (msg.arg1 == TcpConnection.SERVER) {
                     onConnected((TcpConnection) msg.obj);
                 } else {
-                    tcpListener.onConnected((TcpConnection) msg.obj);
+                    playerTcpListener.onConnected((TcpConnection) msg.obj);
                 }
                 break;
             case TcpConnection.MESSAGE_READ:
                 if (msg.arg1 == TcpConnection.SERVER) {
                     onRead((String) msg.obj);
                 } else {
-                    tcpListener.onRead((String) msg.obj);
+                    playerTcpListener.onRead((String) msg.obj);
                 }
                 break;
             case TcpConnection.DISCONNECTED:
                 if (msg.arg1 == TcpConnection.SERVER) {
                     onDisconnected((TcpConnection) msg.obj);
                 } else {
-                    tcpListener.onDisconnected(null);
+                    playerTcpListener.onDisconnected(null);
                 }
                 break;
         }

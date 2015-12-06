@@ -53,12 +53,12 @@ public class Host {
 
 
     public void setTcpListener(TcpConnection.Listener listener) {
-        playerProxy.setTcpListener(listener);
+        playerProxy.setPlayerTcpListener(listener);
     }
 
 
     public Handler getHandler() {
-        return playerProxy.getHandler();
+        return playerProxy.getThreadHandler();
     }
 
 }
