@@ -146,14 +146,14 @@ public class PlayerProxy implements Handler.Callback, TcpConnection.Listener {
 
 
     public interface SetupListener {
-        void onSetup();
+        void onSetup(Host host);
     }
 
 
     private void callback() {
         Log.i(TAG, "callback: invoked");
         for (SetupListener listener : listeners) {
-            listener.onSetup();
+            listener.onSetup(host);
         }
     }
 

@@ -148,7 +148,7 @@ public class WiFiConnectionsModel extends Observable implements WifiP2pBroadcast
                 Log.i(TAG, "Connected as group owner");
                 host = Host.getInstance(new PlayerProxy.SetupListener() {
                     @Override
-                    public void onSetup() {
+                    public void onSetup(Host host) {
                         Log.i(TAG, "onSetup: game SERVER is ready, creating player");
                         player = Player.getInstance(info.groupOwnerAddress, host);
                     }

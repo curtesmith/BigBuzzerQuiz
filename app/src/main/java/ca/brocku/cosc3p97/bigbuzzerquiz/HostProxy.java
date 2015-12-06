@@ -12,9 +12,8 @@ import java.util.List;
 
 public class HostProxy implements Handler.Callback, TcpConnection.Listener, HostActions {
     private static final String TAG = "HostProxy";
-    private ClientSocketThread socketHandler;
-    private TcpConnection tcpManager;
-    private Player.CallbackListener getPlayerCallback;
+    private ClientSocketThread clientSocketThread;
+    private TcpConnection tcpConnection;
     private PlayerMessageProcessor messageProcessor;
 
 
@@ -22,15 +21,15 @@ public class HostProxy implements Handler.Callback, TcpConnection.Listener, Host
         if (host != null) {
             Log.i(TAG, "ctor: host is not null");
             host.setTcpListener(this);
-            socketHandler = new ClientSocketThread(host.getHandler(), hostAddress);
+            clientSocketThread = new ClientSocketThread(host.getHandler(), hostAddress);
         } else {
             Log.i(TAG, "ctor: host is null");
-            socketHandler = new ClientSocketThread(new Handler(this), hostAddress);
+            clientSocketThread = new ClientSocketThread(new Handler(this), hostAddress);
         }
 
         messageProcessor = new PlayerMessageProcessor(this);
 
-        socketHandler.start();
+        clientSocketThread.start();
     }
 
 
@@ -53,13 +52,13 @@ public class HostProxy implements Handler.Callback, TcpConnection.Listener, Host
 
 
     public void write(String message) {
-        tcpManager.write(message);
+        tcpConnection.write(message);
     }
 
 
     @Override
     public void onConnected(TcpConnection tcpConnection) {
-        tcpManager = tcpConnection;
+        this.tcpConnection = tcpConnection;
     }
 
 
@@ -93,13 +92,13 @@ public class HostProxy implements Handler.Callback, TcpConnection.Listener, Host
 
     }
 
+
     @Override
     public void addPlayer(String name) {
 
     }
 
 
-    // This is the one we want to keep
     @Override
     public void getPlayers(final GetPlayersCallback callback) {
         messageProcessor.createRequest(HostMessageInterface.GET_PLAYERS,
@@ -109,21 +108,10 @@ public class HostProxy implements Handler.Callback, TcpConnection.Listener, Host
                         callback.callback(((List<String>) object));
                     }
                 });
-
-//        getPlayers(new Player.CallbackListener() {
-//            @Override
-//            public void onCallback(Object object) {
-//                callback.callback(((List<String>) object));
-//            }
-//        });
     }
 
-
-    //this is the one we want to trash
-    public void getPlayers(Player.CallbackListener callback) {
-        getPlayerCallback = callback;
-        Request request = new GetPlayersRequest();
-        write(request.toString());
+    interface Callback {
+        void done(String message);
     }
 
 }

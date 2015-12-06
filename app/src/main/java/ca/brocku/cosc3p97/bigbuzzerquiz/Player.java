@@ -10,11 +10,11 @@ import java.util.List;
 public class Player {
     private static final String TAG = "Player";
     private static Player instance = null;
-    private HostActions host;
+    private HostActions hostActions;
 
 
     private Player(InetAddress hostAddress, Host host) {
-        this.host = new HostProxy(hostAddress, host);
+        this.hostActions = new HostProxy(hostAddress, host);
     }
 
 
@@ -33,7 +33,7 @@ public class Player {
 
 
     public static Player getInstance(InetAddress hostAddress, Host host) {
-        Log.i(TAG, "getInstance with host argument");
+        Log.i(TAG, "getInstance with hostActions argument");
         if (instance == null) {
             instance = new Player(hostAddress, host);
         }
@@ -46,11 +46,11 @@ public class Player {
         Log.i(TAG, "getPlayers: invoked");
         final List<String> result = new ArrayList<>();
 
-        host.getPlayers(new HostActions.GetPlayersCallback() {
+        hostActions.getPlayers(new HostActions.GetPlayersCallback() {
             @Override
             public void callback(List<String> names) {
                 Log.i(TAG, String.format("getPlayers callback invoked with %s names", names.size()));
-                for(String name : names) {
+                for (String name : names) {
                     result.add(name);
                 }
             }
