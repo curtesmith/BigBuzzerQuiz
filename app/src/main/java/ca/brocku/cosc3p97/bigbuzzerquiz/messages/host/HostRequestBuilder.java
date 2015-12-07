@@ -1,11 +1,10 @@
 package ca.brocku.cosc3p97.bigbuzzerquiz.messages.host;
 
-import java.util.List;
 
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Request;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.RequestBuilder;
 
-public class HostRequestBuilder extends RequestBuilder implements HostActions {
+public class HostRequestBuilder extends RequestBuilder {
     private static final String TAG = "HostRequestBuilder";
     private HostProxy hostProxy;
     private HostResponseHandler hostResponseHandler;
@@ -21,12 +20,7 @@ public class HostRequestBuilder extends RequestBuilder implements HostActions {
         switch(requestID) {
             case HostRequestInterface.GET_PLAYERS:
                 hostResponseHandler.addCallback(HostRequestInterface.GET_PLAYERS, callback);
-                getPlayers(new GetPlayersCallback() {
-                    @Override
-                    public void reply(List<String> names) {
-                        callback.reply(names);
-                    }
-                });
+                getPlayers();
                 break;
             case HostRequestInterface.PLAY:
                 play();
@@ -35,21 +29,15 @@ public class HostRequestBuilder extends RequestBuilder implements HostActions {
     }
 
 
-    @Override
-    public void addPlayer(String name) {
-
-    }
-
-
-    @Override
-    public void getPlayers(GetPlayersCallback callback) {
+    public void getPlayers() {
         Request request = new GetPlayersRequest();
         hostProxy.write(request.toString());
     }
 
 
-    @Override
-    public void play() {
 
+    public void play() {
+        Request request = new PlayRequest();
+        hostProxy.write(request.toString());
     }
 }

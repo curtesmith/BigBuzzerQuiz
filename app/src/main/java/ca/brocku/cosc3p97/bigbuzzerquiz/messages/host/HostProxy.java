@@ -13,12 +13,11 @@ import java.util.List;
 import ca.brocku.cosc3p97.bigbuzzerquiz.communication.ClientSocketThread;
 import ca.brocku.cosc3p97.bigbuzzerquiz.communication.TcpConnection;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.JsonMessage;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Request;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Response;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.PlayerMessageInterface;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.PlayerMessageProcessor;
-import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Request;
 import ca.brocku.cosc3p97.bigbuzzerquiz.models.Host;
-import ca.brocku.cosc3p97.bigbuzzerquiz.models.Player;
 
 public class HostProxy implements Handler.Callback, TcpConnection.Listener, HostActions {
     private static final String TAG = "HostProxy";
@@ -126,13 +125,20 @@ public class HostProxy implements Handler.Callback, TcpConnection.Listener, Host
 
     @Override
     public void play() {
-        messenger.createRequest(HostRequestInterface.PLAY,
-                new Player.CallbackListener() {
-                    @Override
-                    public void onCallback(Object object) {
-                        //ignore
-                    }
-                });
+        hostRequestBuilder.build(HostRequestInterface.PLAY, new Request.Callback() {
+            @Override
+            public void reply(Object result) {
+                //ignore
+            }
+        });
+
+//        messenger.createRequest(HostRequestInterface.PLAY,
+//                new Player.CallbackListener() {
+//                    @Override
+//                    public void onCallback(Object object) {
+//                        //ignore
+//                    }
+//                });
     }
 
 }

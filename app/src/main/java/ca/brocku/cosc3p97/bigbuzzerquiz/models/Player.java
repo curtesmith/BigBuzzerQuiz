@@ -75,9 +75,4 @@ public class Player implements PlayerActions {
 
     }
 
-
-    public interface CallbackListener {
-        void onCallback(Object object);
-    }
-
 }
