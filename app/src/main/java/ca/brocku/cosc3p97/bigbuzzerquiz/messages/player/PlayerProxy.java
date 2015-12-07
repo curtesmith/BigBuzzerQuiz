@@ -17,7 +17,6 @@ import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.JsonMessage;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Request;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.RequestHandler;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Sender;
-import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.HostMessageProcessor;
 import ca.brocku.cosc3p97.bigbuzzerquiz.models.Host;
 
 
@@ -29,7 +28,6 @@ public class PlayerProxy implements Handler.Callback, TcpConnection.Listener, Pl
     private Handler threadHandler = new Handler(this);
     private List<SetupListener> listeners = new ArrayList<>();
     private TcpConnection.Listener playerTcpListener;
-    private HostMessageProcessor hostMessageProcessor;
     private Host host;
     private HashMap<String, RequestHandler> requestHandlers = new HashMap<>();
 
@@ -65,11 +63,6 @@ public class PlayerProxy implements Handler.Callback, TcpConnection.Listener, Pl
             e.printStackTrace();
             throw e;
         }
-    }
-
-
-    public void setHostMessageInterface(HostMessageProcessor hostMessageInterface) {
-        this.hostMessageProcessor = hostMessageInterface;
     }
 
 
@@ -138,16 +131,6 @@ public class PlayerProxy implements Handler.Callback, TcpConnection.Listener, Pl
             if(jsonMessage.getType().equals(Request.REQUEST)) {
                 requestHandlers.get(jsonMessage.getIdentifier())
                         .handle(new Request(obj.message), obj.conn);
-
-//                requestHandlers.get(jsonMessage.getIdentifier())
-//                        .handle(new Request(obj.message), new Request.Callback() {
-//                            @Override
-//                            public void reply(Object result) {
-//                                if (result != null) {
-//                                    write(obj.conn, (String) result);
-//                                }
-//                            }
-//                        });
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -170,14 +153,11 @@ public class PlayerProxy implements Handler.Callback, TcpConnection.Listener, Pl
     }
 
 
-    public void write(TcpConnection conn, String message) {
-        conn.write(message);
-    }
-
-
     @Override
     public void beginGame() {
-        hostMessageProcessor.createRequest(PlayerMessageInterface.BEGIN_GAME);
+        Request request = new BeginGameRequest();
+        request.addSender(this);
+        request.send();
     }
 
 

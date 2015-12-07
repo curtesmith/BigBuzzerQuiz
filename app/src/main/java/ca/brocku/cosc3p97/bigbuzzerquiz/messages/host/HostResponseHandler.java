@@ -12,6 +12,8 @@ import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Response;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.ResponseHandler;
 
 public class HostResponseHandler extends ResponseHandler{
+    // TODO: 2015-12-07 fix this class
+
     private static final String TAG = "HostResponseHandler";
     HashMap<String, Request.Callback> callbacks = new HashMap<>();
 

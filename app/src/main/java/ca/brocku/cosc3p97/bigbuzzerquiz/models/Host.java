@@ -10,7 +10,6 @@ import java.util.List;
 import ca.brocku.cosc3p97.bigbuzzerquiz.communication.TcpConnection;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.GetPlayersRequestHandler;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.HostActions;
-import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.HostMessageProcessor;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.HostRequestInterface;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.PlayRequestHandler;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.PlayerProxy;
@@ -32,7 +31,6 @@ public class Host implements HostActions {
         Log.i(TAG, "ctor: invoked");
         addListener(listener);
         playerProxy = new PlayerProxy(this, listener);
-        playerProxy.setHostMessageInterface(new HostMessageProcessor(this, playerProxy));
 
         addRequestHandlers();
 

@@ -20,7 +20,6 @@ public class Player implements PlayerActions {
     private static final String TAG = "Player";
     private static Player instance = null;
     private HostProxy hostProxy;
-    //private BeginGameListener listener;
     private AppCompatActivity activity;
 
 
