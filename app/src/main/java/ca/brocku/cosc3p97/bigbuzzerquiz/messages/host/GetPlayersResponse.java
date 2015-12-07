@@ -1,4 +1,4 @@
-package ca.brocku.cosc3p97.bigbuzzerquiz.messages;
+package ca.brocku.cosc3p97.bigbuzzerquiz.messages.host;
 
 
 import org.json.JSONArray;
@@ -6,6 +6,9 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.JsonMessage;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.Response;
 
 public class GetPlayersResponse extends Response {
     public GetPlayersResponse(String string) throws JSONException {

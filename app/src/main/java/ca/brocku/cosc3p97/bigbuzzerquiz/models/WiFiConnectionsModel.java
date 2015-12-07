@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Observable;
 
 import ca.brocku.cosc3p97.bigbuzzerquiz.views.DeviceListAdapter;
-import ca.brocku.cosc3p97.bigbuzzerquiz.messages.PlayerProxy;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.PlayerProxy;
 
 public class WiFiConnectionsModel extends Observable implements WifiP2pBroadcastReceiver.WifiP2pBroadcastListener {
     private static final String TAG = "WiFiConnectionsModel";

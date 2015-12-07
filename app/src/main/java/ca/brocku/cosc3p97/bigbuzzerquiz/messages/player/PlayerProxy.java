@@ -1,4 +1,4 @@
-package ca.brocku.cosc3p97.bigbuzzerquiz.messages;
+package ca.brocku.cosc3p97.bigbuzzerquiz.messages.player;
 
 
 import android.os.Handler;
@@ -12,6 +12,12 @@ import java.util.List;
 
 import ca.brocku.cosc3p97.bigbuzzerquiz.communication.ServerSocketThread;
 import ca.brocku.cosc3p97.bigbuzzerquiz.communication.TcpConnection;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.JsonMessage;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.Request;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.RequestHandler;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.HostMessageProcessor;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.PlayerActions;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.PlayerMessageInterface;
 import ca.brocku.cosc3p97.bigbuzzerquiz.models.Host;
 
 

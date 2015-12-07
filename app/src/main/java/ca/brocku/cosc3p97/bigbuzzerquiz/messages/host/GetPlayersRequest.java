@@ -1,6 +1,9 @@
-package ca.brocku.cosc3p97.bigbuzzerquiz.messages;
+package ca.brocku.cosc3p97.bigbuzzerquiz.messages.host;
 
 import org.json.JSONException;
+
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.JsonMessage;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.Request;
 
 public class GetPlayersRequest extends Request {
     public GetPlayersRequest(String string) throws JSONException {

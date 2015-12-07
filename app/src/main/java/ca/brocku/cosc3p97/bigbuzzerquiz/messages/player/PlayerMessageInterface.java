@@ -1,6 +1,7 @@
-package ca.brocku.cosc3p97.bigbuzzerquiz.messages;
+package ca.brocku.cosc3p97.bigbuzzerquiz.messages.player;
 
 
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.JsonMessage;
 import ca.brocku.cosc3p97.bigbuzzerquiz.models.Player;
 
 public interface PlayerMessageInterface {

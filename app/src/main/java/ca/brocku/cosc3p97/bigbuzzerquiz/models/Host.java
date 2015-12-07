@@ -8,10 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ca.brocku.cosc3p97.bigbuzzerquiz.communication.TcpConnection;
-import ca.brocku.cosc3p97.bigbuzzerquiz.messages.HostActions;
-import ca.brocku.cosc3p97.bigbuzzerquiz.messages.HostMessageProcessor;
-import ca.brocku.cosc3p97.bigbuzzerquiz.messages.HostRequestHandler;
-import ca.brocku.cosc3p97.bigbuzzerquiz.messages.PlayerProxy;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.HostActions;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.HostMessageProcessor;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.HostRequestHandler;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.PlayerProxy;
 
 
 public class Host implements HostActions {

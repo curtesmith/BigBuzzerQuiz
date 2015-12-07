@@ -7,9 +7,9 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 
-import ca.brocku.cosc3p97.bigbuzzerquiz.messages.HostActions;
-import ca.brocku.cosc3p97.bigbuzzerquiz.messages.HostProxy;
-import ca.brocku.cosc3p97.bigbuzzerquiz.messages.PlayerActions;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.HostActions;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.HostProxy;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.PlayerActions;
 
 public class Player implements PlayerActions {
     private static final String TAG = "Player";
