@@ -82,27 +82,13 @@ public class Player implements PlayerActions {
     }
 
 
-//    public void addBeginGameListener(BeginGameListener listener) {
-//        this.listener = listener;
-//    }
-//
-//
-//    public interface BeginGameListener {
-//        void onBeginGame();
-//    }
-
-
     public void setConnectedListener(HostProxy.ConnectedListener listener) {
         hostProxy.setConnectedListener(listener);
     }
 
 
-
     @Override
     public void beginGame() {
-//        if(listener != null) {
-//            listener.onBeginGame();
-//        }
         if(activity != null) {
             Intent intent = new Intent(activity, QuestionActivity.class);
             activity.startActivity(intent);

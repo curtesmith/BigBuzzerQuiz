@@ -29,7 +29,7 @@ public class HostProxy implements Handler.Callback, TcpConnection.Listener, Host
     private PlayerMessageInterface messenger;
     private HostResponseHandler hostResponseHandler;
     private HashMap<String, PlayerRequestHandler> playerRequestHandlers = new HashMap<>();
-    private boolean isConnected = false;
+
 
     public HostProxy(InetAddress hostAddress, Host host) {
         if (host != null) {
@@ -47,10 +47,6 @@ public class HostProxy implements Handler.Callback, TcpConnection.Listener, Host
         clientSocketThread.start();
     }
 
-
-    public boolean isConnected() {
-        return isConnected;
-    }
 
     @Override
     public boolean handleMessage(Message msg) {
@@ -70,22 +66,19 @@ public class HostProxy implements Handler.Callback, TcpConnection.Listener, Host
     }
 
 
-    public void write(String message) {
-        tcpConnection.write(message);
-    }
-
     private HostProxy.ConnectedListener connectedListener;
+
 
     public void setConnectedListener(HostProxy.ConnectedListener listener) {
         connectedListener = listener;
     }
 
 
-
     @Override
     public void send(String request) {
-        write(request);
+        tcpConnection.write(request);
     }
+
 
     public interface ConnectedListener {
         void onConnected();
