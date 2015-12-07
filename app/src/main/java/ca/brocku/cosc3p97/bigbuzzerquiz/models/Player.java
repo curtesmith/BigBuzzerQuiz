@@ -9,6 +9,7 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 
+import ca.brocku.cosc3p97.bigbuzzerquiz.communication.HostConnection;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.HostActions;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.HostProxy;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.BeginGameRequestHandler;
@@ -81,7 +82,7 @@ public class Player implements PlayerActions {
     }
 
 
-    public void setConnectedListener(HostProxy.ConnectedListener listener) {
+    public void setConnectedListener(HostConnection.ConnectedListener listener) {
         hostProxy.setConnectedListener(listener);
     }
 

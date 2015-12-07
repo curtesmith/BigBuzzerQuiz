@@ -17,12 +17,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 
-import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.HostProxy;
-import ca.brocku.cosc3p97.bigbuzzerquiz.views.DeviceListAdapter;
+import ca.brocku.cosc3p97.bigbuzzerquiz.communication.HostConnection;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.PlayerProxy;
+import ca.brocku.cosc3p97.bigbuzzerquiz.views.DeviceListAdapter;
 
 public class WiFiConnectionsModel extends Observable implements WifiP2pBroadcastReceiver.WifiP2pBroadcastListener,
-        HostProxy.ConnectedListener {
+        HostConnection.ConnectedListener {
     private static final String TAG = "WiFiConnectionsModel";
     private WifiP2pInfo p2pInfo;
     private WifiP2pManager manager;
