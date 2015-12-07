@@ -13,6 +13,7 @@ import java.util.List;
 import ca.brocku.cosc3p97.bigbuzzerquiz.communication.ClientSocketThread;
 import ca.brocku.cosc3p97.bigbuzzerquiz.communication.TcpConnection;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.JsonMessage;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Response;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.PlayerMessageInterface;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.PlayerMessageProcessor;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Request;
@@ -25,6 +26,7 @@ public class HostProxy implements Handler.Callback, TcpConnection.Listener, Host
     private TcpConnection tcpConnection;
     private PlayerMessageInterface messenger;
     private HostRequestBuilder hostRequestBuilder;
+    private HostResponseHandler hostResponseHandler;
 
 
     public HostProxy(InetAddress hostAddress, Host host) {
@@ -38,7 +40,8 @@ public class HostProxy implements Handler.Callback, TcpConnection.Listener, Host
         }
 
         messenger = new PlayerMessageProcessor(this);
-        hostRequestBuilder = new HostRequestBuilder(this);
+        hostResponseHandler = new HostResponseHandler();
+        hostRequestBuilder = new HostRequestBuilder(this, hostResponseHandler);
 
         clientSocketThread.start();
     }
@@ -84,7 +87,7 @@ public class HostProxy implements Handler.Callback, TcpConnection.Listener, Host
             if (Request.is(message)) {
                 handleServerRequest(message);
             } else {
-                hostRequestBuilder.handleResponse(message);
+                hostResponseHandler.handle(new Response(obj.message));
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -118,14 +121,6 @@ public class HostProxy implements Handler.Callback, TcpConnection.Listener, Host
                 callback.reply((List<String>) result);
             }
         });
-
-//        messenger.createRequest(HostRequestInterface.GET_PLAYERS,
-//                new Player.CallbackListener() {
-//                    @Override
-//                    public void onCallback(Object object) {
-//                        callback.reply(((List<String>) object));
-//                    }
-//                });
     }
 
 

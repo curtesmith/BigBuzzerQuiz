@@ -25,4 +25,9 @@ public class Response extends JsonMessage {
         }
     }
 
+
+    public Object getResult() {
+        throw new RuntimeException("Stub");
+    }
+
 }

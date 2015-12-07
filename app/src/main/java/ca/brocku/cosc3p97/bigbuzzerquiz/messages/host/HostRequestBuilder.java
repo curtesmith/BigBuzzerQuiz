@@ -1,32 +1,26 @@
 package ca.brocku.cosc3p97.bigbuzzerquiz.messages.host;
 
-import android.util.Log;
-
-import org.json.JSONException;
-
-import java.util.HashMap;
 import java.util.List;
 
-import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.JsonMessage;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Request;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.RequestBuilder;
 
 public class HostRequestBuilder extends RequestBuilder implements HostActions {
     private static final String TAG = "HostRequestBuilder";
-    private HashMap<String, Request.Callback> callbacks = new HashMap<>();
     private HostProxy hostProxy;
+    private HostResponseHandler hostResponseHandler;
 
 
-    public HostRequestBuilder(HostProxy hostProxy) {
+    public HostRequestBuilder(HostProxy hostProxy, HostResponseHandler hostResponseHandler) {
         this.hostProxy = hostProxy;
+        this.hostResponseHandler = hostResponseHandler;
     }
 
 
     public void build(String requestID, final Request.Callback callback) {
         switch(requestID) {
             case HostRequestInterface.GET_PLAYERS:
-                callbacks.put(HostRequestInterface.GET_PLAYERS, callback);
-
+                hostResponseHandler.addCallback(HostRequestInterface.GET_PLAYERS, callback);
                 getPlayers(new GetPlayersCallback() {
                     @Override
                     public void reply(List<String> names) {
@@ -38,27 +32,6 @@ public class HostRequestBuilder extends RequestBuilder implements HostActions {
                 play();
                 break;
         }
-    }
-
-
-    @Override
-    public void handleResponse(JsonMessage jsonMessage) {
-        Log.i(TAG, String.format("handleServerResponse: invoked with response identifier {%s}",
-                jsonMessage.getIdentifier()));
-
-        switch (jsonMessage.getIdentifier()) {
-            case HostRequestInterface.GET_PLAYERS:
-                if (callbacks.containsKey(HostRequestInterface.GET_PLAYERS)) {
-                    try {
-                        GetPlayersResponse response = new GetPlayersResponse(jsonMessage.toString());
-                        callbacks.get(HostRequestInterface.GET_PLAYERS).reply(response.getResult());
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-                break;
-        }
-
     }
 
 

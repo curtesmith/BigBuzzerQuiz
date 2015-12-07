@@ -21,6 +21,7 @@ public class GetPlayersResponse extends Response {
     }
 
 
+    @Override
     public void setIdentifier() {
         try {
             put(JsonMessage.IDENTIFIER, HostRequestInterface.GET_PLAYERS);
@@ -30,6 +31,7 @@ public class GetPlayersResponse extends Response {
     }
 
 
+    @Override
     public Object getResult() {
         List<String> names = new ArrayList<>();
         try {
