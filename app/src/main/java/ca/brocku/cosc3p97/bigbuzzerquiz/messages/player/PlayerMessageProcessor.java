@@ -7,9 +7,9 @@ import org.json.JSONException;
 
 import java.util.HashMap;
 
-import ca.brocku.cosc3p97.bigbuzzerquiz.messages.JsonMessage;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.JsonMessage;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.PlayRequest;
-import ca.brocku.cosc3p97.bigbuzzerquiz.messages.Request;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Request;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.GetPlayersRequest;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.GetPlayersResponse;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.HostProxy;

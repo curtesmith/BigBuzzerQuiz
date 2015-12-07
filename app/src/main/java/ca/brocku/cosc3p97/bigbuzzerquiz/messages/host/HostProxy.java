@@ -12,10 +12,10 @@ import java.util.List;
 
 import ca.brocku.cosc3p97.bigbuzzerquiz.communication.ClientSocketThread;
 import ca.brocku.cosc3p97.bigbuzzerquiz.communication.TcpConnection;
-import ca.brocku.cosc3p97.bigbuzzerquiz.messages.JsonMessage;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.JsonMessage;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.PlayerMessageInterface;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.PlayerMessageProcessor;
-import ca.brocku.cosc3p97.bigbuzzerquiz.messages.Request;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Request;
 import ca.brocku.cosc3p97.bigbuzzerquiz.models.Host;
 import ca.brocku.cosc3p97.bigbuzzerquiz.models.Player;
 

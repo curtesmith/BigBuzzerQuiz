@@ -2,9 +2,8 @@ package ca.brocku.cosc3p97.bigbuzzerquiz.messages.host;
 
 import org.json.JSONException;
 
-import ca.brocku.cosc3p97.bigbuzzerquiz.messages.JsonMessage;
-import ca.brocku.cosc3p97.bigbuzzerquiz.messages.Request;
-import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.HostRequestInterface;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.JsonMessage;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Request;
 
 
 public class PlayRequest extends Request {

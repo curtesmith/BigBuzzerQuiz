@@ -1,7 +1,7 @@
 package ca.brocku.cosc3p97.bigbuzzerquiz.messages.host;
 
 
-import ca.brocku.cosc3p97.bigbuzzerquiz.messages.Response;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Response;
 
 public interface HostRequestInterface {
     String GET_PLAYERS = "GET_PLAYERS";

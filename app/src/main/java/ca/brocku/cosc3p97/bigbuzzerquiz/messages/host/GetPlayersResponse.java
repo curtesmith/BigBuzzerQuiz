@@ -7,8 +7,8 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.List;
 
-import ca.brocku.cosc3p97.bigbuzzerquiz.messages.JsonMessage;
-import ca.brocku.cosc3p97.bigbuzzerquiz.messages.Response;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.JsonMessage;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Response;
 
 public class GetPlayersResponse extends Response {
     public GetPlayersResponse(String string) throws JSONException {

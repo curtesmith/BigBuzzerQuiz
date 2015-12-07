@@ -6,9 +6,9 @@ import org.json.JSONException;
 
 import java.util.List;
 
-import ca.brocku.cosc3p97.bigbuzzerquiz.messages.Request;
-import ca.brocku.cosc3p97.bigbuzzerquiz.messages.RequestHandler;
-import ca.brocku.cosc3p97.bigbuzzerquiz.messages.Response;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Request;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.RequestHandler;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Response;
 import ca.brocku.cosc3p97.bigbuzzerquiz.models.Host;
 
 /**

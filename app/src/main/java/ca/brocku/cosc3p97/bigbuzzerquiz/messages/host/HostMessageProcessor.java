@@ -4,7 +4,7 @@ package ca.brocku.cosc3p97.bigbuzzerquiz.messages.host;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.BeginGameRequest;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.PlayerMessageInterface;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.PlayerProxy;
-import ca.brocku.cosc3p97.bigbuzzerquiz.messages.Request;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Request;
 
 public class HostMessageProcessor {
     PlayerProxy playerProxy;

@@ -1,6 +1,8 @@
-package ca.brocku.cosc3p97.bigbuzzerquiz.messages;
+package ca.brocku.cosc3p97.bigbuzzerquiz.messages.common;
 
 import org.json.JSONException;
+
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.JsonMessage;
 
 public class Request extends JsonMessage {
     public static final String REQUEST = "REQUEST";

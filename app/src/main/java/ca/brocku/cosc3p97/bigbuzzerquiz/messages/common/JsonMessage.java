@@ -1,4 +1,4 @@
-package ca.brocku.cosc3p97.bigbuzzerquiz.messages;
+package ca.brocku.cosc3p97.bigbuzzerquiz.messages.common;
 
 
 import org.json.JSONException;

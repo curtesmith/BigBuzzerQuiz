@@ -7,9 +7,9 @@ import org.json.JSONException;
 import java.util.HashMap;
 import java.util.List;
 
-import ca.brocku.cosc3p97.bigbuzzerquiz.messages.JsonMessage;
-import ca.brocku.cosc3p97.bigbuzzerquiz.messages.Request;
-import ca.brocku.cosc3p97.bigbuzzerquiz.messages.RequestBuilder;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.JsonMessage;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Request;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.RequestBuilder;
 
 public class HostRequestBuilder extends RequestBuilder implements HostActions {
     private static final String TAG = "HostRequestBuilder";
