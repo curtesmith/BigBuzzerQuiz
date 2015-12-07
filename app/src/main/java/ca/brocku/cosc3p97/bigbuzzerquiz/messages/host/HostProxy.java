@@ -27,7 +27,6 @@ public class HostProxy implements Handler.Callback, TcpConnection.Listener, Host
     private ClientSocketThread clientSocketThread;
     private TcpConnection tcpConnection;
     private PlayerMessageInterface messenger;
-    private HostRequestBuilder hostRequestBuilder;
     private HostResponseHandler hostResponseHandler;
     private HashMap<String, PlayerRequestHandler> playerRequestHandlers = new HashMap<>();
     private boolean isConnected = false;
@@ -44,7 +43,6 @@ public class HostProxy implements Handler.Callback, TcpConnection.Listener, Host
 
         messenger = new PlayerMessageProcessor(this);
         hostResponseHandler = new HostResponseHandler();
-        hostRequestBuilder = new HostRequestBuilder(this, hostResponseHandler);
 
         clientSocketThread.start();
     }
@@ -159,32 +157,14 @@ public class HostProxy implements Handler.Callback, TcpConnection.Listener, Host
         });
 
         request.send();
-
-//        hostRequestBuilder.build(HostRequestInterface.GET_PLAYERS, new Request.Callback() {
-//            @Override
-//            public void reply(Object result) {
-//                callback.reply((List<String>) result);
-//            }
-//        });
     }
 
 
     @Override
     public void play() {
-        hostRequestBuilder.build(HostRequestInterface.PLAY, new Request.Callback() {
-            @Override
-            public void reply(Object result) {
-                //ignore
-            }
-        });
-
-//        messenger.createRequest(HostRequestInterface.PLAY,
-//                new Player.CallbackListener() {
-//                    @Override
-//                    public void onCallback(Object object) {
-//                        //ignore
-//                    }
-//                });
+        PlayRequest request = new PlayRequest();
+        request.addSender(this);
+        request.send();
     }
 
 }

@@ -7,5 +7,4 @@ public interface Requestable {
 
     void send();
     void addSender(RequestSender sender);
-    void setCallback(Request.Callback callback);
 }

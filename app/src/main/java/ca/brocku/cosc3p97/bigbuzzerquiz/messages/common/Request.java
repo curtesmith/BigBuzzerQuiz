@@ -43,12 +43,6 @@ public class Request extends JsonMessage implements Requestable {
     }
 
 
-    @Override
-    public void setCallback(Callback callback) {
-        this.callback = callback;
-    }
-
-
     public interface Callback {
         void reply(Object result);
     }
