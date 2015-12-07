@@ -10,7 +10,9 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class TcpConnection implements Runnable {
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Sender;
+
+public class TcpConnection implements Runnable, Sender {
     private static final String TAG = "TcpConnection";
     private Socket socket;
     private Handler handler;
@@ -21,6 +23,7 @@ public class TcpConnection implements Runnable {
     public static final int PORT = 8988;
     public static final int SERVER = 1;
     public static final int CLIENT = 2;
+
 
     public interface Listener {
         void onConnected(TcpConnection connection);
@@ -78,6 +81,12 @@ public class TcpConnection implements Runnable {
             }
         }
     }
+
+    @Override
+    public void send(String message) {
+        write(message);
+    }
+
 
     public void write(String message) {
         out.println(message);

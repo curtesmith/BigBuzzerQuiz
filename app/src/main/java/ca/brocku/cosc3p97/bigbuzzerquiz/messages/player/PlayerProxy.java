@@ -137,14 +137,17 @@ public class PlayerProxy implements Handler.Callback, TcpConnection.Listener, Pl
             JsonMessage jsonMessage = new JsonMessage(obj.message);
             if(jsonMessage.getType().equals(Request.REQUEST)) {
                 requestHandlers.get(jsonMessage.getIdentifier())
-                        .handle(new Request(obj.message), new Request.Callback() {
-                            @Override
-                            public void reply(Object result) {
-                                if (result != null) {
-                                    write(obj.conn, (String) result);
-                                }
-                            }
-                        });
+                        .handle(new Request(obj.message), obj.conn);
+
+//                requestHandlers.get(jsonMessage.getIdentifier())
+//                        .handle(new Request(obj.message), new Request.Callback() {
+//                            @Override
+//                            public void reply(Object result) {
+//                                if (result != null) {
+//                                    write(obj.conn, (String) result);
+//                                }
+//                            }
+//                        });
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -179,8 +182,8 @@ public class PlayerProxy implements Handler.Callback, TcpConnection.Listener, Pl
 
 
     @Override
-    public void send(String request) {
-
+    public void send(String message) {
+        write(message);
     }
 
 

@@ -8,6 +8,7 @@ import java.util.List;
 
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Request;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Response;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Sender;
 import ca.brocku.cosc3p97.bigbuzzerquiz.models.Host;
 
 public class GetPlayersRequestHandler extends HostRequestHandler {
@@ -27,6 +28,14 @@ public class GetPlayersRequestHandler extends HostRequestHandler {
         } else {
             callback.reply(response.toString());
         }
+    }
+
+
+    @Override
+    public void handle(Request request, Sender replyToSender) {
+        Response response = getPlayers();
+        response.addSender(replyToSender);
+        response.send();
     }
 
 

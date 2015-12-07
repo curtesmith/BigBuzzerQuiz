@@ -72,8 +72,8 @@ public class HostProxy implements Handler.Callback, TcpConnection.Listener, Host
 
 
     @Override
-    public void send(String request) {
-        tcpConnection.write(request);
+    public void send(String message) {
+        tcpConnection.write(message);
     }
 
 
@@ -118,7 +118,7 @@ public class HostProxy implements Handler.Callback, TcpConnection.Listener, Host
                 request.getIdentifier()));
 
         if(playerRequestHandlers.containsKey(request.getIdentifier())) {
-            playerRequestHandlers.get(request.getIdentifier()).handle(new Request(request.toString()), null);
+            playerRequestHandlers.get(request.getIdentifier()).handle(new Request(request.toString()), this);
         }
     }
 
