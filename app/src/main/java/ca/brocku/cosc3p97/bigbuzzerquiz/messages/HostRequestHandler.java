@@ -8,7 +8,11 @@ import java.util.List;
 
 import ca.brocku.cosc3p97.bigbuzzerquiz.models.Host;
 
-public class HostRequestHandler extends RequestHandler {
+/**
+ * A handler for requests made to the Host
+ */
+
+public class HostRequestHandler extends RequestHandler implements HostRequestInterface {
     Host host;
 
     public HostRequestHandler(Host host) {
@@ -21,10 +25,10 @@ public class HostRequestHandler extends RequestHandler {
         Response response = null;
 
         switch (request.getIdentifier()) {
-            case HostMessageInterface.GET_PLAYERS:
+            case HostRequestInterface.GET_PLAYERS:
                 response = getPlayers();
                 break;
-            case HostMessageInterface.PLAY:
+            case HostRequestInterface.PLAY:
                 play();
                 break;
         }
@@ -37,6 +41,7 @@ public class HostRequestHandler extends RequestHandler {
     }
 
 
+    @Override
     public Response getPlayers() {
         final GetPlayersResponse response = new GetPlayersResponse();
 
@@ -58,7 +63,7 @@ public class HostRequestHandler extends RequestHandler {
         return response;
     }
 
-
+    @Override
     public void play() {
         host.play();
     }

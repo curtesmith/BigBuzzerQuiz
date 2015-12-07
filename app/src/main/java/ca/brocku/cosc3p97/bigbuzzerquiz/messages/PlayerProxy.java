@@ -23,7 +23,7 @@ public class PlayerProxy implements Handler.Callback, TcpConnection.Listener, Pl
     private Handler threadHandler = new Handler(this);
     private List<SetupListener> listeners = new ArrayList<>();
     private TcpConnection.Listener playerTcpListener;
-    private HostMessageInterface hostMessageInterface;
+    private HostMessageProcessor hostMessageInterface;
     private Host host;
     private RequestHandler requestHandler;
 
@@ -62,7 +62,7 @@ public class PlayerProxy implements Handler.Callback, TcpConnection.Listener, Pl
     }
 
 
-    public void setHostMessageInterface(HostMessageInterface hostMessageInterface) {
+    public void setHostMessageInterface(HostMessageProcessor hostMessageInterface) {
         this.hostMessageInterface = hostMessageInterface;
     }
 
@@ -122,32 +122,26 @@ public class PlayerProxy implements Handler.Callback, TcpConnection.Listener, Pl
         callback();
     }
 
+
     @Override
     public void onRead(final TcpConnection.ReadObject obj) {
         Log.i(TAG, String.format("onRead: invoked with string {%s}", obj.message));
 
         try {
-            requestHandler.handle(new Request(obj.message), new RequestHandler.Callback() {
-                @Override
-                public void reply(String result) {
-                    if (result != null) {
-                        write(obj.conn, result);
+            JsonMessage jsonMessage = new JsonMessage(obj.message);
+            if(jsonMessage.getType().equals(Request.REQUEST)) {
+                requestHandler.handle(new Request(obj.message), new RequestHandler.Callback() {
+                    @Override
+                    public void reply(String result) {
+                        if (result != null) {
+                            write(obj.conn, result);
+                        }
                     }
-                }
-            });
+                });
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-//        hostMessageInterface.execute(obj.message, new Callback() {
-//            @Override
-//            public void done(String message) {
-//                if (message != null) {
-//                    write(obj.conn, message);
-//                }
-//            }
-//        });
-
     }
 
 
@@ -187,10 +181,5 @@ public class PlayerProxy implements Handler.Callback, TcpConnection.Listener, Pl
         for (SetupListener listener : listeners) {
             listener.onSetup(host);
         }
-    }
-
-
-    interface Callback {
-        void done(String message);
     }
 }

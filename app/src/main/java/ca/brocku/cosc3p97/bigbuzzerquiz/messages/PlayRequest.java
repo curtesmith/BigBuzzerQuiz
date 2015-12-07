@@ -15,7 +15,7 @@ public class PlayRequest extends Request {
 
     public void setIdentifier() {
         try {
-            put(JsonMessage.IDENTIFIER, HostMessageInterface.PLAY);
+            put(JsonMessage.IDENTIFIER, HostRequestInterface.PLAY);
         } catch (JSONException e) {
             e.printStackTrace();
         }

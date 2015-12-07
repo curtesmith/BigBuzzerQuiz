@@ -106,7 +106,7 @@ public class HostProxy implements Handler.Callback, TcpConnection.Listener, Host
 
     @Override
     public void getPlayers(final GetPlayersCallback callback) {
-        messenger.createRequest(HostMessageInterface.GET_PLAYERS,
+        messenger.createRequest(HostRequestInterface.GET_PLAYERS,
                 new Player.CallbackListener() {
                     @Override
                     public void onCallback(Object object) {
@@ -118,7 +118,7 @@ public class HostProxy implements Handler.Callback, TcpConnection.Listener, Host
 
     @Override
     public void play() {
-        messenger.createRequest(HostMessageInterface.PLAY,
+        messenger.createRequest(HostRequestInterface.PLAY,
                 new Player.CallbackListener() {
                     @Override
                     public void onCallback(Object object) {

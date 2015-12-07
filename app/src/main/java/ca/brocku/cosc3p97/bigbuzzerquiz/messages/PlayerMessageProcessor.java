@@ -23,10 +23,10 @@ public class PlayerMessageProcessor implements PlayerMessageInterface {
     @Override
     public void createRequest(String requestID, Player.CallbackListener callback) {
         switch (requestID) {
-            case HostMessageInterface.GET_PLAYERS:
+            case HostRequestInterface.GET_PLAYERS:
                 getPlayers(callback);
                 break;
-            case HostMessageInterface.PLAY:
+            case HostRequestInterface.PLAY:
                 play();
         }
     }
@@ -38,7 +38,7 @@ public class PlayerMessageProcessor implements PlayerMessageInterface {
 
 
     public void getPlayers(Player.CallbackListener callback) {
-        callbacks.put(HostMessageInterface.GET_PLAYERS, callback);
+        callbacks.put(HostRequestInterface.GET_PLAYERS, callback);
         Request request = new GetPlayersRequest();
         hostProxy.write(request.toString());
     }
@@ -76,11 +76,11 @@ public class PlayerMessageProcessor implements PlayerMessageInterface {
                 jsonMessage.getIdentifier()));
 
         switch (jsonMessage.getIdentifier()) {
-            case HostMessageInterface.GET_PLAYERS:
-                if (callbacks.containsKey(HostMessageInterface.GET_PLAYERS)) {
+            case HostRequestInterface.GET_PLAYERS:
+                if (callbacks.containsKey(HostRequestInterface.GET_PLAYERS)) {
                     try {
                         GetPlayersResponse response = new GetPlayersResponse(jsonMessage.toString());
-                        callbacks.get(HostMessageInterface.GET_PLAYERS).onCallback(response.getResult());
+                        callbacks.get(HostRequestInterface.GET_PLAYERS).onCallback(response.getResult());
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
