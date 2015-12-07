@@ -11,7 +11,6 @@ import java.net.InetAddress;
 
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.JsonMessage;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Request;
-import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Response;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Sender;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.HostProxy;
 import ca.brocku.cosc3p97.bigbuzzerquiz.models.Host;
@@ -95,7 +94,8 @@ public class HostConnection implements Handler.Callback, TcpConnection.Listener,
             if (Request.is(message)) {
                 hostProxy.handlePlayerRequest(message);
             } else {
-                hostProxy.responseHandler.handle(new Response(obj.message));
+                hostProxy.handleHostResponse(message);
+                //hostProxy.responseHandler.handle(new Response(obj.message));
             }
         } catch (JSONException e) {
             e.printStackTrace();

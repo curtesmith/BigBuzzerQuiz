@@ -10,8 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ca.brocku.cosc3p97.bigbuzzerquiz.communication.HostConnection;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.GetPlayersResponseHandler;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.HostActions;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.HostProxy;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.HostRequestInterface;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.BeginGameRequestHandler;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.PlayerActions;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.PlayerMessageInterface;
@@ -27,6 +29,7 @@ public class Player implements PlayerActions {
     private Player(InetAddress hostAddress, Host host) {
         hostProxy = new HostProxy(hostAddress, host);
         hostProxy.addPlayerRequestHandler(PlayerMessageInterface.BEGIN_GAME, new BeginGameRequestHandler(this));
+        hostProxy.addHostResponseHandler(HostRequestInterface.GET_PLAYERS, new GetPlayersResponseHandler(this));
     }
 
 
