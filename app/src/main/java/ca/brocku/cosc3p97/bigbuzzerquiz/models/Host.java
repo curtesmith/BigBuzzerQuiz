@@ -11,7 +11,6 @@ import ca.brocku.cosc3p97.bigbuzzerquiz.communication.TcpConnection;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.GetPlayersRequestHandler;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.HostActions;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.HostMessageProcessor;
-import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.HostRequestHandler;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.HostRequestInterface;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.PlayRequestHandler;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.PlayerProxy;
@@ -34,8 +33,13 @@ public class Host implements HostActions {
         addListener(listener);
         playerProxy = new PlayerProxy(this, listener);
         playerProxy.setHostMessageInterface(new HostMessageProcessor(this, playerProxy));
-        playerProxy.setRequestHandler(new HostRequestHandler(this));
 
+        addRequestHandlers();
+
+    }
+
+
+    private void addRequestHandlers() {
         playerProxy.addRequestHandler(HostRequestInterface.GET_PLAYERS, new GetPlayersRequestHandler(this));
         playerProxy.addRequestHandler(HostRequestInterface.PLAY, new PlayRequestHandler(this));
     }

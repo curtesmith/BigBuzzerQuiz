@@ -30,7 +30,6 @@ public class PlayerProxy implements Handler.Callback, TcpConnection.Listener, Pl
     private TcpConnection.Listener playerTcpListener;
     private HostMessageProcessor hostMessageInterface;
     private Host host;
-    private RequestHandler requestHandler;
     private HashMap<String, RequestHandler> requestHandlers = new HashMap<>();
 
 
@@ -70,11 +69,6 @@ public class PlayerProxy implements Handler.Callback, TcpConnection.Listener, Pl
 
     public void setHostMessageInterface(HostMessageProcessor hostMessageInterface) {
         this.hostMessageInterface = hostMessageInterface;
-    }
-
-
-    public void setRequestHandler(RequestHandler requestHandler) {
-        this.requestHandler = requestHandler;
     }
 
 
