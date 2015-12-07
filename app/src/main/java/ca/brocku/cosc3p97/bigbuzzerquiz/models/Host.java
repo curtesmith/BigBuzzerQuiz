@@ -89,7 +89,7 @@ public class Host implements HostActions {
     public void play() {
         if(state == State.Stop) {
             state = State.Play;
-            playerProxy.beginGame();
+            playerProxy.showQuestion();
         }
     }
 

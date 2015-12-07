@@ -77,7 +77,6 @@ public class DeviceListAdapter extends BaseAdapter {
         }
 
         CheckBox checkBox = (CheckBox) view.findViewById(R.id.deviceNameCheckBox);
-
         checkBox.setChecked(peers.get(index).status == WifiP2pDevice.CONNECTED);
         checkBox.setText(peers.get(index).deviceName);
         checkBox.setOnCheckedChangeListener(getOnCheckedChangeListener(index));

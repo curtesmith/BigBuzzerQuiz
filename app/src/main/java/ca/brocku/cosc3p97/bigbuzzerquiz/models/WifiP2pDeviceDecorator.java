@@ -12,12 +12,14 @@ public class WifiP2pDeviceDecorator extends WifiP2pDevice {
     private static final String TAG = "WifiP2pDeviceDecorator";
     public boolean isConnecting;
     public boolean isSelected;
+    public boolean isEnabled;
 
     public WifiP2pDeviceDecorator(WifiP2pDevice source) {
         super(source);
         Log.i(TAG, "ctor name={" + source.deviceName + "}, isGroupOwner={" + source.isGroupOwner() + "}");
         isConnecting = false;
         isSelected = false;
+        isEnabled = true;
     }
 
 

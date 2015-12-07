@@ -173,6 +173,11 @@ public class WiFiConnectionsModel extends Observable implements WifiP2pBroadcast
     }
 
 
+    private void blockPeers() {
+
+    }
+
+
     private void requestPeers() {
         Log.i(TAG, "requestPeers called");
         manager.requestPeers(channel, new WifiP2pManager.PeerListListener() {

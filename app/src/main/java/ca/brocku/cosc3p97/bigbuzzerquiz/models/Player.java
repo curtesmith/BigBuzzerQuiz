@@ -14,7 +14,7 @@ import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.GetPlayersResponseHandler;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.HostActions;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.HostProxy;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.HostRequestInterface;
-import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.BeginGameRequestHandler;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.ShowQuestionRequestHandler;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.PlayerActions;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.PlayerMessageInterface;
 import ca.brocku.cosc3p97.bigbuzzerquiz.views.QuestionActivity;
@@ -28,7 +28,7 @@ public class Player implements PlayerActions {
 
     private Player(InetAddress hostAddress, Host host) {
         hostProxy = new HostProxy(hostAddress, host);
-        hostProxy.addPlayerRequestHandler(PlayerMessageInterface.BEGIN_GAME, new BeginGameRequestHandler(this));
+        hostProxy.addPlayerRequestHandler(PlayerMessageInterface.SHOW_QUESTION, new ShowQuestionRequestHandler(this));
         hostProxy.addHostResponseHandler(HostRequestInterface.GET_PLAYERS, new GetPlayersResponseHandler(this));
     }
 
@@ -92,7 +92,7 @@ public class Player implements PlayerActions {
 
 
     @Override
-    public void beginGame() {
+    public void showQuestion() {
         if(activity != null) {
             Intent intent = new Intent(activity, QuestionActivity.class);
             activity.startActivity(intent);

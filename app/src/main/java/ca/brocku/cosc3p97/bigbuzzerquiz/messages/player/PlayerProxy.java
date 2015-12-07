@@ -49,8 +49,8 @@ public class PlayerProxy implements PlayerActions {
 
 
     @Override
-    public void beginGame() {
-        Request request = new BeginGameRequest();
+    public void showQuestion() {
+        Request request = new ShowQuestionRequest();
         request.addSender(connection);
         request.send();
     }
