@@ -1,19 +1,36 @@
 package ca.brocku.cosc3p97.bigbuzzerquiz.views;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import ca.brocku.cosc3p97.bigbuzzerquiz.R;
+import ca.brocku.cosc3p97.bigbuzzerquiz.models.Player;
 
 public class StartPlayerActivity extends AppCompatActivity {
+    Player player;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_player);
+
+        try {
+            player = Player.getInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        player.setActivity(this);
     }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        player.setActivity(this);
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -7,10 +7,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import java.util.Observable;
+import java.util.Observer;
+
 import ca.brocku.cosc3p97.bigbuzzerquiz.R;
+import ca.brocku.cosc3p97.bigbuzzerquiz.models.WiFiConnectionsModel;
 
-public class StartActivity extends AppCompatActivity {
-
+public class StartActivity extends AppCompatActivity implements Observer {
+    private WiFiConnectionsModel wifi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +27,25 @@ public class StartActivity extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), MasterActivity.class));
             }
         });
+
+        wifi = new WiFiConnectionsModel(this);
+        wifi.addObserver(this);
+
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        wifi.registerReceiver(this);
+    }
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        wifi.unregisterReceiver(this);
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -47,7 +69,7 @@ public class StartActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void choseMasterMode(View view){
+    public void choseMasterMode(View view) {
         Intent intent = new Intent(this, MasterSetupActivity.class);
         startActivity(intent);
     }
@@ -57,4 +79,11 @@ public class StartActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    @Override
+    public void update(Observable observable, Object o) {
+        WiFiConnectionsModel wifi = (WiFiConnectionsModel) observable;
+
+        findViewById(R.id.masterButton).setEnabled(wifi.isConnected());
+        findViewById(R.id.playerButton).setEnabled(wifi.isConnected());
+    }
 }

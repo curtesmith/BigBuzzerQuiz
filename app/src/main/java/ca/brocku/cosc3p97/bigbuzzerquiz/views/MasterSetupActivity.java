@@ -31,6 +31,7 @@ public class MasterSetupActivity extends AppCompatActivity {
         try {
             player = Player.getInstance();
             loadListView(player.getPlayers());
+            player.setActivity(this);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -180,5 +181,12 @@ public class MasterSetupActivity extends AppCompatActivity {
 
         amountView.setText(Integer.toString(amount));
     }
+
+
+//    @Override
+//    public void onBeginGame() {
+//        Intent intent = new Intent(this, QuestionActivity.class);
+//        startActivity(intent);
+//    }
 }
 

@@ -22,7 +22,8 @@
         android:id="@+id/masterButton"
         android:onClick="choseMasterMode"
         android:text="Master"
-        android:textSize="@dimen/defaultButtonSize"/>
+        android:textSize="@dimen/defaultButtonSize"
+        android:enabled="false" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -40,7 +41,8 @@
         android:id="@+id/playerButton"
         android:onClick="chosePlayerMode"
         android:text="Player"
-        android:textSize="@dimen/defaultButtonSize"/>
+        android:textSize="@dimen/defaultButtonSize"
+        android:enabled="false" />
 
     <TextView
         android:layout_width="wrap_content"

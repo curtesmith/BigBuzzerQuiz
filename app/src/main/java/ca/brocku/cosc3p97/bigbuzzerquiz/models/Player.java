@@ -1,6 +1,8 @@
 package ca.brocku.cosc3p97.bigbuzzerquiz.models;
 
 
+import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import java.net.InetAddress;
@@ -9,16 +11,22 @@ import java.util.List;
 
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.HostActions;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.HostProxy;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.BeginGameRequestHandler;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.PlayerActions;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.PlayerMessageInterface;
+import ca.brocku.cosc3p97.bigbuzzerquiz.views.QuestionActivity;
 
 public class Player implements PlayerActions {
     private static final String TAG = "Player";
     private static Player instance = null;
-    private HostActions hostActions;
+    private HostProxy hostProxy;
+    //private BeginGameListener listener;
+    private AppCompatActivity activity;
 
 
     private Player(InetAddress hostAddress, Host host) {
-        this.hostActions = new HostProxy(hostAddress, host);
+        hostProxy = new HostProxy(hostAddress, host);
+        hostProxy.addPlayerRequestHander(PlayerMessageInterface.BEGIN_GAME, new BeginGameRequestHandler(this));
     }
 
 
@@ -37,7 +45,7 @@ public class Player implements PlayerActions {
 
 
     public static Player getInstance(InetAddress hostAddress, Host host) {
-        Log.i(TAG, "getInstance with hostActions argument");
+        Log.i(TAG, "getInstance with hostProxy argument");
         if (instance == null) {
             instance = new Player(hostAddress, host);
         }
@@ -45,12 +53,16 @@ public class Player implements PlayerActions {
         return instance;
     }
 
+    public void setActivity(AppCompatActivity activity) {
+        this.activity = activity;
+    }
+
 
     public List<String> getPlayers() {
         Log.i(TAG, "getPlayers: invoked");
         final List<String> result = new ArrayList<>();
 
-        hostActions.getPlayers(new HostActions.GetPlayersCallback() {
+        hostProxy.getPlayers(new HostActions.GetPlayersCallback() {
             @Override
             public void reply(List<String> names) {
                 Log.i(TAG, String.format("getPlayers reply invoked with %s names", names.size()));
@@ -66,13 +78,35 @@ public class Player implements PlayerActions {
 
 
     public void play() {
-        hostActions.play();
+        hostProxy.play();
     }
+
+
+//    public void addBeginGameListener(BeginGameListener listener) {
+//        this.listener = listener;
+//    }
+//
+//
+//    public interface BeginGameListener {
+//        void onBeginGame();
+//    }
+
+
+    public void setConnectedListener(HostProxy.ConnectedListener listener) {
+        hostProxy.setConnectedListener(listener);
+    }
+
 
 
     @Override
     public void beginGame() {
-
+//        if(listener != null) {
+//            listener.onBeginGame();
+//        }
+        if(activity != null) {
+            Intent intent = new Intent(activity, QuestionActivity.class);
+            activity.startActivity(intent);
+        }
     }
 
 }

@@ -17,10 +17,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.HostProxy;
 import ca.brocku.cosc3p97.bigbuzzerquiz.views.DeviceListAdapter;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.PlayerProxy;
 
-public class WiFiConnectionsModel extends Observable implements WifiP2pBroadcastReceiver.WifiP2pBroadcastListener {
+public class WiFiConnectionsModel extends Observable implements WifiP2pBroadcastReceiver.WifiP2pBroadcastListener,
+        HostProxy.ConnectedListener {
     private static final String TAG = "WiFiConnectionsModel";
     private WifiP2pInfo p2pInfo;
     private WifiP2pManager manager;
@@ -139,6 +141,7 @@ public class WiFiConnectionsModel extends Observable implements WifiP2pBroadcast
     @Override
     public void onConnectionInfoAvailable(final WifiP2pInfo info) {
         Log.i(TAG, "onConnectionInfoAvailable called with info?" + (info == null ? "FALSE" : "TRUE"));
+        final WiFiConnectionsModel me = this;
 
         p2pInfo = info;
 
@@ -154,14 +157,17 @@ public class WiFiConnectionsModel extends Observable implements WifiP2pBroadcast
                     public void onSetup(Host host) {
                         Log.i(TAG, "onSetup: game SERVER is ready, creating player");
                         player = Player.getInstance(info.groupOwnerAddress, host);
+                        player.setConnectedListener(me);
                     }
                 });
             } else {
                 Log.i(TAG, "Connected as a CLIENT");
                 player = Player.getInstance(info.groupOwnerAddress);
+                player.setConnectedListener(me);
             }
         }
 
+        Log.i(TAG, "onConnectionInfoAvailable: completed calling notifyObservers");
         setChanged();
         notifyObservers();
     }
@@ -193,6 +199,27 @@ public class WiFiConnectionsModel extends Observable implements WifiP2pBroadcast
         }
 
         return null;
+    }
+
+
+    private boolean isConnected = false;
+
+    public boolean isConnected() {
+            Log.i(TAG, "isConnected returning " + isConnected);
+            return isConnected;
+    }
+
+
+    public void onConnected() {
+        Log.i(TAG, "onConnected: invoked");
+        isConnected = true;
+        setChanged();
+        notifyObservers();
+    }
+
+
+    public Player getPlayer() {
+        return player;
     }
 
 }

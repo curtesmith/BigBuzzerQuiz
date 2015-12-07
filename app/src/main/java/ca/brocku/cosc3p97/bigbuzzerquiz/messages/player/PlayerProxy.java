@@ -28,7 +28,7 @@ public class PlayerProxy implements Handler.Callback, TcpConnection.Listener, Pl
     private Handler threadHandler = new Handler(this);
     private List<SetupListener> listeners = new ArrayList<>();
     private TcpConnection.Listener playerTcpListener;
-    private HostMessageProcessor hostMessageInterface;
+    private HostMessageProcessor hostMessageProcessor;
     private Host host;
     private HashMap<String, RequestHandler> requestHandlers = new HashMap<>();
 
@@ -68,7 +68,7 @@ public class PlayerProxy implements Handler.Callback, TcpConnection.Listener, Pl
 
 
     public void setHostMessageInterface(HostMessageProcessor hostMessageInterface) {
-        this.hostMessageInterface = hostMessageInterface;
+        this.hostMessageProcessor = hostMessageInterface;
     }
 
 
@@ -173,7 +173,7 @@ public class PlayerProxy implements Handler.Callback, TcpConnection.Listener, Pl
 
     @Override
     public void beginGame() {
-        hostMessageInterface.createRequest(PlayerMessageInterface.BEGIN_GAME);
+        hostMessageProcessor.createRequest(PlayerMessageInterface.BEGIN_GAME);
     }
 
 

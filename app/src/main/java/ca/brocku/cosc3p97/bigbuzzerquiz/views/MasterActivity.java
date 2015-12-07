@@ -14,6 +14,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import ca.brocku.cosc3p97.bigbuzzerquiz.R;
+import ca.brocku.cosc3p97.bigbuzzerquiz.models.Player;
 import ca.brocku.cosc3p97.bigbuzzerquiz.models.WiFiConnectionsModel;
 
 
@@ -22,6 +23,7 @@ public class MasterActivity extends AppCompatActivity
 
     private static final String TAG = "MasterActivity";
     private WiFiConnectionsModel model;
+    private Player player;
 
 
     @Override
@@ -31,6 +33,12 @@ public class MasterActivity extends AppCompatActivity
 
         model = new WiFiConnectionsModel(this);
         model.addObserver(this);
+
+        try {
+            player = Player.getInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         ListView list = (ListView) findViewById(R.id.devicesList);
         list.setAdapter(model.getPeersListAdapter());
@@ -44,6 +52,7 @@ public class MasterActivity extends AppCompatActivity
     public void onResume() {
         super.onResume();
         model.registerReceiver(this);
+        player.setActivity(this);
     }
 
 

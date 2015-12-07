@@ -29,7 +29,7 @@ public class HostProxy implements Handler.Callback, TcpConnection.Listener, Host
     private HostRequestBuilder hostRequestBuilder;
     private HostResponseHandler hostResponseHandler;
     private HashMap<String, PlayerRequestHandler> playerRequestHandlers = new HashMap<>();
-
+    private boolean isConnected = false;
 
     public HostProxy(InetAddress hostAddress, Host host) {
         if (host != null) {
@@ -48,6 +48,10 @@ public class HostProxy implements Handler.Callback, TcpConnection.Listener, Host
         clientSocketThread.start();
     }
 
+
+    public boolean isConnected() {
+        return isConnected;
+    }
 
     @Override
     public boolean handleMessage(Message msg) {
@@ -71,10 +75,20 @@ public class HostProxy implements Handler.Callback, TcpConnection.Listener, Host
         tcpConnection.write(message);
     }
 
+    private HostProxy.ConnectedListener connectedListener;
+
+    public void setConnectedListener(HostProxy.ConnectedListener listener) {
+        connectedListener = listener;
+    }
+    public interface ConnectedListener {
+        void onConnected();
+    }
+
 
     @Override
     public void onConnected(TcpConnection tcpConnection) {
         this.tcpConnection = tcpConnection;
+        connectedListener.onConnected();
     }
 
 
@@ -100,6 +114,7 @@ public class HostProxy implements Handler.Callback, TcpConnection.Listener, Host
     public void addPlayerRequestHander(String ID, PlayerRequestHandler playerRequestHandler) {
         playerRequestHandlers.put(ID, playerRequestHandler);
     }
+
 
     private void handlePlayerRequest(JsonMessage request) throws JSONException {
         Log.i(TAG, String.format("handlePlayerRequest: invoked for request identifier [%s]",
