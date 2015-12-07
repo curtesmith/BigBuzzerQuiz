@@ -5,14 +5,13 @@ import android.util.Log;
 
 import org.json.JSONException;
 
-import java.util.List;
+import java.util.HashMap;
 
 import ca.brocku.cosc3p97.bigbuzzerquiz.models.Player;
 
 public class PlayerMessageProcessor implements PlayerMessageInterface {
     private static final String TAG = "PlayerMessageProcessor";
-    private Player.CallbackListener getPlayerCallback;
-    private List<Player.CallbackListener> callbacks;
+    private HashMap<String, Player.CallbackListener> callbacks = new HashMap<>();
     private HostProxy hostProxy;
 
 
@@ -22,8 +21,8 @@ public class PlayerMessageProcessor implements PlayerMessageInterface {
 
 
     @Override
-    public void createRequest(String requestId, Player.CallbackListener callback) {
-        switch (requestId) {
+    public void createRequest(String requestID, Player.CallbackListener callback) {
+        switch (requestID) {
             case HostMessageInterface.GET_PLAYERS:
                 getPlayers(callback);
                 break;
@@ -33,13 +32,13 @@ public class PlayerMessageProcessor implements PlayerMessageInterface {
     }
 
     @Override
-    public void begin() {
+    public void beginGame() {
         // TODO: 2015-12-06 add code to handle this message
     }
 
 
     public void getPlayers(Player.CallbackListener callback) {
-        getPlayerCallback = callback;
+        callbacks.put(HostMessageInterface.GET_PLAYERS, callback);
         Request request = new GetPlayersRequest();
         hostProxy.write(request.toString());
     }
@@ -58,8 +57,8 @@ public class PlayerMessageProcessor implements PlayerMessageInterface {
             Response response = null;
 
             switch (request.getIdentifier()) {
-                case PlayerMessageInterface.BEGIN:
-                    begin();
+                case PlayerMessageInterface.BEGIN_GAME:
+                    beginGame();
                     break;
             }
 
@@ -78,10 +77,10 @@ public class PlayerMessageProcessor implements PlayerMessageInterface {
 
         switch (jsonMessage.getIdentifier()) {
             case HostMessageInterface.GET_PLAYERS:
-                if (getPlayerCallback != null) {
+                if (callbacks.containsKey(HostMessageInterface.GET_PLAYERS)) {
                     try {
                         GetPlayersResponse response = new GetPlayersResponse(jsonMessage.toString());
-                        getPlayerCallback.onCallback(response.getResult());
+                        callbacks.get(HostMessageInterface.GET_PLAYERS).onCallback(response.getResult());
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

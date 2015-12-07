@@ -9,8 +9,9 @@ import java.util.List;
 
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.HostActions;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.HostProxy;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.PlayerActions;
 
-public class Player {
+public class Player implements PlayerActions {
     private static final String TAG = "Player";
     private static Player instance = null;
     private HostActions hostActions;
@@ -67,6 +68,13 @@ public class Player {
     public void play() {
         hostActions.play();
     }
+
+
+    @Override
+    public void beginGame() {
+
+    }
+
 
     public interface CallbackListener {
         void onCallback(Object object);

@@ -6,13 +6,6 @@ import org.json.JSONException;
 
 import java.util.List;
 
-import ca.brocku.cosc3p97.bigbuzzerquiz.messages.GetPlayersResponse;
-import ca.brocku.cosc3p97.bigbuzzerquiz.messages.HostActions;
-import ca.brocku.cosc3p97.bigbuzzerquiz.messages.HostMessageInterface;
-import ca.brocku.cosc3p97.bigbuzzerquiz.messages.PlayerProxy;
-import ca.brocku.cosc3p97.bigbuzzerquiz.messages.Request;
-import ca.brocku.cosc3p97.bigbuzzerquiz.messages.Response;
-
 public class HostMessageProcessor implements HostMessageInterface {
     PlayerProxy playerProxy;
     HostActions host;
@@ -47,6 +40,22 @@ public class HostMessageProcessor implements HostMessageInterface {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+
+    @Override
+    public void createRequest(String requestID) {
+        switch(requestID) {
+            case PlayerMessageInterface.BEGIN_GAME:
+                beginGame();
+                break;
+        }
+    }
+
+
+    private void beginGame() {
+        Request request = new BeginGameRequest();
+        playerProxy.write(request.toString());
     }
 
 

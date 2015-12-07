@@ -7,10 +7,11 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
+import ca.brocku.cosc3p97.bigbuzzerquiz.communication.TcpConnection;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.HostActions;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.HostMessageProcessor;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.HostRequestHandler;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.PlayerProxy;
-import ca.brocku.cosc3p97.bigbuzzerquiz.communication.TcpConnection;
 
 
 public class Host implements HostActions {
@@ -29,7 +30,8 @@ public class Host implements HostActions {
         Log.i(TAG, "ctor: invoked");
         addListener(listener);
         playerProxy = new PlayerProxy(this, listener);
-        playerProxy.setRequestHandler(new HostMessageProcessor(this, playerProxy));
+        playerProxy.setHostMessageInterface(new HostMessageProcessor(this, playerProxy));
+        playerProxy.setRequestHandler(new HostRequestHandler(this));
     }
 
 
@@ -77,8 +79,7 @@ public class Host implements HostActions {
     public void play() {
         if(state == State.Stop) {
             state = State.Play;
-
-            // TODO: 2015-12-06 send a BEGIN message to all players
+            playerProxy.beginGame();
         }
     }
 
