@@ -16,11 +16,12 @@ import ca.brocku.cosc3p97.bigbuzzerquiz.communication.TcpConnection;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.JsonMessage;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Request;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.RequestHandler;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Sender;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.HostMessageProcessor;
 import ca.brocku.cosc3p97.bigbuzzerquiz.models.Host;
 
 
-public class PlayerProxy implements Handler.Callback, TcpConnection.Listener, PlayerActions {
+public class PlayerProxy implements Handler.Callback, TcpConnection.Listener, PlayerActions, Sender {
     private static final String TAG = "PlayerProxy";
 
     private ServerSocketThread serverSocketThread;
@@ -174,6 +175,12 @@ public class PlayerProxy implements Handler.Callback, TcpConnection.Listener, Pl
     @Override
     public void beginGame() {
         hostMessageProcessor.createRequest(PlayerMessageInterface.BEGIN_GAME);
+    }
+
+
+    @Override
+    public void send(String request) {
+
     }
 
 

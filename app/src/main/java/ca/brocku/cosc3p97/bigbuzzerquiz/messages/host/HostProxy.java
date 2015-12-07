@@ -15,36 +15,33 @@ import ca.brocku.cosc3p97.bigbuzzerquiz.communication.ClientSocketThread;
 import ca.brocku.cosc3p97.bigbuzzerquiz.communication.TcpConnection;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.JsonMessage;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Request;
-import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.RequestSender;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Sender;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Response;
-import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.PlayerMessageInterface;
-import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.PlayerMessageProcessor;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.PlayerRequestHandler;
 import ca.brocku.cosc3p97.bigbuzzerquiz.models.Host;
 
-public class HostProxy implements Handler.Callback, TcpConnection.Listener, HostActions, RequestSender {
+public class HostProxy implements Handler.Callback, TcpConnection.Listener, HostActions, Sender {
     private static final String TAG = "HostProxy";
-    private ClientSocketThread clientSocketThread;
     private TcpConnection tcpConnection;
-    private PlayerMessageInterface messenger;
     private HostResponseHandler hostResponseHandler;
     private HashMap<String, PlayerRequestHandler> playerRequestHandlers = new HashMap<>();
 
 
     public HostProxy(InetAddress hostAddress, Host host) {
+        ClientSocketThread thread;
+
         if (host != null) {
             Log.i(TAG, "ctor: host is not null");
             host.setTcpListener(this);
-            clientSocketThread = new ClientSocketThread(host.getHandler(), hostAddress);
+            thread = new ClientSocketThread(host.getHandler(), hostAddress);
         } else {
             Log.i(TAG, "ctor: host is null");
-            clientSocketThread = new ClientSocketThread(new Handler(this), hostAddress);
+            thread = new ClientSocketThread(new Handler(this), hostAddress);
         }
 
-        messenger = new PlayerMessageProcessor(this);
         hostResponseHandler = new HostResponseHandler();
 
-        clientSocketThread.start();
+        thread.start();
     }
 
 
@@ -111,7 +108,7 @@ public class HostProxy implements Handler.Callback, TcpConnection.Listener, Host
     }
 
 
-    public void addPlayerRequestHander(String ID, PlayerRequestHandler playerRequestHandler) {
+    public void addPlayerRequestHandler(String ID, PlayerRequestHandler playerRequestHandler) {
         playerRequestHandlers.put(ID, playerRequestHandler);
     }
 

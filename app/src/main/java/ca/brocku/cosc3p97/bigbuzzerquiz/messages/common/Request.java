@@ -2,9 +2,9 @@ package ca.brocku.cosc3p97.bigbuzzerquiz.messages.common;
 
 import org.json.JSONException;
 
-public class Request extends JsonMessage implements Requestable {
+public class Request extends JsonMessage implements Sendable {
     public static final String REQUEST = "REQUEST";
-    private RequestSender sender;
+    private Sender sender;
     private Callback callback;
 
 
@@ -38,7 +38,7 @@ public class Request extends JsonMessage implements Requestable {
 
 
     @Override
-    public void addSender(RequestSender sender) {
+    public void addSender(Sender sender) {
         this.sender = sender;
     }
 

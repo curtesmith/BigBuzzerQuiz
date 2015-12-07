@@ -26,7 +26,7 @@ public class Player implements PlayerActions {
 
     private Player(InetAddress hostAddress, Host host) {
         hostProxy = new HostProxy(hostAddress, host);
-        hostProxy.addPlayerRequestHander(PlayerMessageInterface.BEGIN_GAME, new BeginGameRequestHandler(this));
+        hostProxy.addPlayerRequestHandler(PlayerMessageInterface.BEGIN_GAME, new BeginGameRequestHandler(this));
     }
 
 
