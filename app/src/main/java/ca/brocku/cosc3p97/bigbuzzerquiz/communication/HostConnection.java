@@ -95,7 +95,6 @@ public class HostConnection implements Handler.Callback, TcpConnection.Listener,
                 hostProxy.handlePlayerRequest(message);
             } else {
                 hostProxy.handleHostResponse(message);
-                //hostProxy.responseHandler.handle(new Response(obj.message));
             }
         } catch (JSONException e) {
             e.printStackTrace();

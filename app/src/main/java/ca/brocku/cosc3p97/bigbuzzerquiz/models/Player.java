@@ -56,8 +56,14 @@ public class Player implements PlayerActions {
         return instance;
     }
 
+
     public void setActivity(AppCompatActivity activity) {
         this.activity = activity;
+    }
+
+
+    public void setConnectedListener(HostConnection.ConnectedListener listener) {
+        hostProxy.setConnectedListener(listener);
     }
 
 
@@ -82,11 +88,6 @@ public class Player implements PlayerActions {
 
     public void play() {
         hostProxy.play();
-    }
-
-
-    public void setConnectedListener(HostConnection.ConnectedListener listener) {
-        hostProxy.setConnectedListener(listener);
     }
 
 

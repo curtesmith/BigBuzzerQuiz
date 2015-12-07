@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Observable;
 
 import ca.brocku.cosc3p97.bigbuzzerquiz.communication.HostConnection;
-import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.PlayerProxy;
+import ca.brocku.cosc3p97.bigbuzzerquiz.communication.PlayerConnection;
 import ca.brocku.cosc3p97.bigbuzzerquiz.views.DeviceListAdapter;
 
 public class WiFiConnectionsModel extends Observable implements WifiP2pBroadcastReceiver.WifiP2pBroadcastListener,
@@ -152,7 +152,7 @@ public class WiFiConnectionsModel extends Observable implements WifiP2pBroadcast
         if(info != null) {
             if (info.isGroupOwner) {
                 Log.i(TAG, "Connected as group owner");
-                host = Host.getInstance(new PlayerProxy.SetupListener() {
+                host = Host.getInstance(new PlayerConnection.SetupListener() {
                     @Override
                     public void onSetup(Host host) {
                         Log.i(TAG, "onSetup: game SERVER is ready, creating player");

@@ -26,7 +26,6 @@ public class HostProxy implements HostActions {
     public HostProxy(InetAddress hostAddress, Host host) {
         connection = new HostConnection(hostAddress, host);
         connection.setHostProxy(this);
-        //responseHandler = new HostResponseHandler();
     }
 
 
