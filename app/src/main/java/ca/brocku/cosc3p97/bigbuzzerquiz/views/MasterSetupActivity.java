@@ -1,4 +1,4 @@
-package ca.brocku.cosc3p97.bigbuzzerquiz;
+package ca.brocku.cosc3p97.bigbuzzerquiz.views;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +12,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
+
+import ca.brocku.cosc3p97.bigbuzzerquiz.R;
+import ca.brocku.cosc3p97.bigbuzzerquiz.models.Player;
 
 /**
  * This Activity provides setting for the master-player to setup the game
@@ -110,6 +113,13 @@ public class MasterSetupActivity extends AppCompatActivity {
      * @param view
      */
     public void startGame(View view) {
+        try {
+            Player player = Player.getInstance();
+            player.play();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
 
     }
 

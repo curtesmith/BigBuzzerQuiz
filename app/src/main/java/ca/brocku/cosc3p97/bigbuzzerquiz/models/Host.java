@@ -1,4 +1,4 @@
-package ca.brocku.cosc3p97.bigbuzzerquiz;
+package ca.brocku.cosc3p97.bigbuzzerquiz.models;
 
 
 import android.os.Handler;
@@ -7,6 +7,11 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.HostActions;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.HostMessageProcessor;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.PlayerProxy;
+import ca.brocku.cosc3p97.bigbuzzerquiz.communication.TcpConnection;
+
 
 public class Host implements HostActions {
     private static final String TAG = "Host";
@@ -14,6 +19,10 @@ public class Host implements HostActions {
     private List<PlayerProxy.SetupListener> listeners = new ArrayList<>();
     private PlayerProxy playerProxy;
     private List<String> players = new ArrayList<>();
+    public enum State {
+        Play, Stop
+    }
+    private State state = State.Stop;
 
 
     private Host(PlayerProxy.SetupListener listener) throws Exception {
@@ -62,6 +71,15 @@ public class Host implements HostActions {
     @Override
     public void getPlayers(GetPlayersCallback callback) {
         callback.callback(players);
+    }
+
+    @Override
+    public void play() {
+        if(state == State.Stop) {
+            state = State.Play;
+
+            // TODO: 2015-12-06 send a BEGIN message to all players
+        }
     }
 
 }

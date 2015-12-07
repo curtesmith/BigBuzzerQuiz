@@ -1,4 +1,4 @@
-package ca.brocku.cosc3p97.bigbuzzerquiz;
+package ca.brocku.cosc3p97.bigbuzzerquiz.models;
 
 
 import android.util.Log;
@@ -6,6 +6,9 @@ import android.util.Log;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
+
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.HostActions;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.HostProxy;
 
 public class Player {
     private static final String TAG = "Player";
@@ -61,8 +64,8 @@ public class Player {
     }
 
 
-    public void startGame() {
-
+    public void play() {
+        hostActions.play();
     }
 
     public interface CallbackListener {

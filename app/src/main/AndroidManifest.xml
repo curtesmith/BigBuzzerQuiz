@@ -20,19 +20,19 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".MasterActivity"
+            android:name=".views.MasterActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
         </activity>
 
         <activity
-            android:name=".MasterSetupActivity"
+            android:name=".views.MasterSetupActivity"
             android:label="@string/title_activity_master_setup"
             android:screenOrientation="portrait" >
         </activity>
 
         <activity
-            android:name=".StartActivity"
+            android:name=".views.StartActivity"
             android:label="@string/title_activity_start"
             android:screenOrientation="portrait" >
             <intent-filter>
@@ -42,12 +42,12 @@
         </activity>
 
         <activity
-            android:name=".StartPlayerActivity"
+            android:name=".views.StartPlayerActivity"
             android:label="@string/title_activity_start_player" >
         </activity>
 
         <activity
-            android:name=".QuestionActivity"
+            android:name=".views.QuestionActivity"
             android:label="@string/title_activity_question_activity" >
         </activity>
     </application>

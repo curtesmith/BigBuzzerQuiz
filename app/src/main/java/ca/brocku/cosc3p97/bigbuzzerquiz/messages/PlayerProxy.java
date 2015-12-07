@@ -1,4 +1,4 @@
-package ca.brocku.cosc3p97.bigbuzzerquiz;
+package ca.brocku.cosc3p97.bigbuzzerquiz.messages;
 
 
 import android.os.Handler;
@@ -7,6 +7,10 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import ca.brocku.cosc3p97.bigbuzzerquiz.communication.ServerSocketThread;
+import ca.brocku.cosc3p97.bigbuzzerquiz.communication.TcpConnection;
+import ca.brocku.cosc3p97.bigbuzzerquiz.models.Host;
 
 
 public class PlayerProxy implements Handler.Callback, TcpConnection.Listener {

@@ -1,4 +1,4 @@
-package ca.brocku.cosc3p97.bigbuzzerquiz;
+package ca.brocku.cosc3p97.bigbuzzerquiz.messages;
 
 
 import org.json.JSONArray;
@@ -8,9 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GetPlayersResponse extends Response {
-    public static final String GET_PLAYERS = "GET_PLAYERS";
-    public static final String IDENTIFIER = GET_PLAYERS;
-
     public GetPlayersResponse(String string) throws JSONException {
         super(string);
     }
@@ -23,7 +20,7 @@ public class GetPlayersResponse extends Response {
 
     public void setIdentifier() {
         try {
-            put(JsonMessage.IDENTIFIER, GET_PLAYERS);
+            put(JsonMessage.IDENTIFIER, HostMessageInterface.GET_PLAYERS);
         } catch (JSONException e) {
             e.printStackTrace();
         }

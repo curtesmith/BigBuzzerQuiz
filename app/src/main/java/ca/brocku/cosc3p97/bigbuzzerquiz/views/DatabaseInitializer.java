@@ -1,4 +1,4 @@
-package ca.brocku.cosc3p97.bigbuzzerquiz;
+package ca.brocku.cosc3p97.bigbuzzerquiz.views;
 
 import android.app.Activity;
 import android.content.Context;
@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 
 import android.support.v7.app.AppCompatActivity;
+
+import ca.brocku.cosc3p97.bigbuzzerquiz.R;
 
 /**
  * This class provides the methods to create and initialize the database for the first time as

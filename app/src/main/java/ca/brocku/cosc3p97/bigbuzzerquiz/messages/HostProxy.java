@@ -1,4 +1,4 @@
-package ca.brocku.cosc3p97.bigbuzzerquiz;
+package ca.brocku.cosc3p97.bigbuzzerquiz.messages;
 
 
 import android.os.Handler;
@@ -10,11 +10,16 @@ import org.json.JSONException;
 import java.net.InetAddress;
 import java.util.List;
 
+import ca.brocku.cosc3p97.bigbuzzerquiz.communication.ClientSocketThread;
+import ca.brocku.cosc3p97.bigbuzzerquiz.communication.TcpConnection;
+import ca.brocku.cosc3p97.bigbuzzerquiz.models.Host;
+import ca.brocku.cosc3p97.bigbuzzerquiz.models.Player;
+
 public class HostProxy implements Handler.Callback, TcpConnection.Listener, HostActions {
     private static final String TAG = "HostProxy";
     private ClientSocketThread clientSocketThread;
     private TcpConnection tcpConnection;
-    private PlayerMessageProcessor messageProcessor;
+    private PlayerMessageInterface messenger;
 
 
     public HostProxy(InetAddress hostAddress, Host host) {
@@ -27,7 +32,7 @@ public class HostProxy implements Handler.Callback, TcpConnection.Listener, Host
             clientSocketThread = new ClientSocketThread(new Handler(this), hostAddress);
         }
 
-        messageProcessor = new PlayerMessageProcessor(this);
+        messenger = new PlayerMessageProcessor(this);
 
         clientSocketThread.start();
     }
@@ -73,7 +78,7 @@ public class HostProxy implements Handler.Callback, TcpConnection.Listener, Host
             if (Request.is(message)) {
                 handleServerRequest(message);
             } else {
-                messageProcessor.handleServerResponse(message);
+                messenger.handleServerResponse(message);
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -101,7 +106,7 @@ public class HostProxy implements Handler.Callback, TcpConnection.Listener, Host
 
     @Override
     public void getPlayers(final GetPlayersCallback callback) {
-        messageProcessor.createRequest(HostMessageInterface.GET_PLAYERS,
+        messenger.createRequest(HostMessageInterface.GET_PLAYERS,
                 new Player.CallbackListener() {
                     @Override
                     public void onCallback(Object object) {
@@ -109,6 +114,19 @@ public class HostProxy implements Handler.Callback, TcpConnection.Listener, Host
                     }
                 });
     }
+
+
+    @Override
+    public void play() {
+        messenger.createRequest(HostMessageInterface.PLAY,
+                new Player.CallbackListener() {
+                    @Override
+                    public void onCallback(Object object) {
+                        //ignore
+                    }
+                });
+    }
+
 
     interface Callback {
         void done(String message);

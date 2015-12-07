@@ -1,10 +1,17 @@
-package ca.brocku.cosc3p97.bigbuzzerquiz;
+package ca.brocku.cosc3p97.bigbuzzerquiz.messages;
 
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.List;
+
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.GetPlayersResponse;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.HostActions;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.HostMessageInterface;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.PlayerProxy;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.Request;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.Response;
 
 public class HostMessageProcessor implements HostMessageInterface {
     PlayerProxy playerProxy;
@@ -26,9 +33,16 @@ public class HostMessageProcessor implements HostMessageInterface {
                 case HostMessageInterface.GET_PLAYERS:
                     response = getPlayers();
                     break;
+                case HostMessageInterface.PLAY:
+                    play();
+                    break;
             }
 
-            callback.done(response.toString());
+            if(response == null) {
+                callback.done(null);
+            } else {
+                callback.done(response.toString());
+            }
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -56,5 +70,10 @@ public class HostMessageProcessor implements HostMessageInterface {
         });
 
         return response;
+    }
+
+    @Override
+    public void play() {
+        host.play();
     }
 }

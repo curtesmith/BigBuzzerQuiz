@@ -1,4 +1,4 @@
-package ca.brocku.cosc3p97.bigbuzzerquiz;
+package ca.brocku.cosc3p97.bigbuzzerquiz.models;
 
 
 import android.content.Context;
@@ -16,6 +16,9 @@ import android.widget.ListAdapter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
+
+import ca.brocku.cosc3p97.bigbuzzerquiz.views.DeviceListAdapter;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.PlayerProxy;
 
 public class WiFiConnectionsModel extends Observable implements WifiP2pBroadcastReceiver.WifiP2pBroadcastListener {
     private static final String TAG = "WiFiConnectionsModel";

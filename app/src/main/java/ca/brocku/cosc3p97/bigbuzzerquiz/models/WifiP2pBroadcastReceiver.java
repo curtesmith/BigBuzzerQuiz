@@ -1,4 +1,4 @@
-package ca.brocku.cosc3p97.bigbuzzerquiz;
+package ca.brocku.cosc3p97.bigbuzzerquiz.models;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

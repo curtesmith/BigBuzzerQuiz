@@ -1,4 +1,4 @@
-package ca.brocku.cosc3p97.bigbuzzerquiz;
+package ca.brocku.cosc3p97.bigbuzzerquiz.views;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +12,9 @@ import android.widget.Toast;
 
 import java.util.Observable;
 import java.util.Observer;
+
+import ca.brocku.cosc3p97.bigbuzzerquiz.R;
+import ca.brocku.cosc3p97.bigbuzzerquiz.models.WiFiConnectionsModel;
 
 
 public class MasterActivity extends AppCompatActivity

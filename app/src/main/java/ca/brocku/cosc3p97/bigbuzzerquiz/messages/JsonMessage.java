@@ -1,12 +1,12 @@
-package ca.brocku.cosc3p97.bigbuzzerquiz;
+package ca.brocku.cosc3p97.bigbuzzerquiz.messages;
 
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class JsonMessage extends JSONObject {
-    protected static final String TYPE = "TYPE";
-    protected static final String IDENTIFIER = "IDENTIFIER";
+    public static final String TYPE = "TYPE";
+    public static final String IDENTIFIER = "IDENTIFIER";
 
     public JsonMessage(String string) throws JSONException {
         super(string);

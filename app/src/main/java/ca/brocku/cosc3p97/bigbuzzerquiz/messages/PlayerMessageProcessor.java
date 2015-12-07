@@ -1,13 +1,18 @@
-package ca.brocku.cosc3p97.bigbuzzerquiz;
+package ca.brocku.cosc3p97.bigbuzzerquiz.messages;
 
 
 import android.util.Log;
 
 import org.json.JSONException;
 
+import java.util.List;
+
+import ca.brocku.cosc3p97.bigbuzzerquiz.models.Player;
+
 public class PlayerMessageProcessor implements PlayerMessageInterface {
     private static final String TAG = "PlayerMessageProcessor";
     private Player.CallbackListener getPlayerCallback;
+    private List<Player.CallbackListener> callbacks;
     private HostProxy hostProxy;
 
 
@@ -16,18 +21,32 @@ public class PlayerMessageProcessor implements PlayerMessageInterface {
     }
 
 
+    @Override
     public void createRequest(String requestId, Player.CallbackListener callback) {
-        switch(requestId) {
+        switch (requestId) {
             case HostMessageInterface.GET_PLAYERS:
                 getPlayers(callback);
                 break;
+            case HostMessageInterface.PLAY:
+                play();
         }
+    }
+
+    @Override
+    public void begin() {
+        // TODO: 2015-12-06 add code to handle this message
     }
 
 
     public void getPlayers(Player.CallbackListener callback) {
         getPlayerCallback = callback;
         Request request = new GetPlayersRequest();
+        hostProxy.write(request.toString());
+    }
+
+
+    public void play() {
+        Request request = new PlayRequest();
         hostProxy.write(request.toString());
     }
 
@@ -39,8 +58,8 @@ public class PlayerMessageProcessor implements PlayerMessageInterface {
             Response response = null;
 
             switch (request.getIdentifier()) {
-                case PlayerMessageInterface.LETS_PLAY:
-                    //response = getPlayers();
+                case PlayerMessageInterface.BEGIN:
+                    begin();
                     break;
             }
 
@@ -51,18 +70,14 @@ public class PlayerMessageProcessor implements PlayerMessageInterface {
         }
     }
 
+
     @Override
-    public void letsPlay() {
-
-    }
-
-
     public void handleServerResponse(JsonMessage jsonMessage) {
         Log.i(TAG, String.format("handleServerResponse: invoked with response identifier {%s}",
                 jsonMessage.getIdentifier()));
 
         switch (jsonMessage.getIdentifier()) {
-            case GetPlayersResponse.IDENTIFIER:
+            case HostMessageInterface.GET_PLAYERS:
                 if (getPlayerCallback != null) {
                     try {
                         GetPlayersResponse response = new GetPlayersResponse(jsonMessage.toString());
@@ -70,8 +85,8 @@ public class PlayerMessageProcessor implements PlayerMessageInterface {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    break;
                 }
+                break;
         }
     }
 

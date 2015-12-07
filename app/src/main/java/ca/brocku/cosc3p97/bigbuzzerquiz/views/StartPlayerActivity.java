@@ -1,22 +1,24 @@
-package ca.brocku.cosc3p97.bigbuzzerquiz;
+package ca.brocku.cosc3p97.bigbuzzerquiz.views;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class QuestionActivity extends AppCompatActivity {
+import ca.brocku.cosc3p97.bigbuzzerquiz.R;
+
+public class StartPlayerActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_question_acitivity);
+        setContentView(R.layout.activity_start_player);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_question_acitivity, menu);
+        getMenuInflater().inflate(R.menu.menu_start_player, menu);
         return true;
     }
 

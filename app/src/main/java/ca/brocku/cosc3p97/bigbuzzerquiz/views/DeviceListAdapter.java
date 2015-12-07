@@ -1,4 +1,4 @@
-package ca.brocku.cosc3p97.bigbuzzerquiz;
+package ca.brocku.cosc3p97.bigbuzzerquiz.views;
 
 import android.app.Activity;
 import android.content.Context;
@@ -21,6 +21,10 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import ca.brocku.cosc3p97.bigbuzzerquiz.R;
+import ca.brocku.cosc3p97.bigbuzzerquiz.models.WifiP2pDeviceDecorator;
+import ca.brocku.cosc3p97.bigbuzzerquiz.models.WifiP2pHelper;
 
 
 public class DeviceListAdapter extends BaseAdapter {

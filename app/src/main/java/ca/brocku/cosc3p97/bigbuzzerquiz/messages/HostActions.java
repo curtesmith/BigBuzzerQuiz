@@ -1,4 +1,4 @@
-package ca.brocku.cosc3p97.bigbuzzerquiz;
+package ca.brocku.cosc3p97.bigbuzzerquiz.messages;
 
 
 import java.util.List;
@@ -12,4 +12,6 @@ public interface HostActions {
     interface GetPlayersCallback {
         void callback(List<String> names);
     }
+
+    void play();
 }
