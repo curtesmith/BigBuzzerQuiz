@@ -10,6 +10,7 @@ import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.RequestHandler;
 public class PlayerRequestHandler extends RequestHandler {
     @Override
     public void handle(Request request, Request.Callback callback) {
+        throw new RuntimeException("Stub");
 
     }
 }

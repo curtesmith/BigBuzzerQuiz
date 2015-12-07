@@ -8,6 +8,7 @@ import android.util.Log;
 import org.json.JSONException;
 
 import java.net.InetAddress;
+import java.util.HashMap;
 import java.util.List;
 
 import ca.brocku.cosc3p97.bigbuzzerquiz.communication.ClientSocketThread;
@@ -17,6 +18,7 @@ import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Request;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Response;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.PlayerMessageInterface;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.PlayerMessageProcessor;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.PlayerRequestHandler;
 import ca.brocku.cosc3p97.bigbuzzerquiz.models.Host;
 
 public class HostProxy implements Handler.Callback, TcpConnection.Listener, HostActions {
@@ -26,6 +28,7 @@ public class HostProxy implements Handler.Callback, TcpConnection.Listener, Host
     private PlayerMessageInterface messenger;
     private HostRequestBuilder hostRequestBuilder;
     private HostResponseHandler hostResponseHandler;
+    private HashMap<String, PlayerRequestHandler> playerRequestHandlers = new HashMap<>();
 
 
     public HostProxy(InetAddress hostAddress, Host host) {
@@ -84,7 +87,7 @@ public class HostProxy implements Handler.Callback, TcpConnection.Listener, Host
             Log.i(TAG, String.format("onRead: message type is {%s}", message.getType()));
 
             if (Request.is(message)) {
-                handleServerRequest(message);
+                handlePlayerRequest(message);
             } else {
                 hostResponseHandler.handle(new Response(obj.message));
             }
@@ -94,9 +97,17 @@ public class HostProxy implements Handler.Callback, TcpConnection.Listener, Host
     }
 
 
-    private void handleServerRequest(JsonMessage request) {
-        Log.i(TAG, String.format("handleServerRequest: invoked for request identifier [%s]",
+    public void addPlayerRequestHander(String ID, PlayerRequestHandler playerRequestHandler) {
+        playerRequestHandlers.put(ID, playerRequestHandler);
+    }
+
+    private void handlePlayerRequest(JsonMessage request) throws JSONException {
+        Log.i(TAG, String.format("handlePlayerRequest: invoked for request identifier [%s]",
                 request.getIdentifier()));
+
+        if(playerRequestHandlers.containsKey(request.getIdentifier())) {
+            playerRequestHandlers.get(request.getIdentifier()).handle(new Request(request.toString()), null);
+        }
     }
 
 

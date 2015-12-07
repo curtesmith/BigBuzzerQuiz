@@ -8,6 +8,7 @@ import android.util.Log;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import ca.brocku.cosc3p97.bigbuzzerquiz.communication.ServerSocketThread;
@@ -30,6 +31,7 @@ public class PlayerProxy implements Handler.Callback, TcpConnection.Listener, Pl
     private HostMessageProcessor hostMessageInterface;
     private Host host;
     private RequestHandler requestHandler;
+    private HashMap<String, RequestHandler> requestHandlers = new HashMap<>();
 
 
     public PlayerProxy(Host host, SetupListener listener) throws Exception {
@@ -73,6 +75,11 @@ public class PlayerProxy implements Handler.Callback, TcpConnection.Listener, Pl
 
     public void setRequestHandler(RequestHandler requestHandler) {
         this.requestHandler = requestHandler;
+    }
+
+
+    public void addRequestHandler(String ID, RequestHandler requestHandler) {
+        requestHandlers.put(ID, requestHandler);
     }
 
 
@@ -134,14 +141,15 @@ public class PlayerProxy implements Handler.Callback, TcpConnection.Listener, Pl
         try {
             JsonMessage jsonMessage = new JsonMessage(obj.message);
             if(jsonMessage.getType().equals(Request.REQUEST)) {
-                requestHandler.handle(new Request(obj.message), new Request.Callback() {
-                    @Override
-                    public void reply(Object result) {
-                        if (result != null) {
-                            write(obj.conn, (String) result);
-                        }
-                    }
-                });
+                requestHandlers.get(jsonMessage.getIdentifier())
+                        .handle(new Request(obj.message), new Request.Callback() {
+                            @Override
+                            public void reply(Object result) {
+                                if (result != null) {
+                                    write(obj.conn, (String) result);
+                                }
+                            }
+                        });
             }
         } catch (JSONException e) {
             e.printStackTrace();
