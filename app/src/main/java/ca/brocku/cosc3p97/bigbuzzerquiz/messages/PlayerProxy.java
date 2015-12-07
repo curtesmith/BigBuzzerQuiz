@@ -177,7 +177,7 @@ public class PlayerProxy implements Handler.Callback, TcpConnection.Listener, Pl
 
 
     private void callback() {
-        Log.i(TAG, "callback: invoked");
+        Log.i(TAG, "reply: invoked");
         for (SetupListener listener : listeners) {
             listener.onSetup(host);
         }

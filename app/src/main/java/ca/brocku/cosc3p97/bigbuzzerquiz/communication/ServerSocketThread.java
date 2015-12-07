@@ -65,7 +65,7 @@ public class ServerSocketThread extends Thread {
 
 
     private void callback() {
-        Log.i(TAG, "callback to onSetup listeners");
+        Log.i(TAG, "reply to onSetup listeners");
         for(ServerSocketListener listener : listeners) {
             listener.onSetup();
         }

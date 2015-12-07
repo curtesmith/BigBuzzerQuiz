@@ -110,7 +110,7 @@ public class HostProxy implements Handler.Callback, TcpConnection.Listener, Host
                 new Player.CallbackListener() {
                     @Override
                     public void onCallback(Object object) {
-                        callback.callback(((List<String>) object));
+                        callback.reply(((List<String>) object));
                     }
                 });
     }
@@ -125,11 +125,6 @@ public class HostProxy implements Handler.Callback, TcpConnection.Listener, Host
                         //ignore
                     }
                 });
-    }
-
-
-    interface Callback {
-        void done(String message);
     }
 
 }

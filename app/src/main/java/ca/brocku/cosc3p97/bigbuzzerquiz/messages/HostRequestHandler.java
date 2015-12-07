@@ -47,7 +47,7 @@ public class HostRequestHandler extends RequestHandler implements HostRequestInt
 
         host.getPlayers(new HostActions.GetPlayersCallback() {
             @Override
-            public void callback(List<String> names) {
+            public void reply(List<String> names) {
                 try {
                     JSONArray jsonNames = new JSONArray();
                     for (String name : names) {

@@ -52,8 +52,8 @@ public class Player implements PlayerActions {
 
         hostActions.getPlayers(new HostActions.GetPlayersCallback() {
             @Override
-            public void callback(List<String> names) {
-                Log.i(TAG, String.format("getPlayers callback invoked with %s names", names.size()));
+            public void reply(List<String> names) {
+                Log.i(TAG, String.format("getPlayers reply invoked with %s names", names.size()));
                 for (String name : names) {
                     result.add(name);
                 }

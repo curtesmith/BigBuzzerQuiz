@@ -10,7 +10,7 @@ public interface HostActions {
     void getPlayers(GetPlayersCallback callback);
 
     interface GetPlayersCallback {
-        void callback(List<String> names);
+        void reply(List<String> names);
     }
 
     void play();

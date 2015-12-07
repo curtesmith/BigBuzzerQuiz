@@ -72,8 +72,9 @@ public class Host implements HostActions {
 
     @Override
     public void getPlayers(GetPlayersCallback callback) {
-        callback.callback(players);
+        callback.reply(players);
     }
+
 
     @Override
     public void play() {

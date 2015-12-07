@@ -51,26 +51,6 @@ public class PlayerMessageProcessor implements PlayerMessageInterface {
 
 
     @Override
-    public void execute(String string, HostProxy.Callback callback) {
-        try {
-            Request request = new Request(string);
-            Response response = null;
-
-            switch (request.getIdentifier()) {
-                case PlayerMessageInterface.BEGIN_GAME:
-                    beginGame();
-                    break;
-            }
-
-            callback.done(response.toString());
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    @Override
     public void handleServerResponse(JsonMessage jsonMessage) {
         Log.i(TAG, String.format("handleServerResponse: invoked with response identifier {%s}",
                 jsonMessage.getIdentifier()));
