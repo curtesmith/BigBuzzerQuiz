@@ -130,11 +130,11 @@ public class PlayerProxy implements Handler.Callback, TcpConnection.Listener, Pl
         try {
             JsonMessage jsonMessage = new JsonMessage(obj.message);
             if(jsonMessage.getType().equals(Request.REQUEST)) {
-                requestHandler.handle(new Request(obj.message), new RequestHandler.Callback() {
+                requestHandler.handle(new Request(obj.message), new Request.Callback() {
                     @Override
-                    public void reply(String result) {
+                    public void reply(Object result) {
                         if (result != null) {
-                            write(obj.conn, result);
+                            write(obj.conn, (String) result);
                         }
                     }
                 });

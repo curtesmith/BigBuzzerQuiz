@@ -21,7 +21,7 @@ public class HostRequestHandler extends RequestHandler implements HostRequestInt
 
 
     @Override
-    public void handle(Request request, Callback callback) {
+    public void handle(Request request, Request.Callback callback) {
         Response response = null;
 
         switch (request.getIdentifier()) {

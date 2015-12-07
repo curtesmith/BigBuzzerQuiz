@@ -6,7 +6,7 @@ package ca.brocku.cosc3p97.bigbuzzerquiz.messages;
  */
 public class PlayerRequestHandler extends RequestHandler{
     @Override
-    public void handle(Request request, Callback callback) {
+    public void handle(Request request, Request.Callback callback) {
 
     }
 }

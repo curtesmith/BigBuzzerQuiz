@@ -20,6 +20,7 @@ public class HostProxy implements Handler.Callback, TcpConnection.Listener, Host
     private ClientSocketThread clientSocketThread;
     private TcpConnection tcpConnection;
     private PlayerMessageInterface messenger;
+    private HostRequestBuilder hostRequestBuilder;
 
 
     public HostProxy(InetAddress hostAddress, Host host) {
@@ -33,6 +34,7 @@ public class HostProxy implements Handler.Callback, TcpConnection.Listener, Host
         }
 
         messenger = new PlayerMessageProcessor(this);
+        hostRequestBuilder = new HostRequestBuilder(this);
 
         clientSocketThread.start();
     }
@@ -78,7 +80,7 @@ public class HostProxy implements Handler.Callback, TcpConnection.Listener, Host
             if (Request.is(message)) {
                 handleServerRequest(message);
             } else {
-                messenger.handleServerResponse(message);
+                hostRequestBuilder.handleResponse(message);
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -106,13 +108,20 @@ public class HostProxy implements Handler.Callback, TcpConnection.Listener, Host
 
     @Override
     public void getPlayers(final GetPlayersCallback callback) {
-        messenger.createRequest(HostRequestInterface.GET_PLAYERS,
-                new Player.CallbackListener() {
-                    @Override
-                    public void onCallback(Object object) {
-                        callback.reply(((List<String>) object));
-                    }
-                });
+        hostRequestBuilder.build(HostRequestInterface.GET_PLAYERS, new Request.Callback() {
+            @Override
+            public void reply(Object result) {
+                callback.reply((List<String>) result);
+            }
+        });
+
+//        messenger.createRequest(HostRequestInterface.GET_PLAYERS,
+//                new Player.CallbackListener() {
+//                    @Override
+//                    public void onCallback(Object object) {
+//                        callback.reply(((List<String>) object));
+//                    }
+//                });
     }
 
 

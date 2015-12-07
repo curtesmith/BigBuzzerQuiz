@@ -27,6 +27,11 @@ public class Request extends JsonMessage {
     public static boolean is(JsonMessage message) {
         return message.getType().equals(REQUEST);
     }
+
+
+    public interface Callback {
+        void reply(Object result);
+    }
 }
 
 
