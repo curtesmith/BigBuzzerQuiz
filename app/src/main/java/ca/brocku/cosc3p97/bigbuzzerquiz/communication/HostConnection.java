@@ -65,6 +65,7 @@ public class HostConnection implements Handler.Callback, TcpConnection.Listener,
         connectedListener = listener;
     }
 
+
     @Override
     public void send(String message) {
         tcpConnection.write(message);

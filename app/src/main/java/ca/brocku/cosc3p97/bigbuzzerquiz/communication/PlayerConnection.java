@@ -31,12 +31,14 @@ public class PlayerConnection implements Handler.Callback, TcpConnection.Listene
         void onSetup(Host host);
     }
 
+
     public PlayerConnection(Host host, SetupListener listener) throws Exception {
         Log.i(TAG, "ctor: invoked");
         this.host = host;
         addListener(listener);
         startServerSocket();
     }
+
 
     public Handler getThreadHandler() {
         return threadHandler;
@@ -78,6 +80,7 @@ public class PlayerConnection implements Handler.Callback, TcpConnection.Listene
         }
     }
 
+
     @Override
     public boolean handleMessage(Message msg) {
         Log.i(TAG, "handleMessage: invoked");
@@ -109,6 +112,7 @@ public class PlayerConnection implements Handler.Callback, TcpConnection.Listene
 
         return true;
     }
+
 
     @Override
     public void onConnected(TcpConnection connection) {
