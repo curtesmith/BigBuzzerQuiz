@@ -15,13 +15,14 @@ import ca.brocku.cosc3p97.bigbuzzerquiz.communication.ClientSocketThread;
 import ca.brocku.cosc3p97.bigbuzzerquiz.communication.TcpConnection;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.JsonMessage;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Request;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.RequestSender;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Response;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.PlayerMessageInterface;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.PlayerMessageProcessor;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.PlayerRequestHandler;
 import ca.brocku.cosc3p97.bigbuzzerquiz.models.Host;
 
-public class HostProxy implements Handler.Callback, TcpConnection.Listener, HostActions {
+public class HostProxy implements Handler.Callback, TcpConnection.Listener, HostActions, RequestSender {
     private static final String TAG = "HostProxy";
     private ClientSocketThread clientSocketThread;
     private TcpConnection tcpConnection;
@@ -80,6 +81,14 @@ public class HostProxy implements Handler.Callback, TcpConnection.Listener, Host
     public void setConnectedListener(HostProxy.ConnectedListener listener) {
         connectedListener = listener;
     }
+
+
+
+    @Override
+    public void send(String request) {
+        write(request);
+    }
+
     public interface ConnectedListener {
         void onConnected();
     }
@@ -140,12 +149,23 @@ public class HostProxy implements Handler.Callback, TcpConnection.Listener, Host
 
     @Override
     public void getPlayers(final GetPlayersCallback callback) {
-        hostRequestBuilder.build(HostRequestInterface.GET_PLAYERS, new Request.Callback() {
+        GetPlayersRequest request = new GetPlayersRequest();
+        request.addSender(this);
+        hostResponseHandler.addCallback(request.getIdentifier(), new Request.Callback() {
             @Override
             public void reply(Object result) {
                 callback.reply((List<String>) result);
             }
         });
+
+        request.send();
+
+//        hostRequestBuilder.build(HostRequestInterface.GET_PLAYERS, new Request.Callback() {
+//            @Override
+//            public void reply(Object result) {
+//                callback.reply((List<String>) result);
+//            }
+//        });
     }
 
 

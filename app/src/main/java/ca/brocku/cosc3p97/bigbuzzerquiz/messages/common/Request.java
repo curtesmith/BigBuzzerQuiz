@@ -2,10 +2,10 @@ package ca.brocku.cosc3p97.bigbuzzerquiz.messages.common;
 
 import org.json.JSONException;
 
-import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.JsonMessage;
-
-public class Request extends JsonMessage {
+public class Request extends JsonMessage implements Requestable {
     public static final String REQUEST = "REQUEST";
+    private RequestSender sender;
+    private Callback callback;
 
 
     public Request(String string) throws JSONException {
@@ -28,6 +28,24 @@ public class Request extends JsonMessage {
 
     public static boolean is(JsonMessage message) {
         return message.getType().equals(REQUEST);
+    }
+
+
+    @Override
+    public void send() {
+        sender.send(this.toString());
+    }
+
+
+    @Override
+    public void addSender(RequestSender sender) {
+        this.sender = sender;
+    }
+
+
+    @Override
+    public void setCallback(Callback callback) {
+        this.callback = callback;
     }
 
 

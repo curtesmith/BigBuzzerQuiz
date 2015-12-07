@@ -52,7 +52,7 @@ public class MasterActivity extends AppCompatActivity
     public void onResume() {
         super.onResume();
         model.registerReceiver(this);
-        player.setActivity(this);
+//        player.setActivity(this);
     }
 
 
