@@ -130,13 +130,29 @@ public class PlayerConnection implements Handler.Callback, TcpConnection.Listene
             JsonMessage jsonMessage = new JsonMessage(obj.message);
             if (jsonMessage.getType().equals(Request.REQUEST)) {
                 playerProxy.handleHostRequest(new Request(jsonMessage.toString()), obj.conn);
-
-//                requestHandlers.get(jsonMessage.getIdentifier())
-//                        .handle(new Request(obj.message), obj.conn);
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+
+    public int getConnectionIndex(TcpConnection conn) {
+        int index, result;
+
+        index = 0;
+        result = 0;
+
+        for(TcpConnection compareTo : tcpConnections) {
+            if(compareTo.equals(conn)) {
+                Log.i(TAG, String.format("getConnectionIndex: invoked with conn #%d", index));
+                result = index;
+                break;
+            }
+            index++;
+        }
+
+        return result;
     }
 
 

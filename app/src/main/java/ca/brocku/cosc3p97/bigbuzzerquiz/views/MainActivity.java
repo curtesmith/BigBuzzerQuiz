@@ -20,7 +20,8 @@ import ca.brocku.cosc3p97.bigbuzzerquiz.models.WiFiConnectionsModel;
 
 public class MainActivity extends AppCompatActivity
         implements StartFragment.OnClickListener, MasterSetupFragment.OnClickListener,
-        Player.ShowQuestionable, Player.ShowTimeoutable, Player.ShowGameOverable, Observer {
+        Player.ShowQuestionable, Player.ShowTimeoutable, Player.ShowGameOverable,
+        QuestionFragment.QuestionFragmentListener, Observer {
     private static final String TAG = "MainActivity";
     private static final String START_FRAGMENT = "START_FRAGMENT";
     private static final String MASTER_SETUP_FRAGMENT = "MASTER_SETUP_FRAGMENT";
@@ -155,7 +156,7 @@ public class MainActivity extends AppCompatActivity
         if(this.player != null) {
             this.player.setActivity(this);
         }
-        Log.i(TAG,"update: player is null? " +(this.player == null));
+        Log.i(TAG, "update: player is null? " + (this.player == null));
     }
 
     @Override
@@ -188,5 +189,12 @@ public class MainActivity extends AppCompatActivity
                     }
                 });
         timeoutDialog.show();
+    }
+
+
+    @Override
+    public void onAnswerButtonClick(int buttonNbr) {
+        Log.i(TAG, String.format("onAnswerButtonClick: invoked with buttonNbr [%d]", buttonNbr));
+        wifi.getPlayer().answer(buttonNbr == 1);
     }
 }

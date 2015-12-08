@@ -163,4 +163,9 @@ public class Player implements PlayerActions {
         hostProxy.ready();
     }
 
+
+    public void answer(boolean correct) {
+        hostProxy.answer(correct);
+    }
+
 }

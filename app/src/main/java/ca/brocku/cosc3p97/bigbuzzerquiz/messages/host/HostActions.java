@@ -16,4 +16,6 @@ public interface HostActions {
     void play();
 
     void ready();
+
+    void answer(boolean correct);
 }

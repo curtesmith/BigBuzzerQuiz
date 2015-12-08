@@ -7,6 +7,7 @@ public interface HostRequestInterface {
     String GET_PLAYERS = "GET_PLAYERS";
     String PLAY = "PLAY";
     String READY = "READY";
+    String ANSWER = "ANSWER";
 
     Response getPlayers();
     void play();

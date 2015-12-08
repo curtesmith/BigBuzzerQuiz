@@ -9,6 +9,8 @@ import java.util.List;
 
 import ca.brocku.cosc3p97.bigbuzzerquiz.communication.PlayerConnection;
 import ca.brocku.cosc3p97.bigbuzzerquiz.communication.TcpConnection;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Sender;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.AnswerRequestHandler;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.GetPlayersRequestHandler;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.HostActions;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.HostRequestInterface;
@@ -30,6 +32,7 @@ public class Host implements HostActions {
     private int readyCounter = 0;
     private int questionCounter = 0;
     private int maxQuestions = 2;
+    private int answers = 0;
 
 
     public class Player {
@@ -52,6 +55,7 @@ public class Host implements HostActions {
         playerProxy.addRequestHandler(HostRequestInterface.GET_PLAYERS, new GetPlayersRequestHandler(this));
         playerProxy.addRequestHandler(HostRequestInterface.PLAY, new PlayRequestHandler(this));
         playerProxy.addRequestHandler(HostRequestInterface.READY, new ReadyRequestHandler(this));
+        playerProxy.addRequestHandler(HostRequestInterface.ANSWER, new AnswerRequestHandler(this));
     }
 
 
@@ -84,6 +88,11 @@ public class Host implements HostActions {
     }
 
 
+    public int getPlayerIndex(Sender sender) {
+        return playerProxy.getPlayerIndex(sender);
+    }
+
+
     @Override
     public void addPlayer(String name) {
         Player player = new Player();
@@ -112,10 +121,12 @@ public class Host implements HostActions {
         }
     }
 
+
     @Override
     public void ready() {
         readyCounter++;
         if(readyCounter == players.size()) {
+            readyCounter = 0;
             if(questionCounter == maxQuestions) {
                 state = State.Stop;
                 questionCounter = 0;
@@ -124,6 +135,33 @@ public class Host implements HostActions {
                 sendNextQuestion();
             }
         }
+    }
+
+    @Override
+    public void answer(boolean correct) {
+        answers++;
+
+        if(correct) {
+            // TODO: 2015-12-08 interrupt the other players
+        } else {
+            if(answers == players.size()) {
+                answers = 0;
+                // TODO: 2015-12-08 if the counter is equal to the number of players then tell everyone they failed
+            }
+        }
+    }
+
+
+    public void adjustPoints(boolean correct, int playerIndex) {
+        Log.i(TAG, String.format("answer: invoked with correct=[%s]", correct));
+        if(correct) {
+            players.get(playerIndex).score++;
+        } else {
+            players.get(playerIndex).score--;
+        }
+
+        answer(correct);
+
     }
 
 

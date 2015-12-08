@@ -106,4 +106,12 @@ public class HostProxy implements HostActions {
         request.send();
     }
 
+    @Override
+    public void answer(boolean correct) {
+        AnswerRequest request = new AnswerRequest();
+        request.setCorrect(correct);
+        request.addSender(connection);
+        request.send();
+    }
+
 }

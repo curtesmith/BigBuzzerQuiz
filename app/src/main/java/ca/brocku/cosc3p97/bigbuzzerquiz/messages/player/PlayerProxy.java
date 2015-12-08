@@ -43,6 +43,12 @@ public class PlayerProxy implements PlayerActions {
     }
 
 
+    public int getPlayerIndex(Sender sender) {
+        TcpConnection conn = (TcpConnection) sender;
+        return connection.getConnectionIndex(conn);
+    }
+
+
     public void handleHostRequest(Request request, Sender replyToSender) {
         requestHandlers.get(request.getIdentifier())
                 .handle(request, replyToSender);
