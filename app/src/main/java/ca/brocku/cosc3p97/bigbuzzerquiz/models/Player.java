@@ -143,4 +143,9 @@ public class Player implements PlayerActions {
         }
     }
 
+
+    public void ready() {
+        hostProxy.ready();
+    }
+
 }

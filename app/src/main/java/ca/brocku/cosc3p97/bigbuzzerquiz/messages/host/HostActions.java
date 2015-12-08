@@ -14,4 +14,6 @@ public interface HostActions {
     }
 
     void play();
+
+    void ready();
 }

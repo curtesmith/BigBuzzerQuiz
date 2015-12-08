@@ -13,6 +13,7 @@ import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.GetPlayersRequestHandler;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.HostActions;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.HostRequestInterface;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.PlayRequestHandler;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.ReadyRequestHandler;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.PlayerProxy;
 
 
@@ -26,6 +27,9 @@ public class Host implements HostActions {
         Play, Stop
     }
     private State state = State.Stop;
+    private int readyCounter = 0;
+    private int questionCounter = 0;
+    private int maxQuestions = 5;
 
 
     private Host(PlayerConnection.SetupListener listener) throws Exception {
@@ -41,6 +45,7 @@ public class Host implements HostActions {
     private void addRequestHandlers() {
         playerProxy.addRequestHandler(HostRequestInterface.GET_PLAYERS, new GetPlayersRequestHandler(this));
         playerProxy.addRequestHandler(HostRequestInterface.PLAY, new PlayRequestHandler(this));
+        playerProxy.addRequestHandler(HostRequestInterface.READY, new ReadyRequestHandler(this));
     }
 
 
@@ -90,23 +95,40 @@ public class Host implements HostActions {
         Log.i(TAG, "play: invoked");
         if(state == State.Stop) {
             state = State.Play;
-            playerProxy.showQuestion();
+            sendNextQuestion();
+        }
+    }
 
-            Thread timer = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        Thread.currentThread().sleep(5000);
-                        playerProxy.timeout();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-            timer.start();
+    @Override
+    public void ready() {
+        readyCounter++;
+        if(readyCounter == players.size()) {
+            if(questionCounter == maxQuestions) {
+                // TODO: 2015-12-08 send Game Over message with results
+            } else {
+                sendNextQuestion();
+            }
         }
     }
 
 
+    private void sendNextQuestion() {
+        questionCounter++;
+        readyCounter = 0;
+        playerProxy.showQuestion();
+
+        Thread timer = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.currentThread().sleep(5000);
+                    playerProxy.timeout();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        timer.start();
+    }
 
 }

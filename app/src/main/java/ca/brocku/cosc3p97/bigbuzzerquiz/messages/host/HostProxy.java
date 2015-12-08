@@ -99,4 +99,11 @@ public class HostProxy implements HostActions {
         request.send();
     }
 
+    @Override
+    public void ready() {
+        ReadyRequest request = new ReadyRequest();
+        request.addSender(connection);
+        request.send();
+    }
+
 }

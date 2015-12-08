@@ -161,11 +161,12 @@ public class MainActivity extends AppCompatActivity
         AlertDialog timeoutDialog = new AlertDialog.Builder(MainActivity.this).create();
         timeoutDialog.setTitle(("Timeout"));
         timeoutDialog.setMessage("Time is up!");
-        timeoutDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+        timeoutDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Ready for next question?",
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int which) {
                         dialogInterface.dismiss();
+                        wifi.getPlayer().ready();
                     }
                 });
         timeoutDialog.show();
