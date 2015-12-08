@@ -9,16 +9,18 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
 import ca.brocku.cosc3p97.bigbuzzerquiz.R;
+import ca.brocku.cosc3p97.bigbuzzerquiz.models.Host;
 import ca.brocku.cosc3p97.bigbuzzerquiz.models.Player;
 import ca.brocku.cosc3p97.bigbuzzerquiz.models.WiFiConnectionsModel;
 
 public class MainActivity extends AppCompatActivity
         implements StartFragment.OnClickListener, MasterSetupFragment.OnClickListener,
-        Player.ShowQuestionable, Player.ShowTimeoutable, Observer {
+        Player.ShowQuestionable, Player.ShowTimeoutable, Player.ShowGameOverable, Observer {
     private static final String TAG = "MainActivity";
     private static final String START_FRAGMENT = "START_FRAGMENT";
     private static final String MASTER_SETUP_FRAGMENT = "MASTER_SETUP_FRAGMENT";
@@ -167,6 +169,22 @@ public class MainActivity extends AppCompatActivity
                     public void onClick(DialogInterface dialogInterface, int which) {
                         dialogInterface.dismiss();
                         wifi.getPlayer().ready();
+                    }
+                });
+        timeoutDialog.show();
+    }
+
+    @Override
+    public void showGameOver(List<Host.Player> players) {
+        AlertDialog timeoutDialog = new AlertDialog.Builder(MainActivity.this).create();
+        timeoutDialog.setTitle(("Game Over"));
+        timeoutDialog.setMessage("The game is over here are the results ...");
+        timeoutDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int which) {
+                        dialogInterface.dismiss();
+                        // TODO: 2015-12-08 have the activity return to the main page
                     }
                 });
         timeoutDialog.show();

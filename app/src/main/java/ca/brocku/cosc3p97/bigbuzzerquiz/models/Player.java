@@ -14,6 +14,7 @@ import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.GetPlayersResponseHandler;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.HostActions;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.HostProxy;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.HostRequestInterface;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.GameOverRequestHandler;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.PlayerActions;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.PlayerMessageInterface;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.ShowQuestionRequestHandler;
@@ -32,6 +33,7 @@ public class Player implements PlayerActions {
         hostProxy.addPlayerRequestHandler(PlayerMessageInterface.SHOW_QUESTION, new ShowQuestionRequestHandler(this));
         hostProxy.addHostResponseHandler(HostRequestInterface.GET_PLAYERS, new GetPlayersResponseHandler(this));
         hostProxy.addPlayerRequestHandler(PlayerMessageInterface.TIMEOUT, new TimeoutRequestHandler(this));
+        hostProxy.addPlayerRequestHandler(PlayerMessageInterface.GAME_OVER, new GameOverRequestHandler(this));
     }
 
 
@@ -140,6 +142,19 @@ public class Player implements PlayerActions {
         Log.i(TAG, "timeout: invoked, activity is null? " + (activity == null));
         if(activity != null) {
             ((ShowTimeoutable) activity).showTimeout();
+        }
+    }
+
+    public interface ShowGameOverable {
+        void showGameOver(List<Host.Player> players);
+    }
+
+
+    @Override
+    public void gameOver(List<Host.Player> players) {
+        Log.i(TAG, "gameOver: invoked, activity is null? " + (activity == null));
+        if(activity != null) {
+            ((ShowGameOverable) activity).showGameOver(players);
         }
     }
 

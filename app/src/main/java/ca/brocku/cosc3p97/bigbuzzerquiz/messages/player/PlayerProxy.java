@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.util.Log;
 
 import java.util.HashMap;
+import java.util.List;
 
 import ca.brocku.cosc3p97.bigbuzzerquiz.communication.PlayerConnection;
 import ca.brocku.cosc3p97.bigbuzzerquiz.communication.TcpConnection;
@@ -60,6 +61,15 @@ public class PlayerProxy implements PlayerActions {
     public void timeout() {
         Log.i(TAG, "timeout: invoked");
         Request request = new TimeoutRequest();
+        request.addSender(connection);
+        request.send();
+    }
+
+    @Override
+    public void gameOver(List<Host.Player> players) {
+        Log.i(TAG, String.format("gameOver: invoked with %s players", players.size()));
+        GameOverRequest request = new GameOverRequest();
+        request.setPlayers(players);
         request.addSender(connection);
         request.send();
     }

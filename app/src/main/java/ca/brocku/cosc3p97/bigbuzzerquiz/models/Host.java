@@ -22,14 +22,20 @@ public class Host implements HostActions {
     private static Host instance = null;
     private List<PlayerConnection.SetupListener> listeners = new ArrayList<>();
     private PlayerProxy playerProxy;
-    private List<String> players = new ArrayList<>();
+    private List<Player> players = new ArrayList<>();
     public enum State {
         Play, Stop
     }
     private State state = State.Stop;
     private int readyCounter = 0;
     private int questionCounter = 0;
-    private int maxQuestions = 5;
+    private int maxQuestions = 2;
+
+
+    public class Player {
+        public String name;
+        public int score;
+    }
 
 
     private Host(PlayerConnection.SetupListener listener) throws Exception {
@@ -80,13 +86,20 @@ public class Host implements HostActions {
 
     @Override
     public void addPlayer(String name) {
-        players.add(name);
+        Player player = new Player();
+        player.name = name;
+        player.score = 0;
+        players.add(player);
     }
 
 
     @Override
     public void getPlayers(GetPlayersCallback callback) {
-        callback.reply(players);
+        List<String> names = new ArrayList<>();
+        for(Player player : players) {
+            names.add(player.name);
+        }
+        callback.reply(names);
     }
 
 
@@ -104,7 +117,9 @@ public class Host implements HostActions {
         readyCounter++;
         if(readyCounter == players.size()) {
             if(questionCounter == maxQuestions) {
-                // TODO: 2015-12-08 send Game Over message with results
+                state = State.Stop;
+                questionCounter = 0;
+                playerProxy.gameOver(players);
             } else {
                 sendNextQuestion();
             }
