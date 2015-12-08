@@ -32,7 +32,7 @@ public class Player implements PlayerActions {
         hostProxy = new HostProxy(hostAddress, host);
         hostProxy.addPlayerRequestHandler(PlayerMessageInterface.SHOW_QUESTION, new ShowQuestionRequestHandler(this));
         hostProxy.addHostResponseHandler(HostRequestInterface.GET_PLAYERS, new GetPlayersResponseHandler(this));
-        hostProxy.addPlayerRequestHandler(PlayerMessageInterface.TIMEOUT, new InterruptRequestHandler(this));
+        hostProxy.addPlayerRequestHandler(PlayerMessageInterface.INTERRUPT, new InterruptRequestHandler(this));
         hostProxy.addPlayerRequestHandler(PlayerMessageInterface.GAME_OVER, new GameOverRequestHandler(this));
     }
 
@@ -140,6 +140,14 @@ public class Player implements PlayerActions {
     @Override
     public void timeout() {
         Log.i(TAG, "timeout: invoked, activity is null? " + (activity == null));
+        if(activity != null) {
+            ((ShowTimeoutable) activity).showTimeout();
+        }
+    }
+
+
+    public void youLose() {
+        Log.i(TAG, "youLose: invoked, activity is null? " + (activity == null));
         if(activity != null) {
             ((ShowTimeoutable) activity).showTimeout();
         }

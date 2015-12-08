@@ -4,6 +4,8 @@ package ca.brocku.cosc3p97.bigbuzzerquiz.messages.player;
 import android.os.Handler;
 import android.util.Log;
 
+import org.json.JSONException;
+
 import java.util.HashMap;
 import java.util.List;
 
@@ -67,7 +69,12 @@ public class PlayerProxy implements PlayerActions {
     @Override
     public void timeout() {
         Log.i(TAG, "timeout: invoked");
-        Request request = new InterruptRequest();
+        InterruptRequest request = new InterruptRequest();
+        try {
+            request.put(InterruptRequest.INTERRUPT_TYPE, InterruptRequest.InterruptionType.TIMEOUT);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         request.addSender(connection);
         request.send();
     }
