@@ -8,7 +8,7 @@ import java.util.List;
 
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.JsonMessage;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Request;
-import ca.brocku.cosc3p97.bigbuzzerquiz.models.Host;
+import ca.brocku.cosc3p97.bigbuzzerquiz.models.Participant;
 
 
 public class GameOverRequest extends Request {
@@ -30,10 +30,10 @@ public class GameOverRequest extends Request {
     }
 
 
-    public void setPlayers(List<Host.Player> players) {
+    public void setPlayers(List<Participant> players) {
         try {
             JSONArray jsonPlayers = new JSONArray();
-            for (Host.Player player : players) {
+            for (Participant player : players) {
                 JSONObject jsonPlayer = new JSONObject();
                 jsonPlayer.put("name", player.name);
                 jsonPlayer.put("score", player.score);

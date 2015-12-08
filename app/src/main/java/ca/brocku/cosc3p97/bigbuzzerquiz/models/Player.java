@@ -146,12 +146,12 @@ public class Player implements PlayerActions {
     }
 
     public interface ShowGameOverable {
-        void showGameOver(List<Host.Player> players);
+        void showGameOver(List<Participant> players);
     }
 
 
     @Override
-    public void gameOver(List<Host.Player> players) {
+    public void gameOver(List<Participant> players) {
         Log.i(TAG, "gameOver: invoked, activity is null? " + (activity == null));
         if(activity != null) {
             ((ShowGameOverable) activity).showGameOver(players);

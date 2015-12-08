@@ -13,6 +13,7 @@ import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Request;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.RequestHandler;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Sender;
 import ca.brocku.cosc3p97.bigbuzzerquiz.models.Host;
+import ca.brocku.cosc3p97.bigbuzzerquiz.models.Participant;
 
 
 public class PlayerProxy implements PlayerActions {
@@ -72,7 +73,7 @@ public class PlayerProxy implements PlayerActions {
     }
 
     @Override
-    public void gameOver(List<Host.Player> players) {
+    public void gameOver(List<Participant> players) {
         Log.i(TAG, String.format("gameOver: invoked with %s players", players.size()));
         GameOverRequest request = new GameOverRequest();
         request.setPlayers(players);

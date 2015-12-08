@@ -14,7 +14,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import ca.brocku.cosc3p97.bigbuzzerquiz.R;
-import ca.brocku.cosc3p97.bigbuzzerquiz.models.Host;
+import ca.brocku.cosc3p97.bigbuzzerquiz.models.Participant;
 import ca.brocku.cosc3p97.bigbuzzerquiz.models.Player;
 import ca.brocku.cosc3p97.bigbuzzerquiz.models.WiFiConnectionsModel;
 
@@ -176,10 +176,17 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void showGameOver(List<Host.Player> players) {
+    public void showGameOver(List<Participant> players) {
         AlertDialog timeoutDialog = new AlertDialog.Builder(MainActivity.this).create();
         timeoutDialog.setTitle(("Game Over"));
-        timeoutDialog.setMessage("The game is over here are the results ...");
+
+        StringBuilder message = new StringBuilder();
+        message.append("The game is over here are the results...\n\n");
+        for(Participant player : players) {
+            message.append(String.format("Name: %s\tScore: %d\n", player.name, player.score));
+        }
+
+        timeoutDialog.setMessage(message.toString());
         timeoutDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                 new DialogInterface.OnClickListener() {
                     @Override

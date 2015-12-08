@@ -24,7 +24,7 @@ public class Host implements HostActions {
     private static Host instance = null;
     private List<PlayerConnection.SetupListener> listeners = new ArrayList<>();
     private PlayerProxy playerProxy;
-    private List<Player> players = new ArrayList<>();
+    private List<Participant> players = new ArrayList<>();
     public enum State {
         Play, Stop
     }
@@ -33,12 +33,6 @@ public class Host implements HostActions {
     private int questionCounter = 0;
     private int maxQuestions = 2;
     private int answers = 0;
-
-
-    public class Player {
-        public String name;
-        public int score;
-    }
 
 
     private Host(PlayerConnection.SetupListener listener) throws Exception {
@@ -95,7 +89,7 @@ public class Host implements HostActions {
 
     @Override
     public void addPlayer(String name) {
-        Player player = new Player();
+        Participant player = new Participant();
         player.name = name;
         player.score = 0;
         players.add(player);
@@ -105,7 +99,7 @@ public class Host implements HostActions {
     @Override
     public void getPlayers(GetPlayersCallback callback) {
         List<String> names = new ArrayList<>();
-        for(Player player : players) {
+        for(Participant player : players) {
             names.add(player.name);
         }
         callback.reply(names);
@@ -125,8 +119,10 @@ public class Host implements HostActions {
     @Override
     public void ready() {
         readyCounter++;
+
         if(readyCounter == players.size()) {
             readyCounter = 0;
+
             if(questionCounter == maxQuestions) {
                 state = State.Stop;
                 questionCounter = 0;
@@ -136,6 +132,7 @@ public class Host implements HostActions {
             }
         }
     }
+
 
     @Override
     public void answer(boolean correct) {
