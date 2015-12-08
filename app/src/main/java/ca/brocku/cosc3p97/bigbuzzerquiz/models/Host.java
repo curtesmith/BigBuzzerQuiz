@@ -91,7 +91,22 @@ public class Host implements HostActions {
         if(state == State.Stop) {
             state = State.Play;
             playerProxy.showQuestion();
+
+            Thread timer = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Thread.currentThread().sleep(5000);
+                        playerProxy.timeout();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            timer.start();
         }
     }
+
+
 
 }

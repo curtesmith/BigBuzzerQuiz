@@ -1,5 +1,7 @@
 package ca.brocku.cosc3p97.bigbuzzerquiz.views;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -16,7 +18,7 @@ import ca.brocku.cosc3p97.bigbuzzerquiz.models.WiFiConnectionsModel;
 
 public class MainActivity extends AppCompatActivity
         implements StartFragment.OnClickListener, MasterSetupFragment.OnClickListener,
-        Player.ShowQuestionable, Observer {
+        Player.ShowQuestionable, Player.ShowTimeoutable, Observer {
     private static final String TAG = "MainActivity";
     private static final String START_FRAGMENT = "START_FRAGMENT";
     private static final String MASTER_SETUP_FRAGMENT = "MASTER_SETUP_FRAGMENT";
@@ -152,5 +154,20 @@ public class MainActivity extends AppCompatActivity
             this.player.setActivity(this);
         }
         Log.i(TAG,"update: player is null? " +(this.player == null));
+    }
+
+    @Override
+    public void showTimeout() {
+        AlertDialog timeoutDialog = new AlertDialog.Builder(MainActivity.this).create();
+        timeoutDialog.setTitle(("Timeout"));
+        timeoutDialog.setMessage("Time is up!");
+        timeoutDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int which) {
+                        dialogInterface.dismiss();
+                    }
+                });
+        timeoutDialog.show();
     }
 }

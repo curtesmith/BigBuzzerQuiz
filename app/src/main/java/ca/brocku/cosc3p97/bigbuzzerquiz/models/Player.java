@@ -17,6 +17,7 @@ import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.HostRequestInterface;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.PlayerActions;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.PlayerMessageInterface;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.ShowQuestionRequestHandler;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.TimeoutRequestHandler;
 
 public class Player implements PlayerActions {
     private static final String TAG = "Player";
@@ -30,6 +31,7 @@ public class Player implements PlayerActions {
         hostProxy = new HostProxy(hostAddress, host);
         hostProxy.addPlayerRequestHandler(PlayerMessageInterface.SHOW_QUESTION, new ShowQuestionRequestHandler(this));
         hostProxy.addHostResponseHandler(HostRequestInterface.GET_PLAYERS, new GetPlayersResponseHandler(this));
+        hostProxy.addPlayerRequestHandler(PlayerMessageInterface.TIMEOUT, new TimeoutRequestHandler(this));
     }
 
 
@@ -125,6 +127,19 @@ public class Player implements PlayerActions {
         Log.i(TAG, "showQuestion: invoked, activity is null? " + (activity == null));
         if(activity != null) {
             ((ShowQuestionable) activity).showQuestion();
+        }
+    }
+
+    public interface ShowTimeoutable {
+        void showTimeout();
+    }
+
+
+    @Override
+    public void timeout() {
+        Log.i(TAG, "timeout: invoked, activity is null? " + (activity == null));
+        if(activity != null) {
+            ((ShowTimeoutable) activity).showTimeout();
         }
     }
 
