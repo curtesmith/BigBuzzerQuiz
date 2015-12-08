@@ -67,7 +67,7 @@ public class PlayerProxy implements PlayerActions {
     @Override
     public void timeout() {
         Log.i(TAG, "timeout: invoked");
-        Request request = new TimeoutRequest();
+        Request request = new InterruptRequest();
         request.addSender(connection);
         request.send();
     }

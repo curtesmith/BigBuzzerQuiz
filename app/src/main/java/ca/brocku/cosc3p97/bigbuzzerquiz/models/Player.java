@@ -18,7 +18,7 @@ import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.GameOverRequestHandler;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.PlayerActions;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.PlayerMessageInterface;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.ShowQuestionRequestHandler;
-import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.TimeoutRequestHandler;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.InterruptRequestHandler;
 
 public class Player implements PlayerActions {
     private static final String TAG = "Player";
@@ -32,7 +32,7 @@ public class Player implements PlayerActions {
         hostProxy = new HostProxy(hostAddress, host);
         hostProxy.addPlayerRequestHandler(PlayerMessageInterface.SHOW_QUESTION, new ShowQuestionRequestHandler(this));
         hostProxy.addHostResponseHandler(HostRequestInterface.GET_PLAYERS, new GetPlayersResponseHandler(this));
-        hostProxy.addPlayerRequestHandler(PlayerMessageInterface.TIMEOUT, new TimeoutRequestHandler(this));
+        hostProxy.addPlayerRequestHandler(PlayerMessageInterface.TIMEOUT, new InterruptRequestHandler(this));
         hostProxy.addPlayerRequestHandler(PlayerMessageInterface.GAME_OVER, new GameOverRequestHandler(this));
     }
 

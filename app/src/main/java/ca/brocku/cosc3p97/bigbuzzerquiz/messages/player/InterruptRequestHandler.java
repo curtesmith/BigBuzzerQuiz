@@ -5,9 +5,9 @@ import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Sender;
 import ca.brocku.cosc3p97.bigbuzzerquiz.models.Player;
 
 
-public class TimeoutRequestHandler extends PlayerRequestHandler {
+public class InterruptRequestHandler extends PlayerRequestHandler {
 
-    public TimeoutRequestHandler(Player player) {
+    public InterruptRequestHandler(Player player) {
         super(player);
     }
 

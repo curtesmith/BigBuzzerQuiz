@@ -1,0 +1,115 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
+    tools:context="ca.brocku.cosc3p97.bigbuzzerquiz.views.MasterSetupFragment"
+    android:weightSum="1">
+
+    <TextView
+        android:text="@string/choseCategories"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/defaultHeadingSize"
+        android:layout_marginBottom="10dp" />
+
+    <CheckBox
+        android:id="@+id/CheckboxArt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/checkboxArt"
+        android:textSize="@dimen/defaultTextSize"
+        android:onClick="clickCheckbox"/>
+
+    <CheckBox
+        android:id="@+id/CheckboxScience"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/checkboxScience"
+        android:textSize="@dimen/defaultTextSize"
+        android:onClick="clickCheckbox"/>
+
+    <CheckBox
+        android:id="@+id/CheckboxGeography"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/checkboxGeography"
+        android:textSize="@dimen/defaultTextSize"
+        android:onClick="clickCheckbox"/>
+
+    <TextView
+        android:layout_marginTop="20dp"
+        android:text="@string/questionAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/defaultHeadingSize"
+        android:layout_marginBottom="10dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/minusButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="-"
+            android:textSize="@dimen/defaultButtonSize"
+            android:onClick="clickLess"/>
+
+        <TextView
+            android:id="@+id/questionAmount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="0"
+            android:textSize="@dimen/defaultHeadingSize"/>
+
+        <Button
+            android:id="@+id/plusButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="+"
+            android:textSize="@dimen/defaultButtonSize"
+            android:onClick="clickMore"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/label_selected_players"
+            android:id="@+id/textView" />
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/playerListView" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/startGameButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:textSize="@dimen/defaultButtonSize"
+        android:text="@string/startGame"
+        android:onClick="startGame" />
+
+</LinearLayout>
+

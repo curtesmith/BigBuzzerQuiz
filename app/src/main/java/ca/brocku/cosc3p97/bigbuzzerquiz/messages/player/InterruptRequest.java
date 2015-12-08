@@ -6,12 +6,12 @@ import org.json.JSONException;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.JsonMessage;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Request;
 
-public class TimeoutRequest extends Request {
-    public TimeoutRequest(String string) throws JSONException {
+public class InterruptRequest extends Request {
+    public InterruptRequest(String string) throws JSONException {
         super(string);
     }
 
-    public TimeoutRequest() {
+    public InterruptRequest() {
         super();
     }
 
