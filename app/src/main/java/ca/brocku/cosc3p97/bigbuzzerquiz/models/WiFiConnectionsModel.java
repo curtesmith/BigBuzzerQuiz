@@ -158,6 +158,8 @@ public class WiFiConnectionsModel extends Observable implements WifiP2pBroadcast
                         Log.i(TAG, "onSetup: game SERVER is ready, creating player");
                         player = Player.getInstance(info.groupOwnerAddress, host);
                         player.setConnectedListener(me);
+                        setChanged();
+                        notifyObservers();
                     }
                 });
             } else {
@@ -165,6 +167,8 @@ public class WiFiConnectionsModel extends Observable implements WifiP2pBroadcast
                 player = Player.getInstance(info.groupOwnerAddress);
                 player.setConnectedListener(me);
             }
+        } else {
+            isConnected = false;
         }
 
         Log.i(TAG, "onConnectionInfoAvailable: completed calling notifyObservers");
@@ -222,6 +226,14 @@ public class WiFiConnectionsModel extends Observable implements WifiP2pBroadcast
         notifyObservers();
     }
 
+
+    @Override
+    public void onDisconnected() {
+        Log.i(TAG, "onDisconnected: invoked");
+        isConnected = false;
+        setChanged();
+        notifyObservers();
+    }
 
     public Player getPlayer() {
         return player;

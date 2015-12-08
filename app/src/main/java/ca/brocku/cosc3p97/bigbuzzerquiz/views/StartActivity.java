@@ -3,6 +3,7 @@ package ca.brocku.cosc3p97.bigbuzzerquiz.views;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,6 +16,8 @@ import ca.brocku.cosc3p97.bigbuzzerquiz.models.WiFiConnectionsModel;
 
 public class StartActivity extends AppCompatActivity implements Observer {
     private WiFiConnectionsModel wifi;
+    private static final String TAG = "StartActivity";
+    public static final String EXTRA_WIFI_MODEL = "EXTRA_WIFI_MODEL";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +27,9 @@ public class StartActivity extends AppCompatActivity implements Observer {
         findViewById(R.id.wiFiSetupButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), MasterActivity.class));
+                Intent intent = new Intent(getApplicationContext(), MasterActivity.class);
+                // TODO: 2015-12-07 pass the wifi object to the masteractivity
+                startActivity(intent);
             }
         });
 
@@ -36,6 +41,7 @@ public class StartActivity extends AppCompatActivity implements Observer {
     @Override
     public void onResume() {
         super.onResume();
+        Log.i(TAG, "onResume: invoked");
         wifi.registerReceiver(this);
     }
 
@@ -43,6 +49,7 @@ public class StartActivity extends AppCompatActivity implements Observer {
     @Override
     public void onPause() {
         super.onPause();
+        Log.i(TAG, "onPause: invoked");
         wifi.unregisterReceiver(this);
     }
 

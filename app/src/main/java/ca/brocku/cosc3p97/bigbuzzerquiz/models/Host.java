@@ -87,6 +87,7 @@ public class Host implements HostActions {
 
     @Override
     public void play() {
+        Log.i(TAG, "play: invoked");
         if(state == State.Stop) {
             state = State.Play;
             playerProxy.showQuestion();

@@ -2,6 +2,7 @@ package ca.brocku.cosc3p97.bigbuzzerquiz.views;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -51,6 +52,8 @@ public class MasterActivity extends AppCompatActivity
     @Override
     public void onResume() {
         super.onResume();
+        Log.i(TAG, "onResume: invoked");
+
         model.registerReceiver(this);
     }
 
@@ -58,6 +61,7 @@ public class MasterActivity extends AppCompatActivity
     @Override
     public void onPause() {
         super.onPause();
+        Log.i(TAG, "onPause: invoked");
         model.unregisterReceiver(this);
     }
 

@@ -58,6 +58,11 @@
 
     <!-- Question Activity -->
     <string name="title_activity_question_activity">QuestionActivity</string>
+    <string name="title_activity_main">This is the big one</string>
+    <string name="hello_world">Hello world!</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 

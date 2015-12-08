@@ -50,6 +50,7 @@ public class PlayerProxy implements PlayerActions {
 
     @Override
     public void showQuestion() {
+        Log.i(TAG, "showQuestion: invoked");
         Request request = new ShowQuestionRequest();
         request.addSender(connection);
         request.send();

@@ -20,6 +20,7 @@ public class HostConnection implements Handler.Callback, TcpConnection.Listener,
     private HostProxy hostProxy;
     private TcpConnection tcpConnection;
     private ConnectedListener connectedListener;
+    private boolean isConnected = false;
 
 
     public HostConnection(InetAddress hostAddress, Host host) {
@@ -72,18 +73,6 @@ public class HostConnection implements Handler.Callback, TcpConnection.Listener,
     }
 
 
-    public interface ConnectedListener {
-        void onConnected();
-    }
-
-
-    @Override
-    public void onConnected(TcpConnection tcpConnection) {
-        this.tcpConnection = tcpConnection;
-        connectedListener.onConnected();
-    }
-
-
     @Override
     public void onRead(TcpConnection.ReadObject obj) {
         Log.i(TAG, String.format("onRead: invoked with string {%s}", obj.message));
@@ -103,8 +92,30 @@ public class HostConnection implements Handler.Callback, TcpConnection.Listener,
     }
 
 
+    public boolean isConnected() {
+        return  isConnected;
+    }
+
+
+    public interface ConnectedListener {
+        void onConnected();
+        void onDisconnected();
+    }
+
+
+    @Override
+    public void onConnected(TcpConnection tcpConnection) {
+        isConnected = true;
+        this.tcpConnection = tcpConnection;
+        connectedListener.onConnected();
+    }
+
+
+
+
     @Override
     public void onDisconnected(TcpConnection connection) {
-
+        isConnected = false;
+        connectedListener.onDisconnected();
     }
 }

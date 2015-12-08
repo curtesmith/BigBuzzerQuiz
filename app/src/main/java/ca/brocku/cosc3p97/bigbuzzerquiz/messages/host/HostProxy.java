@@ -64,6 +64,11 @@ public class HostProxy implements HostActions {
     }
 
 
+    public boolean isConnected() {
+        return connection.isConnected();
+    }
+
+
     @Override
     public void addPlayer(String name) {
 
