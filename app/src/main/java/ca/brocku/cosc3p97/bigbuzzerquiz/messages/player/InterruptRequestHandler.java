@@ -10,6 +10,7 @@ import ca.brocku.cosc3p97.bigbuzzerquiz.models.Player;
 public class InterruptRequestHandler extends PlayerRequestHandler {
     private static final String TAG = "InterruptRequestHandler";
 
+
     public InterruptRequestHandler(Player player) {
         super(player);
     }
@@ -24,7 +25,8 @@ public class InterruptRequestHandler extends PlayerRequestHandler {
             if(interruptRequest.is(InterruptRequest.InterruptionType.TIMEOUT)) {
                 player.timeout();
             } else if (interruptRequest.is(InterruptRequest.InterruptionType.SOMEBODY_SUCCEEDED)) {
-                player.youLose();
+                String playerName = interruptRequest.getString(InterruptRequest.PLAYER_NAME);
+                player.success(playerName);
             }
         } catch (JSONException e) {
             e.printStackTrace();

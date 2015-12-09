@@ -19,20 +19,28 @@ import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.ReadyRequestHandler;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.PlayerProxy;
 
 
-public class Host implements HostActions {
+public class Host implements HostActions, TimeoutListener {
     private static final String TAG = "Host";
     private static Host instance = null;
     private List<PlayerConnection.SetupListener> listeners = new ArrayList<>();
     private PlayerProxy playerProxy;
     private List<Participant> players = new ArrayList<>();
+    private Question question;
+
+    @Override
+    public void onTimeout() {
+        playerProxy.timeout();
+    }
+
     public enum State {
         Play, Stop
     }
+
     private State state = State.Stop;
+
     private int readyCounter = 0;
     private int questionCounter = 0;
     private int maxQuestions = 2;
-    private int answers = 0;
 
 
     private Host(PlayerConnection.SetupListener listener) throws Exception {
@@ -99,7 +107,7 @@ public class Host implements HostActions {
     @Override
     public void getPlayers(GetPlayersCallback callback) {
         List<String> names = new ArrayList<>();
-        for(Participant player : players) {
+        for (Participant player : players) {
             names.add(player.name);
         }
         callback.reply(names);
@@ -109,8 +117,9 @@ public class Host implements HostActions {
     @Override
     public void play() {
         Log.i(TAG, "play: invoked");
-        if(state == State.Stop) {
+        if (state == State.Stop) {
             state = State.Play;
+            questionCounter = 0;
             sendNextQuestion();
         }
     }
@@ -120,12 +129,11 @@ public class Host implements HostActions {
     public void ready() {
         readyCounter++;
 
-        if(readyCounter == players.size()) {
+        if (isEverybodyReady()) {
             readyCounter = 0;
 
-            if(questionCounter == maxQuestions) {
+            if (isGameOver()) {
                 state = State.Stop;
-                questionCounter = 0;
                 playerProxy.gameOver(players);
             } else {
                 sendNextQuestion();
@@ -136,49 +144,55 @@ public class Host implements HostActions {
 
     @Override
     public void answer(boolean correct) {
-        answers++;
+        //ignoring for now
+    }
 
-        if(correct) {
-            // TODO: 2015-12-08 interrupt the other players
+
+    private boolean isEverybodyReady() {
+        return readyCounter == players.size();
+    }
+
+
+    private boolean isGameOver() {
+        return questionCounter == maxQuestions;
+    }
+
+
+    public void answer(boolean correct, String playerName) {
+        if (correct) {
+            playerProxy.success(playerName);
         } else {
-            if(answers == players.size()) {
-                answers = 0;
-                // TODO: 2015-12-08 if the counter is equal to the number of players then tell everyone they failed
-            }
+            // TODO: 2015-12-08 if the counter is equal to the number of players then tell everyone they failed
         }
     }
 
 
-    public void adjustPoints(boolean correct, int playerIndex) {
-        Log.i(TAG, String.format("answer: invoked with correct=[%s]", correct));
-        if(correct) {
-            players.get(playerIndex).score++;
-        } else {
-            players.get(playerIndex).score--;
+    public void handleAnswer(boolean isCorrect, int playerIndex) {
+        Participant p = players.get(playerIndex);
+
+        if (p.isBlocked()) {
+            return;
         }
 
-        answer(correct);
+        if (question.isBlocked()) {
+            return;
+        }
 
+        p.block();
+        question.block(isCorrect);
+        p.adjustScore(isCorrect);
+
+        answer(isCorrect);
     }
 
 
     private void sendNextQuestion() {
         questionCounter++;
         readyCounter = 0;
-        playerProxy.showQuestion();
 
-        Thread timer = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.currentThread().sleep(5000);
-                    playerProxy.timeout();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        timer.start();
+        question = new Question(players, this);
+        playerProxy.showQuestion();
+        question.startTimer();
     }
 
 }

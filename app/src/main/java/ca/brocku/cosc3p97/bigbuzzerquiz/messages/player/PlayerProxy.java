@@ -66,6 +66,7 @@ public class PlayerProxy implements PlayerActions {
         request.send();
     }
 
+
     @Override
     public void timeout() {
         Log.i(TAG, "timeout: invoked");
@@ -78,6 +79,22 @@ public class PlayerProxy implements PlayerActions {
         request.addSender(connection);
         request.send();
     }
+
+
+
+    public void success(String playerName) {
+        Log.i(TAG, "success: invoked");
+        InterruptRequest request = new InterruptRequest();
+        try {
+            request.put(InterruptRequest.INTERRUPT_TYPE, InterruptRequest.InterruptionType.SOMEBODY_SUCCEEDED);
+            request.put(InterruptRequest.PLAYER_NAME, playerName);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        request.addSender(connection);
+        request.send();
+    }
+
 
     @Override
     public void gameOver(List<Participant> players) {

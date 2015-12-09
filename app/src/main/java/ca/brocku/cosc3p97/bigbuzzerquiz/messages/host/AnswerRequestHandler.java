@@ -29,8 +29,7 @@ public class AnswerRequestHandler extends HostRequestHandler {
 
     public void answer(boolean correct, int playerIndex) {
         Log.i(TAG, String.format("answer: invoked with argument [%s]", correct));
-        host.adjustPoints(correct, playerIndex);
-        host.answer(correct);
+        host.handleAnswer(correct, playerIndex);
     }
 
 }

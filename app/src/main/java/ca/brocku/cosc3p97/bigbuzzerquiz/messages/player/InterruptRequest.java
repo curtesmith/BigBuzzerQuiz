@@ -8,6 +8,7 @@ import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Request;
 
 public class InterruptRequest extends Request {
     public static final String INTERRUPT_TYPE = "INTERRUPTION_TYPE";
+    public static final String PLAYER_NAME = "PLAYER_NAME";
 
     public InterruptRequest(String string) throws JSONException {
         super(string);

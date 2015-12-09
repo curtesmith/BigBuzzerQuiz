@@ -81,6 +81,7 @@ public class Player implements PlayerActions {
         hostProxy.setConnectedListener(listener);
     }
 
+
     public boolean isConnected() {
         return hostProxy.isConnected();
     }
@@ -132,8 +133,10 @@ public class Player implements PlayerActions {
         }
     }
 
-    public interface ShowTimeoutable {
+
+    public interface Interruptable {
         void showTimeout();
+        void showSomebodySucceeded(String playerName);
     }
 
 
@@ -141,17 +144,18 @@ public class Player implements PlayerActions {
     public void timeout() {
         Log.i(TAG, "timeout: invoked, activity is null? " + (activity == null));
         if(activity != null) {
-            ((ShowTimeoutable) activity).showTimeout();
+            ((Interruptable) activity).showTimeout();
         }
     }
 
 
-    public void youLose() {
-        Log.i(TAG, "youLose: invoked, activity is null? " + (activity == null));
+    public void success(String playerName) {
+        Log.i(TAG, "success: invoked, activity is null? " + (activity == null));
         if(activity != null) {
-            ((ShowTimeoutable) activity).showTimeout();
+            ((Interruptable) activity).showSomebodySucceeded(playerName);
         }
     }
+
 
     public interface ShowGameOverable {
         void showGameOver(List<Participant> players);

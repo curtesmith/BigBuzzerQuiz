@@ -20,7 +20,7 @@ import ca.brocku.cosc3p97.bigbuzzerquiz.models.WiFiConnectionsModel;
 
 public class MainActivity extends AppCompatActivity
         implements StartFragment.OnClickListener, MasterSetupFragment.OnClickListener,
-        Player.ShowQuestionable, Player.ShowTimeoutable, Player.ShowGameOverable,
+        Player.ShowQuestionable, Player.Interruptable, Player.ShowGameOverable,
         QuestionFragment.QuestionFragmentListener, Observer {
     private static final String TAG = "MainActivity";
     private static final String START_FRAGMENT = "START_FRAGMENT";
@@ -161,10 +161,10 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void showTimeout() {
-        AlertDialog timeoutDialog = new AlertDialog.Builder(MainActivity.this).create();
-        timeoutDialog.setTitle(("Timeout"));
-        timeoutDialog.setMessage("Time is up!");
-        timeoutDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Ready for next question?",
+        AlertDialog interruptDialog = new AlertDialog.Builder(MainActivity.this).create();
+        interruptDialog.setTitle(("Timeout"));
+        interruptDialog.setMessage("Time is up!");
+        interruptDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Ready for next question?",
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int which) {
@@ -172,8 +172,25 @@ public class MainActivity extends AppCompatActivity
                         wifi.getPlayer().ready();
                     }
                 });
-        timeoutDialog.show();
+        interruptDialog.show();
     }
+
+    @Override
+    public void showSomebodySucceeded(String playerName) {
+        AlertDialog interruptDialog = new AlertDialog.Builder(MainActivity.this).create();
+        interruptDialog.setTitle(("Question Success"));
+        interruptDialog.setMessage(String.format("%s answered this question successfully", playerName));
+        interruptDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Ready for next question?",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int which) {
+                        dialogInterface.dismiss();
+                        wifi.getPlayer().ready();
+                    }
+                });
+        interruptDialog.show();
+    }
+
 
     @Override
     public void showGameOver(List<Participant> players) {
