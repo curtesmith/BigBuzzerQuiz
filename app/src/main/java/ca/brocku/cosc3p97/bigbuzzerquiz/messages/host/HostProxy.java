@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import ca.brocku.cosc3p97.bigbuzzerquiz.communication.HostConnection;
-import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.JsonMessage;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.JSONMessage;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Request;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Response;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.PlayerRequestHandler;
@@ -44,7 +44,7 @@ public class HostProxy implements HostActions {
     }
 
 
-    public void handlePlayerRequest(JsonMessage request) throws JSONException {
+    public void handlePlayerRequest(JSONMessage request) throws JSONException {
         Log.i(TAG, String.format("handlePlayerRequest: invoked for request identifier [%s]",
                 request.getIdentifier()));
 
@@ -55,7 +55,7 @@ public class HostProxy implements HostActions {
     }
 
 
-    public void handleHostResponse(JsonMessage response) throws JSONException {
+    public void handleHostResponse(JSONMessage response) throws JSONException {
         Log.i(TAG, String.format("handleHostResponse: invoked for identifier [%s]", response.getIdentifier()));
         if(hostResponseHandlers.containsKey(response.getIdentifier())) {
             hostResponseHandlers.get(response.getIdentifier())

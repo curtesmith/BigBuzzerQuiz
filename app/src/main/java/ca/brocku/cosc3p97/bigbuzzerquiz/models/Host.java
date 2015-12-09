@@ -168,13 +168,16 @@ public class Host implements HostActions, TimeoutListener {
 
 
     public void handleAnswer(boolean isCorrect, int playerIndex) {
+        Log.i(TAG, String.format("handleAnswer: invoked with isCorrect=[%s], playerIndex=[%s]", isCorrect, playerIndex));
         Participant p = players.get(playerIndex);
 
         if (p.isBlocked()) {
+            Log.i(TAG, String.format("handleAnswer: player is blocked, returning"));
             return;
         }
 
         if (question.isBlocked()) {
+            Log.i(TAG, String.format("handleAnswer: question is blocked, returning"));
             return;
         }
 
@@ -182,7 +185,7 @@ public class Host implements HostActions, TimeoutListener {
         question.block(isCorrect);
         p.adjustScore(isCorrect);
 
-        answer(isCorrect);
+        answer(isCorrect, players.get(playerIndex).name);
     }
 
 

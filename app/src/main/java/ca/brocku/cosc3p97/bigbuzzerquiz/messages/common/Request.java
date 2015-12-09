@@ -2,7 +2,7 @@ package ca.brocku.cosc3p97.bigbuzzerquiz.messages.common;
 
 import org.json.JSONException;
 
-public class Request extends JsonMessage implements Sendable {
+public class Request extends JSONMessage implements Sendable {
     public static final String REQUEST = "REQUEST";
     private Sender sender;
     private Callback callback;
@@ -19,14 +19,14 @@ public class Request extends JsonMessage implements Sendable {
 
     public void setType() {
         try {
-            put(JsonMessage.TYPE, REQUEST);
+            put(JSONMessage.TYPE, REQUEST);
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
 
-    public static boolean is(JsonMessage message) {
+    public static boolean is(JSONMessage message) {
         return message.getType().equals(REQUEST);
     }
 

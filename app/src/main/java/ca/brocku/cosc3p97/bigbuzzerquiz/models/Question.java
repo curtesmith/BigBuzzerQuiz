@@ -71,19 +71,14 @@ public class Question implements TimeoutListener {
 
 
     public void startTimer() {
-        timer = new Thread(new Runnable() {
+        timer = new Thread(new Timer(MAXTIME, new TimeoutListener() {
             @Override
-            public void run() {
-                try {
-                    Thread.currentThread().sleep(MAXTIME);
-                    for (TimeoutListener timeoutListener : timeoutListeners) {
-                        timeoutListener.onTimeout();
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+            public void onTimeout() {
+                for(TimeoutListener timeoutListener : timeoutListeners) {
+                    timeoutListener.onTimeout();
                 }
             }
-        });
+        }));
 
         timer.start();
     }

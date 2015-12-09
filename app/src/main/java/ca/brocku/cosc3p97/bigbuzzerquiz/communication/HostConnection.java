@@ -9,7 +9,7 @@ import org.json.JSONException;
 
 import java.net.InetAddress;
 
-import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.JsonMessage;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.JSONMessage;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Request;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Sender;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.HostProxy;
@@ -78,7 +78,7 @@ public class HostConnection implements Handler.Callback, TcpConnection.Listener,
         Log.i(TAG, String.format("onRead: invoked with string {%s}", obj.message));
 
         try {
-            JsonMessage message = new JsonMessage(obj.message);
+            JSONMessage message = new JSONMessage(obj.message);
             Log.i(TAG, String.format("onRead: message type is {%s}", message.getType()));
 
             if (Request.is(message)) {

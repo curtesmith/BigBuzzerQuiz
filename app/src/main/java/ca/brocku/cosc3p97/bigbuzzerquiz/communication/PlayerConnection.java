@@ -10,7 +10,7 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.List;
 
-import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.JsonMessage;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.JSONMessage;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Request;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Sender;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.PlayerProxy;
@@ -127,7 +127,7 @@ public class PlayerConnection implements Handler.Callback, TcpConnection.Listene
         Log.i(TAG, String.format("onRead: invoked with string {%s}", obj.message));
 
         try {
-            JsonMessage jsonMessage = new JsonMessage(obj.message);
+            JSONMessage jsonMessage = new JSONMessage(obj.message);
             if (jsonMessage.getType().equals(Request.REQUEST)) {
                 playerProxy.handleHostRequest(new Request(jsonMessage.toString()), obj.conn);
             }

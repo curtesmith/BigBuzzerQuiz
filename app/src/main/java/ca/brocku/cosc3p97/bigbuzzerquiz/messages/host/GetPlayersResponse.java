@@ -7,7 +7,7 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.List;
 
-import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.JsonMessage;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.JSONMessage;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Response;
 
 public class GetPlayersResponse extends Response {
@@ -24,7 +24,7 @@ public class GetPlayersResponse extends Response {
     @Override
     public void setIdentifier() {
         try {
-            put(JsonMessage.IDENTIFIER, HostRequestInterface.GET_PLAYERS);
+            put(JSONMessage.IDENTIFIER, HostRequestInterface.GET_PLAYERS);
         } catch (JSONException e) {
             e.printStackTrace();
         }
