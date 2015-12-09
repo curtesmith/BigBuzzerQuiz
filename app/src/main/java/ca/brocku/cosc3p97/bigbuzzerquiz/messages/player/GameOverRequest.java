@@ -6,7 +6,7 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.JSONMessage;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.JsonMessage;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Request;
 import ca.brocku.cosc3p97.bigbuzzerquiz.models.Participant;
 
@@ -23,7 +23,7 @@ public class GameOverRequest extends Request {
 
     public void setIdentifier() {
         try {
-            put(JSONMessage.IDENTIFIER, PlayerMessageInterface.GAME_OVER);
+            put(JsonMessage.IDENTIFIER, PlayerMessageInterface.GAME_OVER);
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -2,7 +2,7 @@ package ca.brocku.cosc3p97.bigbuzzerquiz.messages.host;
 
 import org.json.JSONException;
 
-import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.JSONMessage;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.JsonMessage;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Request;
 
 
@@ -18,7 +18,7 @@ public class AnswerRequest extends Request {
 
     public void setIdentifier() {
         try {
-            put(JSONMessage.IDENTIFIER, HostRequestInterface.ANSWER);
+            put(JsonMessage.IDENTIFIER, HostRequestInterface.ANSWER);
         } catch (JSONException e) {
             e.printStackTrace();
         }

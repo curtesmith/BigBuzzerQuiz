@@ -3,7 +3,7 @@ package ca.brocku.cosc3p97.bigbuzzerquiz.messages.player;
 
 import org.json.JSONException;
 
-import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.JSONMessage;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.JsonMessage;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Request;
 
 public class InterruptRequest extends Request {
@@ -27,7 +27,7 @@ public class InterruptRequest extends Request {
 
     public void setIdentifier() {
         try {
-            put(JSONMessage.IDENTIFIER, PlayerMessageInterface.INTERRUPT);
+            put(JsonMessage.IDENTIFIER, PlayerMessageInterface.INTERRUPT);
         } catch (JSONException e) {
             e.printStackTrace();
         }
