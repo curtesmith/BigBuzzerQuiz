@@ -202,6 +202,23 @@ public class MainActivity extends AppCompatActivity
 
 
     @Override
+    public void showEveryoneFailed() {
+        AlertDialog interruptDialog = new AlertDialog.Builder(MainActivity.this).create();
+        interruptDialog.setTitle(("Question Failure"));
+        interruptDialog.setMessage("Well, nobody got that one right");
+        interruptDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Ready for next question?",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int which) {
+                        dialogInterface.dismiss();
+                        wifi.getPlayer().ready();
+                    }
+                });
+        interruptDialog.show();
+    }
+
+
+    @Override
     public void showGameOver(List<Participant> players) {
         AlertDialog timeoutDialog = new AlertDialog.Builder(MainActivity.this).create();
         timeoutDialog.setTitle(("Game Over"));

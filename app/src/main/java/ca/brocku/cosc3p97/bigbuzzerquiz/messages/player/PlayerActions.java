@@ -9,4 +9,5 @@ public interface PlayerActions {
     void showQuestion(int key);
     void timeout();
     void gameOver(List<Participant> players);
+    void everyoneFailed();
 }

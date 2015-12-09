@@ -110,4 +110,18 @@ public class PlayerProxy implements PlayerActions {
         request.send();
     }
 
+
+    @Override
+    public void everyoneFailed() {
+        Log.i(TAG, "everyone: invoked");
+        InterruptRequest request = new InterruptRequest();
+        try {
+            request.put(InterruptRequest.INTERRUPT_TYPE, InterruptRequest.InterruptionType.EVERYONE_FAILED);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        request.addSender(connection);
+        request.send();
+    }
+
 }

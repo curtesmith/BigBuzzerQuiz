@@ -137,6 +137,7 @@ public class Player implements PlayerActions {
     public interface Interruptable {
         void showTimeout();
         void showSomebodySucceeded(String playerName);
+        void showEveryoneFailed();
     }
 
 
@@ -167,6 +168,15 @@ public class Player implements PlayerActions {
         Log.i(TAG, "gameOver: invoked, activity is null? " + (activity == null));
         if(activity != null) {
             ((ShowGameOverable) activity).showGameOver(players);
+        }
+    }
+
+
+    @Override
+    public void everyoneFailed() {
+        Log.i(TAG, "everyoneFailed: invoked, activity is null? " + (activity == null));
+        if(activity != null) {
+            ((Interruptable) activity).showEveryoneFailed();
         }
     }
 

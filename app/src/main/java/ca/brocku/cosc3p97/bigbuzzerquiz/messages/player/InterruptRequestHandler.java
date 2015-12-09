@@ -27,6 +27,8 @@ public class InterruptRequestHandler extends PlayerRequestHandler {
             } else if (interruptRequest.is(InterruptRequest.InterruptionType.SOMEBODY_SUCCEEDED)) {
                 String playerName = interruptRequest.getString(InterruptRequest.PLAYER_NAME);
                 player.success(playerName);
+            } else if (interruptRequest.is(InterruptRequest.InterruptionType.EVERYONE_FAILED)) {
+                player.everyoneFailed();
             }
         } catch (JSONException e) {
             e.printStackTrace();

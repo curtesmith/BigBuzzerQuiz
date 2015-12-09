@@ -162,7 +162,9 @@ public class Host implements HostActions, TimeoutListener {
         if (correct) {
             playerProxy.success(playerName);
         } else {
-            // TODO: 2015-12-08 if the counter is equal to the number of players then tell everyone they failed
+            if(question.isBlocked()) {
+                playerProxy.everyoneFailed();
+            }
         }
     }
 

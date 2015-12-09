@@ -1,10 +1,13 @@
 package ca.brocku.cosc3p97.bigbuzzerquiz.models;
 
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Question implements TimeoutListener {
+    private static final String TAG = "Question";
     private static final int MAXTIME = 5000;
     public boolean blocked;
     private List<Participant> participants;
@@ -33,6 +36,8 @@ public class Question implements TimeoutListener {
             return true;
         } else {
             if (areAllBlocked(participants)) {
+                blocked = true;
+                stopTimer();
                 return true;
             }
         }
@@ -46,6 +51,7 @@ public class Question implements TimeoutListener {
 
         for(Participant participant : participants) {
             if(!participant.isBlocked()) {
+                Log.i(TAG, String.format("areAllBlocked: %s is not blocked", participant.name));
                 result = false;
                 break;
             }
@@ -58,15 +64,17 @@ public class Question implements TimeoutListener {
     public void block(boolean isCorrect) {
         blocked = isCorrect;
 
-        if (blocked && timer != null) {
+        if (blocked) {
             stopTimer();
         }
     }
 
 
     public void stopTimer() {
-        timer.interrupt();
-        timer = null;
+        if(timer != null) {
+            timer.interrupt();
+            timer = null;
+        }
     }
 
 
