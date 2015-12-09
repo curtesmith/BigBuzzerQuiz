@@ -1,6 +1,8 @@
 package ca.brocku.cosc3p97.bigbuzzerquiz.messages.player;
 
 
+import org.json.JSONException;
+
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Request;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Sender;
 import ca.brocku.cosc3p97.bigbuzzerquiz.models.Player;
@@ -14,6 +16,17 @@ public class ShowQuestionRequestHandler extends PlayerRequestHandler {
 
     @Override
     public void handle(Request request, Sender replyToSender) {
-        player.showQuestion();
+        ShowQuestionRequest showQuestionRequest = null;
+        int key;
+
+        try {
+            showQuestionRequest = new ShowQuestionRequest(request.toString());
+            key = showQuestionRequest.getInt(ShowQuestionRequest.QUESTION_KEY);
+            player.showQuestion(key);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
     }
 }

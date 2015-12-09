@@ -59,9 +59,14 @@ public class PlayerProxy implements PlayerActions {
 
 
     @Override
-    public void showQuestion() {
+    public void showQuestion(int key) {
         Log.i(TAG, "showQuestion: invoked");
         Request request = new ShowQuestionRequest();
+        try {
+            request.put(ShowQuestionRequest.QUESTION_KEY, key);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         request.addSender(connection);
         request.send();
     }

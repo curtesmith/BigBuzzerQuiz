@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import ca.brocku.cosc3p97.bigbuzzerquiz.R;
 
@@ -14,6 +15,7 @@ import ca.brocku.cosc3p97.bigbuzzerquiz.R;
 public class QuestionFragment extends Fragment implements View.OnClickListener {
     private View view;
     private QuestionFragmentListener listener;
+    private int key;
 
     @Override
     public void onClick(View view) {
@@ -54,6 +56,8 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        key = getArguments().getInt("KEY");
+
         view = inflater.inflate(R.layout.fragment_question, container, false);
         return view;
     }
@@ -62,6 +66,8 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        ((TextView) view.findViewById(R.id.questionTextView)).setText(String.format("This is question key={%d}", key));
 
         Button answer1 = (Button) view.findViewById(R.id.answer1);
         answer1.setOnClickListener(this);

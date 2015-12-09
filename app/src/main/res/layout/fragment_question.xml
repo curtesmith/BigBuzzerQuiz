@@ -11,6 +11,7 @@
     tools:context="ca.brocku.cosc3p97.bigbuzzerquiz.views.QuestionFragment">
 
     <TextView
+        android:id="@+id/questionTextView"
         android:text="Question"
         android:layout_width="match_parent"
         android:layout_height="0dp"

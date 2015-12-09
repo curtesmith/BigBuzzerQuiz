@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import java.util.List;
 import java.util.Observable;
@@ -137,9 +138,15 @@ public class MainActivity extends AppCompatActivity
 
 
     @Override
-    public void showQuestion() {
+    public void showQuestion(int key) {
         Fragment fragment = new QuestionFragment();
-        fragment.setArguments(getIntent().getExtras());
+        Bundle bundle = getIntent().getExtras();
+        if (bundle == null) {
+            bundle = new Bundle();
+        }
+        bundle.putInt("KEY", key);
+        fragment.setArguments(bundle);
+
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, fragment)
@@ -157,6 +164,8 @@ public class MainActivity extends AppCompatActivity
             this.player.setActivity(this);
         }
         Log.i(TAG, "update: player is null? " + (this.player == null));
+
+        ((TextView) findViewById(R.id.statusTextView)).setText("Your are not connected");
     }
 
     @Override

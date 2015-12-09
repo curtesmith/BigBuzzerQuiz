@@ -7,6 +7,9 @@ import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.JsonMessage;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Request;
 
 public class ShowQuestionRequest extends Request {
+    public static final String QUESTION_KEY = "QUESTION_KEY";
+
+
     public ShowQuestionRequest(String string) throws JSONException {
         super(string);
     }

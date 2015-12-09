@@ -121,15 +121,15 @@ public class Player implements PlayerActions {
 
 
     public interface ShowQuestionable {
-        void showQuestion();
+        void showQuestion(int key);
     }
 
 
     @Override
-    public void showQuestion() {
+    public void showQuestion(int key) {
         Log.i(TAG, "showQuestion: invoked, activity is null? " + (activity == null));
         if(activity != null) {
-            ((ShowQuestionable) activity).showQuestion();
+            ((ShowQuestionable) activity).showQuestion(key);
         }
     }
 

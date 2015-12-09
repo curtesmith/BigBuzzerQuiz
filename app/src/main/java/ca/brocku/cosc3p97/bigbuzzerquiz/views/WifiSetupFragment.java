@@ -26,8 +26,6 @@ public class WifiSetupFragment extends Fragment implements Observer, View.OnClic
     private Player player;
 
 
-
-
     public static WifiSetupFragment newInstance(WiFiConnectionsModel wifi) {
         WifiSetupFragment fragment = new WifiSetupFragment();
         fragment.wifi = wifi;

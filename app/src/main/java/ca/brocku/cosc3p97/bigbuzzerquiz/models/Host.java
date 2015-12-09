@@ -194,7 +194,7 @@ public class Host implements HostActions, TimeoutListener {
         readyCounter = 0;
 
         question = new Question(players, this);
-        playerProxy.showQuestion();
+        playerProxy.showQuestion(questionCounter);
         question.startTimer();
     }
 
