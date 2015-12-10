@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketException;
 
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Sender;
 
@@ -92,6 +93,22 @@ public class TcpConnection implements Runnable, Sender {
         out.println(message);
     }
 
+
+    public void stop() {
+        try {
+            Log.i(TAG, "stop: shutdownInput");
+            socket.shutdownInput();
+            Log.i(TAG, "stop: shutdownOutput");
+            socket.shutdownOutput();
+            Log.i(TAG, "stop: close");
+            socket.close();
+            Log.i(TAG, "stop: exiting");
+        }catch (SocketException e) {
+            Log.i(TAG, "stop: closed socket");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public class ReadObject {
         public TcpConnection conn;

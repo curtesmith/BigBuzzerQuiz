@@ -57,10 +57,9 @@ public class Player implements PlayerActions {
         if (instance == null) {
             Log.i(TAG, "getInstance: instance is null");
             instance = new Player(hostAddress, host);
-        }
-
-        if(!instance.isConnected()) {
-            Log.i(TAG, "getInstance: not connected. try to reconnect");
+        } else if (!instance.isConnected()) {
+            Log.i(TAG, "getInstance: not connected. try to reconnect with new player");
+            instance = new Player(hostAddress, host);
         }
 
         return instance;
@@ -84,6 +83,12 @@ public class Player implements PlayerActions {
 
     public boolean isConnected() {
         return hostProxy.isConnected();
+    }
+
+
+    public void stop() {
+        hostProxy.stop();
+
     }
 
 
@@ -117,7 +122,7 @@ public class Player implements PlayerActions {
 
     public void play(int numberOfQuestions, List<Integer> categories) {
 
-        hostProxy.play(3, categories);
+        hostProxy.play(numberOfQuestions, categories);
     }
 
 

@@ -158,6 +158,7 @@ public class PlayerConnection implements Handler.Callback, TcpConnection.Listene
 
     @Override
     public void onDisconnected(TcpConnection connection) {
+        host.removePlayer(connection);
         tcpConnections.remove(connection);
         Log.i(TAG, "handleMessage: TcpConnection is disconnected so removing him from the list. Size is now " + tcpConnections.size());
     }

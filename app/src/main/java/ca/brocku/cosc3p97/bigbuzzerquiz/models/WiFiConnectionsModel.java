@@ -3,6 +3,7 @@ package ca.brocku.cosc3p97.bigbuzzerquiz.models;
 
 import android.content.Context;
 import android.content.IntentFilter;
+import android.net.NetworkInfo;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pInfo;
@@ -18,21 +19,21 @@ import java.util.List;
 import java.util.Observable;
 
 import ca.brocku.cosc3p97.bigbuzzerquiz.communication.HostConnection;
-import ca.brocku.cosc3p97.bigbuzzerquiz.communication.PlayerConnection;
 import ca.brocku.cosc3p97.bigbuzzerquiz.views.DeviceListAdapter;
 
 public class WiFiConnectionsModel extends Observable implements WifiP2pBroadcastReceiver.WifiP2pBroadcastListener,
         HostConnection.ConnectedListener {
     private static final String TAG = "WiFiConnectionsModel";
-    private WifiP2pInfo p2pInfo;
+    private NetworkInfo networkInfo;
+    private WifiP2pInfo wifiP2pInfo;
     private WifiP2pManager manager;
     private Channel channel;
     private List<WifiP2pDeviceDecorator> peers = new ArrayList<>();
     private WifiP2pBroadcastReceiver receiver;
     private IntentFilter filter;
     private DeviceListAdapter deviceListAdapter;
-    private Host host;
-    private Player player;
+    //private Host host;
+    //private Player player;
     private boolean isScanning = false;
 
 
@@ -60,11 +61,11 @@ public class WiFiConnectionsModel extends Observable implements WifiP2pBroadcast
 
 
     public String getGroupOwner() {
-        if(p2pInfo != null && p2pInfo.groupFormed) {
-            if(p2pInfo.isGroupOwner) {
+        if(wifiP2pInfo != null && wifiP2pInfo.groupFormed) {
+            if(wifiP2pInfo.isGroupOwner) {
                 return "You are the group owner";
             } else {
-                WifiP2pDevice groupOwner = getGroupOwnerDevice(p2pInfo);
+                WifiP2pDevice groupOwner = getGroupOwnerDevice(wifiP2pInfo);
                 if (groupOwner == null) {
                     return "";
                 } else {
@@ -133,40 +134,43 @@ public class WiFiConnectionsModel extends Observable implements WifiP2pBroadcast
 
 
     private void refreshDeviceList(WifiP2pDeviceList devices) {
+        peers.clear();
         WifiP2pDeviceDecorator.copy(devices, peers);
         deviceListAdapter.notifyDataSetChanged();
     }
 
 
     @Override
-    public void onConnectionInfoAvailable(final WifiP2pInfo info) {
-        Log.i(TAG, "onConnectionInfoAvailable called with info?" + (info == null ? "FALSE" : "TRUE"));
+    public void onConnectionInfoAvailable(NetworkInfo networkInfo, final WifiP2pInfo wifiP2pInfo) {
+        Log.i(TAG, "onConnectionInfoAvailable called with info?" + (wifiP2pInfo == null ? "FALSE" : "TRUE"));
         final WiFiConnectionsModel me = this;
 
-        p2pInfo = info;
+        this.networkInfo = networkInfo;
+        this.wifiP2pInfo = wifiP2pInfo;
 
         if(peers.size() == 0) {
             requestPeers();
         }
 
-        if(info != null) {
-            if (info.isGroupOwner) {
-                Log.i(TAG, "Connected as group owner");
-                host = Host.getInstance(new PlayerConnection.SetupListener() {
-                    @Override
-                    public void onSetup(Host host) {
-                        Log.i(TAG, "onSetup: game SERVER is ready, creating player");
-                        player = Player.getInstance(info.groupOwnerAddress, host);
-                        player.setConnectedListener(me);
-                        setChanged();
-                        notifyObservers();
-                    }
-                });
-            } else {
-                Log.i(TAG, "Connected as a CLIENT");
-                player = Player.getInstance(info.groupOwnerAddress);
-                player.setConnectedListener(me);
-            }
+        if(wifiP2pInfo != null) {
+//            if (info.isGroupOwner) {
+//                Log.i(TAG, "Connected as group owner");
+//                host = Host.getInstance(new PlayerConnection.SetupListener() {
+//                    @Override
+//                    public void onSetup(Host host) {
+//                        Log.i(TAG, "onSetup: game SERVER is ready, creating player");
+//                        player = Player.getInstance(info.groupOwnerAddress, host);
+//                        player.setConnectedListener(me);
+//                        setChanged();
+//                        notifyObservers();
+//                    }
+//                });
+//            } else {
+//                Log.i(TAG, "Connected as a CLIENT");
+//                player = Player.getInstance(info.groupOwnerAddress);
+//                player.setConnectedListener(me);
+//            }
+            isConnected = true;
         } else {
             isConnected = false;
         }
@@ -177,9 +181,12 @@ public class WiFiConnectionsModel extends Observable implements WifiP2pBroadcast
     }
 
 
-    private void blockPeers() {
-
+    public NetworkInfo getNetworkInfo() {
+        return networkInfo;
     }
+
+
+    public WifiP2pInfo getWifiP2pInfo() { return wifiP2pInfo; }
 
 
     private void requestPeers() {
@@ -213,6 +220,7 @@ public class WiFiConnectionsModel extends Observable implements WifiP2pBroadcast
 
     private boolean isConnected = false;
 
+
     public boolean isConnected() {
             Log.i(TAG, "isConnected returning " + isConnected);
             return isConnected;
@@ -235,8 +243,11 @@ public class WiFiConnectionsModel extends Observable implements WifiP2pBroadcast
         notifyObservers();
     }
 
-    public Player getPlayer() {
-        return player;
-    }
+//    public Player getPlayer() {
+//        return player;
+//    }
+//
+//
+//    public void setPlayer(Player player) { this.player = player; }
 
 }

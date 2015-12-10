@@ -21,11 +21,10 @@ public class HostConnection implements Handler.Callback, TcpConnection.Listener,
     private TcpConnection tcpConnection;
     private ConnectedListener connectedListener;
     private boolean isConnected = false;
+    private ClientSocketThread thread;
 
 
     public HostConnection(InetAddress hostAddress, Host host) {
-        ClientSocketThread thread;
-
         if (host != null) {
             Log.i(TAG, "ctor: host is not null");
             host.setTcpListener(this);
@@ -117,5 +116,11 @@ public class HostConnection implements Handler.Callback, TcpConnection.Listener,
     public void onDisconnected(TcpConnection connection) {
         isConnected = false;
         connectedListener.onDisconnected();
+    }
+
+
+    public void stop() {
+        tcpConnection.stop();
+        thread.interrupt();
     }
 }

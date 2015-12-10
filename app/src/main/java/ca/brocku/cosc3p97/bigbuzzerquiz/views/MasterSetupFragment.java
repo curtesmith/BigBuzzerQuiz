@@ -133,7 +133,10 @@ public class MasterSetupFragment extends Fragment implements View.OnClickListene
     public void onDetach() {
         super.onDetach();
         listener = null;
+        player.stop();
+
     }
+
 
     @Override
     public void onClick(View view) {

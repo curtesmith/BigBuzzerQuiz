@@ -19,7 +19,7 @@ public class WifiP2pBroadcastReceiver extends BroadcastReceiver{
 
     public interface WifiP2pBroadcastListener {
         void onPeersAvailable(WifiP2pDeviceList devices);
-        void onConnectionInfoAvailable(WifiP2pInfo info);
+        void onConnectionInfoAvailable(NetworkInfo networkInfo, WifiP2pInfo wifiP2pInfo);
     }
 
     public WifiP2pBroadcastReceiver(WifiP2pManager manager, Channel channel, WifiP2pBroadcastListener listener) {
@@ -45,18 +45,18 @@ public class WifiP2pBroadcastReceiver extends BroadcastReceiver{
                 break;
             case WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION:
                 Log.i(TAG, "WIFI P2P CONNECTION CHANGED ACTION intent has been captured");
-                NetworkInfo networkInfo = intent.getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
+                final NetworkInfo networkInfo = intent.getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
 
                 if (networkInfo.isConnected()) {
                     manager.requestConnectionInfo(channel, new WifiP2pManager.ConnectionInfoListener() {
                         @Override
                         public void onConnectionInfoAvailable(WifiP2pInfo info) {
                             Log.i(TAG, "onConnectionInfoAvailable fired with group owner " + info.groupOwnerAddress);
-                            listener.onConnectionInfoAvailable(info);
+                            listener.onConnectionInfoAvailable(networkInfo, info);
                         }
                     });
                 } else {
-//                    listener.onConnectionInfoAvailable(null);
+                    listener.onConnectionInfoAvailable(networkInfo, null);
                 }
                 break;
         }

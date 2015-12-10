@@ -70,6 +70,10 @@ public class HostProxy implements HostActions {
     }
 
 
+    public void stop() {
+        connection.stop();
+    }
+
     @Override
     public void addPlayer(String name) {
 

@@ -93,33 +93,36 @@ public class DeviceListAdapter extends BaseAdapter {
         return new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                peers.get(index).isSelected = isChecked;
+                if(peers.size() > 0) {
 
-                switch (peers.get(index).status) {
-                    case WifiP2pDevice.AVAILABLE:
-                        WifiP2pDevice device = peers.get(index);
-                        WifiP2pConfig config = new WifiP2pConfig();
-                        config.deviceAddress = device.deviceAddress;
-                        config.wps.setup = WpsInfo.PBC;
+                    peers.get(index).isSelected = isChecked;
 
-                        manager.connect(channel, config, new WifiP2pManager.ActionListener() {
-                            @Override
-                            public void onSuccess() {
-                                peers.get(index).isConnecting = true;
-                                notifyDataSetChanged();
-                                Log.i(TAG, "call to connect was successful");
-                            }
+                    switch (peers.get(index).status) {
+                        case WifiP2pDevice.AVAILABLE:
+                            WifiP2pDevice device = peers.get(index);
+                            WifiP2pConfig config = new WifiP2pConfig();
+                            config.deviceAddress = device.deviceAddress;
+                            config.wps.setup = WpsInfo.PBC;
 
-                            @Override
-                            public void onFailure(int i) {
-                                Log.e(TAG, "call to connect failed with status: " + WifiP2pHelper.convertFailureStatus(i));
-                                Toast.makeText(activity, "Call to connect failed with status: " + WifiP2pHelper.convertFailureStatus(i), Toast.LENGTH_SHORT).show();
-                                peers.get(index).isConnecting = false;
-                                notifyDataSetChanged();
-                            }
-                        });
+                            manager.connect(channel, config, new WifiP2pManager.ActionListener() {
+                                @Override
+                                public void onSuccess() {
+                                    peers.get(index).isConnecting = true;
+                                    notifyDataSetChanged();
+                                    Log.i(TAG, "call to connect was successful");
+                                }
 
-                        break;
+                                @Override
+                                public void onFailure(int i) {
+                                    Log.e(TAG, "call to connect failed with status: " + WifiP2pHelper.convertFailureStatus(i));
+                                    Toast.makeText(activity, "Call to connect failed with status: " + WifiP2pHelper.convertFailureStatus(i), Toast.LENGTH_SHORT).show();
+                                    peers.get(index).isConnecting = false;
+                                    notifyDataSetChanged();
+                                }
+                            });
+
+                            break;
+                    }
                 }
 
                 notifyDataSetChanged();

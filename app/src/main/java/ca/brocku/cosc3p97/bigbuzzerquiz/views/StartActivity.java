@@ -33,8 +33,8 @@ public class StartActivity extends AppCompatActivity implements Observer {
             }
         });
 
-        wifi = new WiFiConnectionsModel(this);
-        wifi.addObserver(this);
+//        wifi = new WiFiConnectionsModel(this);
+//        wifi.addObserver(this);
 
     }
 

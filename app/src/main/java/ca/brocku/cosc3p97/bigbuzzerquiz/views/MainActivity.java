@@ -8,12 +8,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
 import ca.brocku.cosc3p97.bigbuzzerquiz.R;
+import ca.brocku.cosc3p97.bigbuzzerquiz.communication.HostConnection;
+import ca.brocku.cosc3p97.bigbuzzerquiz.communication.PlayerConnection;
+import ca.brocku.cosc3p97.bigbuzzerquiz.models.Host;
 import ca.brocku.cosc3p97.bigbuzzerquiz.models.Participant;
 import ca.brocku.cosc3p97.bigbuzzerquiz.models.Player;
 import ca.brocku.cosc3p97.bigbuzzerquiz.models.WiFiConnectionsModel;
@@ -29,6 +34,7 @@ public class MainActivity extends AppCompatActivity
     private static final String QUESTION_FRAGMENT = "QUESTION_FRAGMENT";
     private WiFiConnectionsModel wifi;
     private Player player;
+    private Host host;
 
 
     @Override
@@ -43,8 +49,9 @@ public class MainActivity extends AppCompatActivity
         }
 
         wifi = new WiFiConnectionsModel(this);
+        wifi.addObserver(this);
 
-        if(findViewById(R.id.fragment_container) != null) {
+        if (findViewById(R.id.fragment_container) != null) {
             Fragment fragment = StartFragment.newInstance(wifi);
             fragment.setArguments(getIntent().getExtras());
 
@@ -60,19 +67,19 @@ public class MainActivity extends AppCompatActivity
         Log.i(TAG, "onResume: invoked");
 
         wifi.registerReceiver(this);
-        wifi.addObserver(this);
 
-        player = wifi.getPlayer();
+        //player = wifi.getPlayer();
 
-        if(player != null) {
-            player.setActivity(this);
-        }
+//        if (player != null) {
+//            player.setActivity(this);
+//        }
     }
 
 
     @Override
     public void onPause() {
         super.onPause();
+        Log.i(TAG, "onPause: invoked");
         wifi.unregisterReceiver(this);
     }
 
@@ -114,6 +121,35 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void masterButtonClicked() {
+        Log.i(TAG, "Connecting as an MC");
+        final AppCompatActivity me = this;
+
+        if (host != null) {
+            player = Player.getInstance(wifi.getWifiP2pInfo().groupOwnerAddress, host);
+        } else {
+            player = Player.getInstance(wifi.getWifiP2pInfo().groupOwnerAddress);
+        }
+
+            player.setConnectedListener(new HostConnection.ConnectedListener() {
+                @Override
+                public void onConnected() {
+                    onConnectionSetup();
+                }
+
+                @Override
+                public void onDisconnected() {
+                    Toast.makeText(me, "Disconnected from host", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+        player.setActivity(this);
+        //wifi.setPlayer(player);
+
+    }
+
+
+    private void onConnectionSetup() {
+        Toast.makeText(this, "Connected to host", Toast.LENGTH_SHORT).show();
         Fragment fragment = MasterSetupFragment.newInstance(wifi);
         fragment.setArguments(getIntent().getExtras());
 
@@ -122,6 +158,7 @@ public class MainActivity extends AppCompatActivity
                 .addToBackStack(MASTER_SETUP_FRAGMENT)
                 .commit();
     }
+
 
 
     @Override
@@ -158,14 +195,29 @@ public class MainActivity extends AppCompatActivity
     public void update(Observable observable, Object o) {
         Log.i(TAG, "update:invoked");
         WiFiConnectionsModel wifi = (WiFiConnectionsModel) observable;
-        this.player = wifi.getPlayer();
-        if(this.player != null) {
-            this.player.setActivity(this);
-        }
-        Log.i(TAG, "update: player is null? " + (this.player == null));
 
-//        ((TextView) findViewById(R.id.statusTextView)).setText("Your are not connected");
+        if(wifi.getWifiP2pInfo() != null) {
+            if (wifi.getWifiP2pInfo().isGroupOwner) {
+                Log.i(TAG, "Connected as group owner");
+                host = Host.getInstance(new PlayerConnection.SetupListener() {
+                    @Override
+                    public void onSetup(Host host) {
+                        Log.i(TAG, "onSetup: game SERVER is ready, creating player");
+                    }
+                });
+
+                Log.i(TAG, "update: player is null? " + (player == null));
+
+            }
+
+            TextView statusTextView = (TextView) findViewById(R.id.mainStatusTextView);
+            statusTextView.setText(String.format("WIFI STATUS: %s", wifi.getNetworkInfo().getDetailedState().toString()));
+        } else {
+            TextView statusTextView = (TextView) findViewById(R.id.mainStatusTextView);
+            statusTextView.setText("WIFI STATUS: UNAVAILABLE");
+        }
     }
+
 
     @Override
     public void showTimeout() {
@@ -177,11 +229,12 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     public void onClick(DialogInterface dialogInterface, int which) {
                         dialogInterface.dismiss();
-                        wifi.getPlayer().ready();
+                        player.ready();
                     }
                 });
         interruptDialog.show();
     }
+
 
     @Override
     public void showSomebodySucceeded(String playerName) {
@@ -193,7 +246,7 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     public void onClick(DialogInterface dialogInterface, int which) {
                         dialogInterface.dismiss();
-                        wifi.getPlayer().ready();
+                        player.ready();
                     }
                 });
         interruptDialog.show();
@@ -210,7 +263,7 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     public void onClick(DialogInterface dialogInterface, int which) {
                         dialogInterface.dismiss();
-                        wifi.getPlayer().ready();
+                        player.ready();
                     }
                 });
         interruptDialog.show();
@@ -224,7 +277,7 @@ public class MainActivity extends AppCompatActivity
 
         StringBuilder message = new StringBuilder();
         message.append("The game is over here are the results...\n\n");
-        for(Participant player : players) {
+        for (Participant player : players) {
             message.append(String.format("Name: %s\tScore: %d\n", player.name, player.score));
         }
 
@@ -244,6 +297,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onAnswerButtonClick(int buttonNbr) {
         Log.i(TAG, String.format("onAnswerButtonClick: invoked with buttonNbr [%d]", buttonNbr));
-        wifi.getPlayer().answer(buttonNbr == 1);
+        player.answer(buttonNbr == 1);
     }
 }

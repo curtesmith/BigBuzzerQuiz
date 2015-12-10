@@ -47,8 +47,10 @@ public class ServerSocketThread extends Thread {
 
         while (true) {
             try {
-                threadPool.execute(new TcpConnection(serverSocket.accept(), threadHandler, TcpConnection.SERVER));
-                Log.i(TAG, "getPoolSize={" + threadPool.getPoolSize() + "}, getCompletedTaskCount={" + threadPool.getCompletedTaskCount() + "}");
+                threadPool.execute(new TcpConnection(serverSocket.accept(),
+                        threadHandler, TcpConnection.SERVER));
+                Log.i(TAG, "getPoolSize={" + threadPool.getPoolSize()
+                        + "}, getCompletedTaskCount={" + threadPool.getCompletedTaskCount() + "}");
             } catch (IOException e) {
                 try {
                     if (serverSocket != null && !serverSocket.isClosed())

@@ -63,8 +63,6 @@ public class WifiSetupFragment extends Fragment implements Observer, View.OnClic
             return;
         }
 
-
-
         try {
             player = Player.getInstance();
         } catch (Exception e) {

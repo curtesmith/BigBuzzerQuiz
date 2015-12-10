@@ -63,8 +63,10 @@ public class Host implements HostActions, TimeoutListener {
 
     public static Host getInstance(PlayerConnection.SetupListener listener) {
         if (instance == null) {
+            Log.i(TAG, "getInstance: instance is null");
             try {
-                return new Host(listener);
+                instance = new Host(listener);
+                return instance;
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;
@@ -92,6 +94,11 @@ public class Host implements HostActions, TimeoutListener {
 
     public int getPlayerIndex(Sender sender) {
         return playerProxy.getPlayerIndex(sender);
+    }
+
+
+    public void removePlayer(Sender sender) {
+        players.remove(playerProxy.getPlayerIndex(sender));
     }
 
 
@@ -165,6 +172,8 @@ public class Host implements HostActions, TimeoutListener {
 
 
     private boolean isGameOver() {
+        Log.i(TAG, String.format("isGameOver: counter=%d, maxQuestions=%d ... returning? %s",
+                questionCounter, maxQuestions, (questionCounter == maxQuestions)));
         return questionCounter == maxQuestions;
     }
 
