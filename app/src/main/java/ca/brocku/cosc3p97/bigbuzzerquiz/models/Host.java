@@ -120,7 +120,15 @@ public class Host implements HostActions, TimeoutListener {
         if (state == State.Stop) {
             state = State.Play;
             questionCounter = 0;
+            resetPlayerScores();
             sendNextQuestion();
+        }
+    }
+
+
+    private void resetPlayerScores() {
+        for(Participant participant : players){
+            participant.score = 0;
         }
     }
 

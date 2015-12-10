@@ -56,7 +56,7 @@ public class WifiP2pBroadcastReceiver extends BroadcastReceiver{
                         }
                     });
                 } else {
-                    listener.onConnectionInfoAvailable(null);
+//                    listener.onConnectionInfoAvailable(null);
                 }
                 break;
         }

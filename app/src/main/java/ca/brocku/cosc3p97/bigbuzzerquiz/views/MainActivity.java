@@ -8,7 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 import java.util.List;
 import java.util.Observable;
@@ -165,7 +164,7 @@ public class MainActivity extends AppCompatActivity
         }
         Log.i(TAG, "update: player is null? " + (this.player == null));
 
-        ((TextView) findViewById(R.id.statusTextView)).setText("Your are not connected");
+//        ((TextView) findViewById(R.id.statusTextView)).setText("Your are not connected");
     }
 
     @Override
