@@ -125,11 +125,11 @@ public class MainActivity extends AppCompatActivity
 
 
     @Override
-    public void startGameButtonClicked() {
+    public void startGameButtonClicked(int numberOfQuestions, List<Integer> categories) {
         Player player = null;
         try {
             player = Player.getInstance();
-            player.play();
+            player.play(numberOfQuestions, categories);
         } catch (Exception e) {
             e.printStackTrace();
         }

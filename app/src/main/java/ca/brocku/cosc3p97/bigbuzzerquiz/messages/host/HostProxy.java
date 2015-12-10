@@ -94,12 +94,12 @@ public class HostProxy implements HostActions {
 
 
     @Override
-    public void play(int numberOfQuestions, int[] keys) {
+    public void play(int numberOfQuestions, List<Integer>categories) {
         PlayRequest request = new PlayRequest();
         try {
             request.put(PlayRequest.NUMBER_OF_QUESTIONS, numberOfQuestions);
             JSONArray jsonKeys = new JSONArray();
-            for(int key : keys) {
+            for(int key : categories) {
                 jsonKeys.put(key);
             }
             request.put(PlayRequest.KEYS, jsonKeys);

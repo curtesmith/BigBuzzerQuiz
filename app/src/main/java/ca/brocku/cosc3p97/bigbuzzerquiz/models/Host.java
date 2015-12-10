@@ -115,7 +115,7 @@ public class Host implements HostActions, TimeoutListener {
 
 
     @Override
-    public void play(int numberOfQuestions, int[] keys) {
+    public void play(int numberOfQuestions, List<Integer> keys) {
         Log.i(TAG, "play: invoked");
         if (state == State.Stop) {
             state = State.Play;
