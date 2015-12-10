@@ -116,7 +116,8 @@ public class Player implements PlayerActions {
 
 
     public void play() {
-        hostProxy.play();
+
+        hostProxy.play(3, new int[]{1,2,3});
     }
 
 

@@ -13,7 +13,7 @@ public interface HostActions {
         void reply(List<String> names);
     }
 
-    void play();
+    void play(int numberOfQuesitons, int[] categoryKeys);
 
     void ready();
 

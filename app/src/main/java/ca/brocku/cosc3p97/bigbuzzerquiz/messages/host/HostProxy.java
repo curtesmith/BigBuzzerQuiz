@@ -3,6 +3,7 @@ package ca.brocku.cosc3p97.bigbuzzerquiz.messages.host;
 
 import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.net.InetAddress;
@@ -93,8 +94,18 @@ public class HostProxy implements HostActions {
 
 
     @Override
-    public void play() {
+    public void play(int numberOfQuestions, int[] keys) {
         PlayRequest request = new PlayRequest();
+        try {
+            request.put(PlayRequest.NUMBER_OF_QUESTIONS, numberOfQuestions);
+            JSONArray jsonKeys = new JSONArray();
+            for(int key : keys) {
+                jsonKeys.put(key);
+            }
+            request.put(PlayRequest.KEYS, jsonKeys);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         request.addSender(connection);
         request.send();
     }

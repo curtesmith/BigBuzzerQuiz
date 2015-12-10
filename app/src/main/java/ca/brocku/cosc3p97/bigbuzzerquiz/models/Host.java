@@ -115,12 +115,15 @@ public class Host implements HostActions, TimeoutListener {
 
 
     @Override
-    public void play() {
+    public void play(int numberOfQuestions, int[] keys) {
         Log.i(TAG, "play: invoked");
         if (state == State.Stop) {
             state = State.Play;
+            maxQuestions = numberOfQuestions;
             questionCounter = 0;
             resetPlayerScores();
+
+            // TODO: 2015-12-09 get and save a list of questions from the database using the keys parameter
             sendNextQuestion();
         }
     }
