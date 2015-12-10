@@ -206,7 +206,9 @@ public class Host implements HostActions, TimeoutListener {
         questionCounter++;
         readyCounter = 0;
 
+        // TODO: 2015-12-09 Get the next question from cached list retrieved and pass its key to the players
         question = new Question(players, this);
+
         playerProxy.showQuestion(questionCounter);
         question.startTimer();
     }
