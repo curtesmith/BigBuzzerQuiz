@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity
     private static final String TAG = "MainActivity";
     private static final String START_FRAGMENT = "START_FRAGMENT";
     private static final String MASTER_SETUP_FRAGMENT = "MASTER_SETUP_FRAGMENT";
+    private static final String START_PLAYER_FRAGMENT = "START_PLAYER_FRAGMENT";
     private static final String WIFI_SETUP_FRAGMENT = "WIFI_SETUP_FRAGMENT";
     private static final String QUESTION_FRAGMENT = "QUESTION_FRAGMENT";
     private WiFiConnectionsModel wifi;
@@ -125,6 +126,12 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void masterButtonClicked() {
         Log.i(TAG, "Connecting as an MC");
+        setupPlayer(true);
+
+    }
+
+
+    public void setupPlayer(final boolean isMaster) {
         final AppCompatActivity me = this;
 
         if (host != null) {
@@ -133,25 +140,35 @@ public class MainActivity extends AppCompatActivity
             player = Player.getInstance(wifi.getWifiP2pInfo().groupOwnerAddress);
         }
 
-            player.setConnectedListener(new HostConnection.ConnectedListener() {
-                @Override
-                public void onConnected() {
+        player.setConnectedListener(new HostConnection.ConnectedListener() {
+            @Override
+            public void onConnected() {
+                if (isMaster) {
+                    onMasterConnectionSetup();
+                } else {
                     onConnectionSetup();
                 }
+            }
 
-                @Override
-                public void onDisconnected() {
-                    Toast.makeText(me, "Disconnected from host", Toast.LENGTH_SHORT).show();
-                }
-            });
+            @Override
+            public void onDisconnected() {
+                Toast.makeText(me, "Disconnected from host", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         player.setActivity(this);
-        //wifi.setPlayer(player);
+    }
+
+
+
+    @Override
+    public void playerButtonClicked() {
+        setupPlayer(false);
 
     }
 
 
-    private void onConnectionSetup() {
+    private void onMasterConnectionSetup() {
         Toast.makeText(this, "Connected to host", Toast.LENGTH_SHORT).show();
         Fragment fragment = MasterSetupFragment.newInstance(wifi);
         fragment.setArguments(getIntent().getExtras());
@@ -162,6 +179,17 @@ public class MainActivity extends AppCompatActivity
                 .commit();
     }
 
+
+    private void onConnectionSetup() {
+        Toast.makeText(this, "Connected to host", Toast.LENGTH_SHORT).show();
+        Fragment fragment = StartPlayerFragment.newInstance();
+        fragment.setArguments(getIntent().getExtras());
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .addToBackStack(START_PLAYER_FRAGMENT)
+                .commit();
+    }
 
 
     @Override

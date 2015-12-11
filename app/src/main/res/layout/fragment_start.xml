@@ -23,7 +23,6 @@
         android:layout_height="wrap_content"
         android:enabled="false"
         android:gravity="center"
-        android:onClick="choseMasterMode"
         android:text="Master"
         android:textSize="@dimen/defaultButtonSize" />
 
@@ -42,7 +41,6 @@
         android:layout_height="wrap_content"
         android:enabled="false"
         android:gravity="center"
-        android:onClick="chosePlayerMode"
         android:text="Player"
         android:textSize="@dimen/defaultButtonSize" />
 

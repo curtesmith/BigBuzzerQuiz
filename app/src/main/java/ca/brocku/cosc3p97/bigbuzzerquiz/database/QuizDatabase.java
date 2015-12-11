@@ -249,6 +249,7 @@ public class QuizDatabase extends SQLiteOpenHelper {
             cursor.moveToNext();
         }
 
+        cursor.close();
         return questions;
     }
 

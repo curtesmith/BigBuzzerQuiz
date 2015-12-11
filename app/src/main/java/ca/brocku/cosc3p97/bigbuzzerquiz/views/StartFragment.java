@@ -88,6 +88,13 @@ public class StartFragment extends Fragment implements Observer {
                 mListener.masterButtonClicked();
             }
         });
+
+        getActivity().findViewById(R.id.playerButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mListener.playerButtonClicked();
+            }
+        });
     }
 
 
@@ -155,6 +162,7 @@ public class StartFragment extends Fragment implements Observer {
     public interface OnClickListener {
         void wifiSetupButtonClicked();
         void masterButtonClicked();
+        void playerButtonClicked();
     }
 
 }
