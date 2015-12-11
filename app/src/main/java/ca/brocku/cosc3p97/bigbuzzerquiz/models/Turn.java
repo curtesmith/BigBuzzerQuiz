@@ -6,8 +6,8 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Question implements TimeoutListener {
-    private static final String TAG = "Question";
+public class Turn implements TimeoutListener {
+    private static final String TAG = "Turn";
     private static final int MAXTIME = 5000;
     public boolean blocked;
     private List<Participant> participants;
@@ -15,7 +15,7 @@ public class Question implements TimeoutListener {
     private List<TimeoutListener> timeoutListeners = new ArrayList<>();
 
 
-    public Question(List<Participant> participants, TimeoutListener timeoutListener) {
+    public Turn(List<Participant> participants, TimeoutListener timeoutListener) {
         this.participants = participants;
         unblock(this.participants);
         blocked = false;

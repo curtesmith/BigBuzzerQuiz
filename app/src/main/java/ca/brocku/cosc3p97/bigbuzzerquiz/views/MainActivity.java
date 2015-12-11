@@ -18,7 +18,9 @@ import java.util.Observer;
 import ca.brocku.cosc3p97.bigbuzzerquiz.R;
 import ca.brocku.cosc3p97.bigbuzzerquiz.communication.HostConnection;
 import ca.brocku.cosc3p97.bigbuzzerquiz.communication.PlayerConnection;
+import ca.brocku.cosc3p97.bigbuzzerquiz.database.Question;
 import ca.brocku.cosc3p97.bigbuzzerquiz.database.QuizDatabase;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.ShowQuestionRequest;
 import ca.brocku.cosc3p97.bigbuzzerquiz.models.Host;
 import ca.brocku.cosc3p97.bigbuzzerquiz.models.Participant;
 import ca.brocku.cosc3p97.bigbuzzerquiz.models.Player;
@@ -175,13 +177,16 @@ public class MainActivity extends AppCompatActivity
 
 
     @Override
-    public void showQuestion(int key) {
+    public void showQuestion(Question question) {
         Fragment fragment = new QuestionFragment();
         Bundle bundle = getIntent().getExtras();
         if (bundle == null) {
             bundle = new Bundle();
         }
-        bundle.putInt("KEY", key);
+        bundle.putInt(ShowQuestionRequest.CORRECT_ANSWER, question.indexOfCorrectAnswer);
+        bundle.putString(ShowQuestionRequest.TEXT, question.text);
+        bundle.putStringArray(ShowQuestionRequest.ANSWERS, question.answers);
+
         fragment.setArguments(bundle);
 
 
@@ -243,7 +248,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void showSomebodySucceeded(String playerName) {
         AlertDialog interruptDialog = new AlertDialog.Builder(MainActivity.this).create();
-        interruptDialog.setTitle(("Question Success"));
+        interruptDialog.setTitle(("Turn Success"));
         interruptDialog.setMessage(String.format("%s answered this question successfully", playerName));
         interruptDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Ready for next question?",
                 new DialogInterface.OnClickListener() {
@@ -260,7 +265,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void showEveryoneFailed() {
         AlertDialog interruptDialog = new AlertDialog.Builder(MainActivity.this).create();
-        interruptDialog.setTitle(("Question Failure"));
+        interruptDialog.setTitle(("Turn Failure"));
         interruptDialog.setMessage("Well, nobody got that one right");
         interruptDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Ready for next question?",
                 new DialogInterface.OnClickListener() {
@@ -299,8 +304,7 @@ public class MainActivity extends AppCompatActivity
 
 
     @Override
-    public void onAnswerButtonClick(int buttonNbr) {
-        Log.i(TAG, String.format("onAnswerButtonClick: invoked with buttonNbr [%d]", buttonNbr));
-        player.answer(buttonNbr == 1);
+    public void onAnswerButtonClick(boolean isCorrect) {
+        player.answer(isCorrect);
     }
 }

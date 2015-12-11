@@ -1,9 +1,14 @@
 package ca.brocku.cosc3p97.bigbuzzerquiz.database;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 import android.widget.Toast;
+
+import java.util.List;
+import java.util.Stack;
 
 import ca.brocku.cosc3p97.bigbuzzerquiz.R;
 
@@ -44,7 +49,7 @@ public class QuizDatabase extends SQLiteOpenHelper {
     }
 
 
-    public void dropTables(SQLiteDatabase db){
+    public void dropTables(SQLiteDatabase db) {
         db.execSQL(context.getString(R.string.dropTableQuestionsQuery));
         db.execSQL(context.getString(R.string.dropTableCategoriesQuery));
     }
@@ -58,7 +63,7 @@ public class QuizDatabase extends SQLiteOpenHelper {
     }
 
 
-    private void insertCategories(String tableName, SQLiteDatabase databaseName){
+    private void insertCategories(String tableName, SQLiteDatabase databaseName) {
         String art = "INSERT INTO " + tableName + " VALUES(\'Art and Culture\')";
         String science = "INSERT INTO " + tableName + " VALUES(\'Science\')";
         String geography = "INSERT INTO " + tableName + " VALUES(\'Geography\')";
@@ -115,7 +120,8 @@ public class QuizDatabase extends SQLiteOpenHelper {
         databaseName.execSQL(art10);
     }
 
-    private void insertScienceQuestions(String tableName, SQLiteDatabase databaseName){
+
+    private void insertScienceQuestions(String tableName, SQLiteDatabase databaseName) {
         String science1 = "INSERT INTO " + tableName + " VALUES(" +
                 "'What is the biggest Planet in our System?', 'The Sun', 'Jupiter', 'Saturn', " +
                 "'Pluto', 1, 2)";
@@ -159,7 +165,8 @@ public class QuizDatabase extends SQLiteOpenHelper {
         databaseName.execSQL(science10);
     }
 
-    private void insertGeographyQuestions(String tableName, SQLiteDatabase databaseName){
+
+    private void insertGeographyQuestions(String tableName, SQLiteDatabase databaseName) {
 
         String geography1 = "INSERT INTO " + tableName + " VALUES(" +
                 "'The Nile River is the longest river in the world. Which one is the next longest?', " +
@@ -205,4 +212,44 @@ public class QuizDatabase extends SQLiteOpenHelper {
         databaseName.execSQL(geography9);
         databaseName.execSQL(geography10);
     }
+
+
+    public Stack<Question> selectQuestions(int numberOfQuestions, List<Integer> categories) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("SELECT Question, Answer0, Answer1, Answer2, Answer3, " +
+                        "rightAnswer, Category FROM Questions WHERE Category IN (");
+        boolean first = true;
+        for(int i : categories) {
+            if (first) {
+                sql.append(String.format("%d", i));
+                first = false;
+            } else {
+                sql.append(String.format(", %d", i));
+            }
+        }
+        sql.append(String.format(") LIMIT %d", numberOfQuestions));
+
+        Log.i(TAG, String.format("select questions: sql={%s}", sql));
+        final Cursor cursor = instance.rawQuery(sql.toString(), new String[]{});
+        Stack<Question> questions = new Stack<>();
+
+        cursor.moveToFirst();
+        while(!cursor.isAfterLast()) {
+            Question question = new Question();
+            question.text = cursor.getString(cursor.getColumnIndex("Question"));
+            question.answers = new String[4];
+            question.answers[0] = cursor.getString(cursor.getColumnIndex("Answer0"));
+            question.answers[1] = cursor.getString(cursor.getColumnIndex("Answer1"));
+            question.answers[2] = cursor.getString(cursor.getColumnIndex("Answer2"));
+            question.answers[3] = cursor.getString(cursor.getColumnIndex("Answer3"));
+            question.indexOfCorrectAnswer = cursor.getInt(cursor.getColumnIndex("rightAnswer"));
+            question.category = cursor.getInt(cursor.getColumnIndex("Category"));
+
+            questions.push(question);
+            cursor.moveToNext();
+        }
+
+        return questions;
+    }
+
 }

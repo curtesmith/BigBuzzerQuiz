@@ -10,15 +10,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ca.brocku.cosc3p97.bigbuzzerquiz.communication.HostConnection;
+import ca.brocku.cosc3p97.bigbuzzerquiz.database.Question;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.GetPlayersResponseHandler;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.HostActions;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.HostProxy;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.HostRequestInterface;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.GameOverRequestHandler;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.InterruptRequestHandler;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.PlayerActions;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.PlayerMessageInterface;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.ShowQuestionRequestHandler;
-import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.InterruptRequestHandler;
 
 public class Player implements PlayerActions {
     private static final String TAG = "Player";
@@ -127,15 +128,15 @@ public class Player implements PlayerActions {
 
 
     public interface ShowQuestionable {
-        void showQuestion(int key);
+        void showQuestion(Question question);
     }
 
 
     @Override
-    public void showQuestion(int key) {
+    public void showQuestion(Question question) {
         Log.i(TAG, "showQuestion: invoked, activity is null? " + (activity == null));
         if(activity != null) {
-            ((ShowQuestionable) activity).showQuestion(key);
+            ((ShowQuestionable) activity).showQuestion(question);
         }
     }
 

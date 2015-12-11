@@ -60,7 +60,7 @@
     <!-- Start Player Activity -->
     <string name="title_activity_start_player">StartPlayerActivity</string>
 
-    <!-- Question Activity -->
+    <!-- Turn Activity -->
     <string name="title_activity_question_activity">QuestionActivity</string>
     <string name="title_activity_main">This is the big one</string>
     <string name="hello_world">Hello world!</string>

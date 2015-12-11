@@ -6,9 +6,11 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 import ca.brocku.cosc3p97.bigbuzzerquiz.communication.PlayerConnection;
 import ca.brocku.cosc3p97.bigbuzzerquiz.communication.TcpConnection;
+import ca.brocku.cosc3p97.bigbuzzerquiz.database.Question;
 import ca.brocku.cosc3p97.bigbuzzerquiz.database.QuizDatabase;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Sender;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.AnswerRequestHandler;
@@ -26,7 +28,8 @@ public class Host implements HostActions, TimeoutListener {
     private List<PlayerConnection.SetupListener> listeners = new ArrayList<>();
     private PlayerProxy playerProxy;
     private List<Participant> players = new ArrayList<>();
-    private Question question;
+    private Turn turn;
+    private Stack<Question> questions;
     private QuizDatabase quizDatabase;
 
     @Override
@@ -138,9 +141,16 @@ public class Host implements HostActions, TimeoutListener {
             questionCounter = 0;
             resetPlayerScores();
 
-            // TODO: 2015-12-09 get and save a list of questions from the database using the keys parameter
-            sendNextQuestion();
+            questions = getSomeQuestions(numberOfQuestions, keys);
+            if(questions.size() > 0) {
+                sendNextQuestion(questions.pop());
+            }
         }
+    }
+
+
+    private Stack<Question> getSomeQuestions(int numberOfQuestions, List<Integer> keys) {
+        return quizDatabase.selectQuestions(numberOfQuestions, keys);
     }
 
 
@@ -162,7 +172,9 @@ public class Host implements HostActions, TimeoutListener {
                 state = State.Stop;
                 playerProxy.gameOver(players);
             } else {
-                sendNextQuestion();
+                if (questions.size() > 0) {
+                    sendNextQuestion(questions.pop());
+                }
             }
         }
     }
@@ -190,7 +202,7 @@ public class Host implements HostActions, TimeoutListener {
         if (correct) {
             playerProxy.success(playerName);
         } else {
-            if(question.isBlocked()) {
+            if(turn.isBlocked()) {
                 playerProxy.everyoneFailed();
             }
         }
@@ -206,28 +218,28 @@ public class Host implements HostActions, TimeoutListener {
             return;
         }
 
-        if (question.isBlocked()) {
-            Log.i(TAG, String.format("handleAnswer: question is blocked, returning"));
+        if (turn.isBlocked()) {
+            Log.i(TAG, String.format("handleAnswer: turn is blocked, returning"));
             return;
         }
 
         p.block();
-        question.block(isCorrect);
+        turn.block(isCorrect);
         p.adjustScore(isCorrect);
 
         answer(isCorrect, players.get(playerIndex).name);
     }
 
 
-    private void sendNextQuestion() {
+    private void sendNextQuestion(Question question) {
         questionCounter++;
         readyCounter = 0;
 
-        // TODO: 2015-12-09 Get the next question from cached list retrieved and pass its key to the players
-        question = new Question(players, this);
+        // TODO: 2015-12-09 Get the next turn from cached list retrieved and pass its key to the players
+        turn = new Turn(players, this);
 
-        playerProxy.showQuestion(questionCounter);
-        question.startTimer();
+        playerProxy.showQuestion(question);
+        turn.startTimer();
     }
 
 }

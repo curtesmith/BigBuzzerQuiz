@@ -17,12 +17,10 @@ public class ShowQuestionRequestHandler extends PlayerRequestHandler {
     @Override
     public void handle(Request request, Sender replyToSender) {
         ShowQuestionRequest showQuestionRequest = null;
-        int key;
 
         try {
             showQuestionRequest = new ShowQuestionRequest(request.toString());
-            key = showQuestionRequest.getInt(ShowQuestionRequest.QUESTION_KEY);
-            player.showQuestion(key);
+            player.showQuestion(showQuestionRequest.deserialize());
         } catch (JSONException e) {
             e.printStackTrace();
         }
