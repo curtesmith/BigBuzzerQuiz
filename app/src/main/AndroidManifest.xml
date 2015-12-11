@@ -25,10 +25,6 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".views.QuestionActivity"
-            android:label="@string/title_activity_question_activity" >
-        </activity>
-        <activity
             android:name=".views.MainActivity"
             android:label="@string/title_activity_start"
             android:screenOrientation="portrait">
