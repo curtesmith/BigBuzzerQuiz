@@ -82,8 +82,8 @@ public class StartActivity extends AppCompatActivity implements Observer {
     }
 
     public void chosePlayerMode(View view) {
-        Intent intent = new Intent(this, StartPlayerActivity.class);
-        startActivity(intent);
+//        Intent intent = new Intent(this, StartPlayerActivity.class);
+//        startActivity(intent);
     }
 
     @Override

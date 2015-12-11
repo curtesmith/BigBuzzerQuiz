@@ -31,10 +31,6 @@
 
         </activity>
         <activity
-            android:name=".views.StartPlayerActivity"
-            android:label="@string/title_activity_start_player" >
-        </activity>
-        <activity
             android:name=".views.QuestionActivity"
             android:label="@string/title_activity_question_activity" >
         </activity>
