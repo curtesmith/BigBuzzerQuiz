@@ -36,21 +36,25 @@
     <!-- For the Database -->
      <string name="createTableQuestionsQuery">
         CREATE TABLE IF NOT EXISTS Questions(
-         _id INTEGER PRIMARY KEY
          Question VARCHAR,
          Answer0 VARCHAR,
-         Answer1 VARCHAR
-         Answer2 VARCHAR
-         Answer3 VARCHAR
-         rightAnswer INTEGER
-         Category INTEGER REFERENCES Categories
+         Answer1 VARCHAR,
+         Answer2 VARCHAR,
+         Answer3 VARCHAR,
+         rightAnswer INTEGER,
+         Category INTEGER REFERENCES Categories (rowid)
          );
+    </string>
+    <string name="dropTableQuestionsQuery">
+        DROP IF TABLE EXISTS Questions;
     </string>
     <string name="createTableCategoriesQuery">
         CREATE TABLE IF NOT EXISTS Categories(
-        _id INTEGER PRIMARY KEY
         Name VARCHAR
         );
+    </string>
+    <string name="dropTableCategoriesQuery">
+        DROP IF TABLE EXISTS Categories
     </string>
 
     <!-- Start Player Activity -->

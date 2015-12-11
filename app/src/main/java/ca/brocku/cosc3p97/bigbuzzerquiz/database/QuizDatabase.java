@@ -1,94 +1,106 @@
-package ca.brocku.cosc3p97.bigbuzzerquiz.views;
+package ca.brocku.cosc3p97.bigbuzzerquiz.database;
 
-import android.app.Activity;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.Cursor;
-import android.app.Activity;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.os.Bundle;
-import android.util.Log;
-import android.widget.TextView;
-
-
-import android.support.v7.app.AppCompatActivity;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.Toast;
 
 import ca.brocku.cosc3p97.bigbuzzerquiz.R;
 
-/**
- * This class provides the methods to create and initialize the database for the first time as
- * well as inserting the question categories, questions and answers
- *
- * Since I don't know where exactly we will need this, the code is here and we can put it
- * wherever we want
- *
- * Created by Maike on 30.11.2015.
- */
-public class DatabaseInitializer extends AppCompatActivity{
 
-    public void initializeDatabase(){
+public class QuizDatabase extends SQLiteOpenHelper {
+    public static final String TAG = "QuizDatabase";
+    public static final String DATABASE_NAME = "QuizDatabase";
+    public static final int DATABASE_VERSION = 1;
+    private SQLiteDatabase instance;
+    private Context context;
 
-        SQLiteDatabase QuizDatabase;
 
-        // Create the Database
-        QuizDatabase = openOrCreateDatabase("QuizDatabase", MODE_PRIVATE, null);
-        //    QuizDatabase.execSQL("DROP Table QuizDatabase");
-
-        // Create both tables
-        QuizDatabase.execSQL(getString(R.string.createTableCategoriesQuery));
-        QuizDatabase.execSQL(getString(R.string.createTableQuestionsQuery));
-
-        // Input Value in tables
-        insertCategories("Categories", QuizDatabase);
-        insertArtQuestions("Questions", QuizDatabase);
-        insertScienceQuestions("Questions", QuizDatabase);
-        insertGeographyQuestions("Questions", QuizDatabase);
-
+    public QuizDatabase(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        this.context = context;
+        instance = getWritableDatabase();
     }
 
+
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        createTables(db);
+        initializeTables(db);
+        Toast.makeText(context, "QuizDatabase created", Toast.LENGTH_SHORT).show();
+    }
+
+
+    private void createTables(SQLiteDatabase db) {
+        db.execSQL(context.getString(R.string.createTableCategoriesQuery));
+        db.execSQL(context.getString(R.string.createTableQuestionsQuery));
+    }
+
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int previousVersion, int currentVersion) {
+        dropTables(db);
+        onCreate(db);
+    }
+
+
+    public void dropTables(SQLiteDatabase db){
+        db.execSQL(context.getString(R.string.dropTableQuestionsQuery));
+        db.execSQL(context.getString(R.string.dropTableCategoriesQuery));
+    }
+
+
+    private void initializeTables(SQLiteDatabase db) {
+        insertCategories("Categories", db);
+        insertArtQuestions("Questions", db);
+        insertScienceQuestions("Questions", db);
+        insertGeographyQuestions("Questions", db);
+    }
+
+
     private void insertCategories(String tableName, SQLiteDatabase databaseName){
-        String art = "INSERT INTO " + tableName + " VALUES('Art and Culture')";
-        String science = "INSERT INTO " + tableName + " VALUES('Science')";
-        String geography = "INSERT INTO " + tableName + " VALUES('Geography')";
+        String art = "INSERT INTO " + tableName + " VALUES(\'Art and Culture\')";
+        String science = "INSERT INTO " + tableName + " VALUES(\'Science\')";
+        String geography = "INSERT INTO " + tableName + " VALUES(\'Geography\')";
 
         databaseName.execSQL(art);
         databaseName.execSQL(science);
         databaseName.execSQL(geography);
     }
 
+
     private void insertArtQuestions(String tableName, SQLiteDatabase databaseName) {
 
         String art1 = "INSERT INTO " + tableName + " VALUES(" +
-                "'Who was the original author of Dracula?', 'Bram Stoker', 'Emily Bronte', " +
-                "'Charles Dickens', 'J.K.Rowling', 0, 1)";
+                "\'Who was the original author of \"Dracula\"?\', \'Bram Stoker\', \'Emily Bronte\'," +
+                "\'Charles Dickens\', \'J.K.Rowling\', 0, 1)";
         String art2 = "INSERT INTO " + tableName + " VALUES(" +
-                "'What is the first book of the Old Testament called?', 'Moses', 'Genesis', 'Lukas', " +
-                "'David', 1, 1)";
+                "\'What is the first book of the Old Testament called?\', \'Moses\', \'Genesis\', \'Lukas\', " +
+                "\'David\', 1, 1)";
         String art3 = "INSERT INTO " + tableName + " VALUES(" +
-                "'Who painted the Mona Lisa?', 'Michelangelo', 'Rembrandt', 'Leonardo Da Vinci', " +
-                "'Sandro Boticelli', 2, 1)";
+                "\'Who painted the Mona Lisa?\', \'Michelangelo\', \'Rembrandt\', \'Leonardo Da Vinci\', " +
+                "\'Sandro Boticelli\', 2, 1)";
         String art4 = "INSERT INTO " + tableName + " VALUES(" +
-                "'Who is the author of the book \'Nineteen Eighty Four\'?', 'Thomas Hardy', " +
-                "'Emile Zola', 'George Orwell', 'Walter Scott', 2, 1)";
+                "\'Who is the author of the book \"Nineteen Eighty Four?\"\', \'Thomas Hardy\', " +
+                "\'Emile Zola\', \'George Orwell\', \'Walter Scott\', 2, 1)";
         String art5 = "INSERT INTO " + tableName + " VALUES(" +
-                "'The first time a television programm to be broadcast in India was in... ?', " +
-                "'1959', '1965', '1976', '1957', 0, 1)";
+                "\'The first time a television program to be broadcast in India was in... ?\', " +
+                "\'1959\', \'1965\', \'1976\', \'1957\', 0, 1)";
 
         String art6 = "INSERT INTO " + tableName + " VALUES(" +
-                "'Who wrote the book \'War and Peace\'?', " +
-                "'Leo Tolstoy', 'Mahatma Gandhi', 'Charles Dickens', 'Kipling', 0, 1)";
+                "\'Who wrote the book \"War and Peace\"?\', " +
+                "\'Leo Tolstoy\', \'Mahatma Gandhi\', \'Charles Dickens\', \'Kipling\', 0, 1)";
         String art7 = "INSERT INTO " + tableName + " VALUES(" +
-                "'How many times has the Mona Lisa been stolen?', '8', '10', '1', '5', 2, 1)";
+                "\'How many times has the Mona Lisa been stolen?\', \'8\', \'10\', \'1\', \'5\', 2, 1)";
         String art8 = "INSERT INTO " + tableName + " VALUES(" +
-                "'Pop Art originated in which city?', 'Amsterdam', 'New York', 'Frankfurt', " +
-                "'London', 3, 1)";
+                "\'Pop Art originated in which city?\', \'Amsterdam\', \'New York\', \'Frankfurt\', " +
+                "\'London\', 3, 1)";
         String art9 = "INSERT INTO " + tableName + " VALUES(" +
-                "'Which art movement claimed to be anti-art?', 'Dada', 'Cubism', 'Art Nouveau', " +
-                "'Fauvism', 0, 1)";
+                "\'Which art movement claimed to be anti-art?\', \'Dada\', \'Cubism\', \'Art Nouveau\', " +
+                "\'Fauvism\', 0, 1)";
         String art10 = "INSERT INTO " + tableName + " VALUES(" +
-                "'Leonardi Da Vinci invented which of these items?', 'Kites', 'High heels', " +
-                "'Gunpowder', 'Wine cork', 1, 1)";
+                "\'Leonardi Da Vinci invented which of these items?\', \'Kites\', \'High heels\', " +
+                "\'Gunpowder\', \'Wine cork\', 1, 1)";
 
         databaseName.execSQL(art1);
         databaseName.execSQL(art2);
@@ -108,7 +120,7 @@ public class DatabaseInitializer extends AppCompatActivity{
                 "'What is the biggest Planet in our System?', 'The Sun', 'Jupiter', 'Saturn', " +
                 "'Pluto', 1, 2)";
         String science2 = "INSERT INTO " + tableName + " VALUES(" +
-                "'Who wrote the book \'The Origin of Species\'?', 'Sir Alexander Fleming', " +
+                "'Who wrote the book \"The Origin of Species\"?', 'Sir Alexander Fleming', " +
                 "'Stephen Hawking', 'Charles Darwin', 'Louis Pasteur', 2, 2)";
         String science3 = "INSERT INTO " + tableName + " VALUES(" +
                 "'The Sun is a ... ?', 'Satellite', 'Comet', 'Star', 'Huge Planet', 2, 2)";
@@ -156,8 +168,8 @@ public class DatabaseInitializer extends AppCompatActivity{
                 "'What is the 10th most spoken language worldwide?', 'German', 'Bengali', 'Russian', " +
                 "'Portuguese', 0, 3)";
         String geography3 = "INSERT INTO " + tableName + " VALUES(" +
-                "'What is the name of Hong Kong\'s metro system?', 'Metrorail', 'RTA Rapid Transit', " +
-                "'Docklands Light Railway', 'MTR', 3, 3)";
+                "\"What is the name of Hong Kong\'s metro system?\", \"Metrorail\", \"RTA Rapid Transit\", " +
+                "\"Docklands Light Railway\", \"MTR\", 3, 3)";
         String geography4 = "INSERT INTO " + tableName + " VALUES(" +
                 "'The second longest coastline (after Canada) is where?', 'Chile', 'Australia', " +
                 "'Russia', 'Indonesia', 3, 3)";
@@ -175,8 +187,8 @@ public class DatabaseInitializer extends AppCompatActivity{
                 "'Mount Denali is the highest peak in the USA. In which state can you find it?', " +
                 "'New York', 'Alaska', 'New Mexico', 'Hawaii', 1, 3)";
         String geography9 = "INSERT INTO " + tableName + " VALUES(" +
-                "'Which country\'s name means literally \'Land of Silver\'?', " +
-                "'Paraguay', 'Chile', 'Columbia', 'Argentina', 3, 3)";
+                "\"Which country\'s name means literally \'Land of Silver\'?\", " +
+                "\"Paraguay\", \"Chile\", \"Columbia\", \"Argentina\", 3, 3)";
         String geography10 = "INSERT INTO " + tableName + " VALUES(" +
                 "'Which Italian city was almost destroyed by the flood in 1966?', 'Milan', " +
                 "'Florence', 'Venice', 'Rome', 1, 3)";

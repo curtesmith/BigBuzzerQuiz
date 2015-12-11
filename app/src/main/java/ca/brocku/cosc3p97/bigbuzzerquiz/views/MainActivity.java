@@ -18,6 +18,7 @@ import java.util.Observer;
 import ca.brocku.cosc3p97.bigbuzzerquiz.R;
 import ca.brocku.cosc3p97.bigbuzzerquiz.communication.HostConnection;
 import ca.brocku.cosc3p97.bigbuzzerquiz.communication.PlayerConnection;
+import ca.brocku.cosc3p97.bigbuzzerquiz.database.QuizDatabase;
 import ca.brocku.cosc3p97.bigbuzzerquiz.models.Host;
 import ca.brocku.cosc3p97.bigbuzzerquiz.models.Participant;
 import ca.brocku.cosc3p97.bigbuzzerquiz.models.Player;
@@ -199,12 +200,15 @@ public class MainActivity extends AppCompatActivity
         if(wifi.getWifiP2pInfo() != null) {
             if (wifi.getWifiP2pInfo().isGroupOwner) {
                 Log.i(TAG, "Connected as group owner");
-                host = Host.getInstance(new PlayerConnection.SetupListener() {
+
+                host = Host.getInstance(new QuizDatabase(this), new PlayerConnection.SetupListener() {
                     @Override
                     public void onSetup(Host host) {
                         Log.i(TAG, "onSetup: game SERVER is ready, creating player");
                     }
                 });
+
+
 
                 Log.i(TAG, "update: player is null? " + (player == null));
 

@@ -9,6 +9,7 @@ import java.util.List;
 
 import ca.brocku.cosc3p97.bigbuzzerquiz.communication.PlayerConnection;
 import ca.brocku.cosc3p97.bigbuzzerquiz.communication.TcpConnection;
+import ca.brocku.cosc3p97.bigbuzzerquiz.database.QuizDatabase;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Sender;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.AnswerRequestHandler;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.GetPlayersRequestHandler;
@@ -26,6 +27,7 @@ public class Host implements HostActions, TimeoutListener {
     private PlayerProxy playerProxy;
     private List<Participant> players = new ArrayList<>();
     private Question question;
+    private QuizDatabase quizDatabase;
 
     @Override
     public void onTimeout() {
@@ -61,11 +63,17 @@ public class Host implements HostActions, TimeoutListener {
     }
 
 
-    public static Host getInstance(PlayerConnection.SetupListener listener) {
+    public void setDatabase(QuizDatabase db) {
+        quizDatabase = db;
+    }
+
+
+    public static Host getInstance(QuizDatabase db, PlayerConnection.SetupListener listener) {
         if (instance == null) {
             Log.i(TAG, "getInstance: instance is null");
             try {
                 instance = new Host(listener);
+                instance.setDatabase(db);
                 return instance;
             } catch (Exception e) {
                 e.printStackTrace();
