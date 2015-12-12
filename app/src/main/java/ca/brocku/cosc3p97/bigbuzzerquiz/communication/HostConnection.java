@@ -15,6 +15,10 @@ import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Sender;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.HostProxy;
 import ca.brocku.cosc3p97.bigbuzzerquiz.models.Host;
 
+
+/**
+ * Manages the connection to the host from the player
+ */
 public class HostConnection implements Handler.Callback, TcpConnection.Listener, Sender {
     private static final String TAG = "HostConnection";
     private HostProxy hostProxy;
@@ -24,6 +28,13 @@ public class HostConnection implements Handler.Callback, TcpConnection.Listener,
     private ClientSocketThread thread;
 
 
+    /**
+     * Constructor which takes the host address and a reference to the host itself. The
+     * host reference will only hold a reference if the current device is also acting
+     * as the host of the game.
+     * @param hostAddress the socket address of the host
+     * @param host a reference to the host object
+     */
     public HostConnection(InetAddress hostAddress, Host host) {
         if (host != null) {
             Log.i(TAG, "ctor: host is not null");
@@ -38,11 +49,23 @@ public class HostConnection implements Handler.Callback, TcpConnection.Listener,
     }
 
 
+    /**
+     * Set a reference to the host proxy object which manages the requests and responses
+     * with the host
+     * @param proxy a reference to the host proxy
+     */
     public void setHostProxy(HostProxy proxy) {
         hostProxy = proxy;
     }
 
 
+    /**
+     * An override of the Handler.Callback interface which will be invoked when connection
+     * events are invoked such as when a connection is established, when a connection
+     * reads a data stream from its input stream and when a connection is closed.
+     * @param msg the message sent from the source
+     * @return response back to the caller
+     */
     @Override
     public boolean handleMessage(Message msg) {
         switch (msg.what) {
@@ -61,17 +84,30 @@ public class HostConnection implements Handler.Callback, TcpConnection.Listener,
     }
 
 
+    /**
+     * Save a reference to a listener that can be invoked to callback when a connection
+     * has been established
+     * @param listener a reference to the object that implements the associated interface
+     */
     public void setConnectedListener(HostConnection.ConnectedListener listener) {
         connectedListener = listener;
     }
 
 
+    /**
+     * Send a message to the connected host
+     * @param message the message to be sent to the host
+     */
     @Override
     public void send(String message) {
         tcpConnection.write(message);
     }
 
 
+    /**
+     * Invoked when a message is read from the connected socket
+     * @param obj a reference to the object passed from the connection handler
+     */
     @Override
     public void onRead(TcpConnection.ReadObject obj) {
         Log.i(TAG, String.format("onRead: invoked with string {%s}", obj.message));
@@ -91,17 +127,30 @@ public class HostConnection implements Handler.Callback, TcpConnection.Listener,
     }
 
 
+    /**
+     * Exposes the private isConnected field
+     * @return a boolean value of the isConnected field
+     */
     public boolean isConnected() {
         return  isConnected;
     }
 
 
+    /**
+     * An interface that exposes callback methods for listening objects to handle
+     * when this connection is connected and also when it becomes disconnected
+     */
     public interface ConnectedListener {
         void onConnected();
         void onDisconnected();
     }
 
 
+    /**
+     * Callback exposed by the ConnectedListener interface to allow listeners to be
+     * invoked when the connection is established
+     * @param tcpConnection a reference to the connection that has been established
+     */
     @Override
     public void onConnected(TcpConnection tcpConnection) {
         isConnected = true;
@@ -110,8 +159,11 @@ public class HostConnection implements Handler.Callback, TcpConnection.Listener,
     }
 
 
-
-
+    /**
+     * Callback exposed by the ConnectedListener interface to allow listeners to be
+     * invoked when the connection is closed
+     * @param tcpConnection a reference to the connection that has been established
+     */
     @Override
     public void onDisconnected(TcpConnection connection) {
         isConnected = false;
@@ -119,6 +171,10 @@ public class HostConnection implements Handler.Callback, TcpConnection.Listener,
     }
 
 
+    /**
+     * Allows the associated connection to be terminated and it corresponding thread
+     * to be interrupted
+     */
     public void stop() {
         tcpConnection.stop();
         thread.interrupt();
