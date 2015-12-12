@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity
     private Player player;
     private Host host;
     private MasterSetupFragment masterSetupFragment;
+    private QuestionFragment questionFragment;
 
 
     @Override
@@ -61,7 +62,7 @@ public class MainActivity extends AppCompatActivity
 
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.fragment_container, fragment)
-                    .addToBackStack(START_FRAGMENT).commit();
+                    .commit();
         }
     }
 
@@ -153,7 +154,6 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-
     @Override
     public void playerButtonClicked(String name) {
         setupPlayer(name ,false);
@@ -199,7 +199,11 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void showQuestion(Question question) {
-        Fragment fragment = new QuestionFragment();
+        if(questionFragment != null) {
+            getSupportFragmentManager().popBackStack();
+        }
+
+        questionFragment = new QuestionFragment();
         Bundle bundle = getIntent().getExtras();
         if (bundle == null) {
             bundle = new Bundle();
@@ -208,11 +212,15 @@ public class MainActivity extends AppCompatActivity
         bundle.putString(ShowQuestionRequest.TEXT, question.text);
         bundle.putStringArray(ShowQuestionRequest.ANSWERS, question.answers);
 
-        fragment.setArguments(bundle);
+        questionFragment.setArguments(bundle);
 
+//        getSupportFragmentManager().beginTransaction()
+//                .replace(R.id.fragment_container, fragment)
+//                .addToBackStack(QUESTION_FRAGMENT)
+//                .commit();
 
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, fragment)
+                .replace(R.id.fragment_container, questionFragment)
                 .addToBackStack(QUESTION_FRAGMENT)
                 .commit();
     }
@@ -317,11 +325,15 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     public void onClick(DialogInterface dialogInterface, int which) {
                         dialogInterface.dismiss();
-                        // TODO: 2015-12-08 have the activity return to the main page
+                        if (questionFragment != null) {
+                            getSupportFragmentManager().popBackStack();
+                            questionFragment = null;
+                        }
                     }
                 });
         timeoutDialog.show();
     }
+
 
     @Override
     public void updatePlayersNames(List<String> names) {
