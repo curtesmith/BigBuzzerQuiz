@@ -31,6 +31,7 @@ public class MasterSetupFragment extends Fragment implements View.OnClickListene
     private OnClickListener listener;
     int numberOfQuestions = 0;
     List<Integer> categories = new ArrayList<>();
+    ArrayAdapter<String> playersAdapter;
 
 
     public MasterSetupFragment() {
@@ -98,10 +99,27 @@ public class MasterSetupFragment extends Fragment implements View.OnClickListene
 
 
     private void loadListView(final ListView listView, List<String> players) {
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_list_item_1, android.R.id.text1, players);
+        playerNames = players;
+        playersAdapter = new ArrayAdapter<>(getContext(),
+                android.R.layout.simple_list_item_1, android.R.id.text1, playerNames);
 
-        listView.setAdapter(adapter);
+        listView.setAdapter(playersAdapter);
+
+    }
+
+
+    public void updatePlayerNames(List<String> players) {
+        Log.i(TAG, "updatePlayerNames: invoked");
+        playerNames = players;
+
+        if(playersAdapter != null) {
+            Log.i(TAG, "updatePlayersNames: playersAdapter is not null");
+            playersAdapter.clear();
+            playersAdapter.addAll(players);
+            playersAdapter.notifyDataSetChanged();
+        } else {
+            Log.i(TAG, "updatePlayersNames: playersAdapter is null");
+        }
     }
 
 

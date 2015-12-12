@@ -17,7 +17,8 @@ import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.HostRequestContract;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.GameOverRequestHandler;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.InterruptRequestHandler;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.PlayerActions;
-import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.PlayerMessageInterface;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.PlayerMessageContract;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.SendPlayerNamesRequestHandler;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.ShowQuestionRequestHandler;
 
 public class Player implements PlayerActions {
@@ -30,10 +31,11 @@ public class Player implements PlayerActions {
 
     private Player(InetAddress hostAddress, Host host) {
         hostProxy = new HostProxy(hostAddress, host);
-        hostProxy.addPlayerRequestHandler(PlayerMessageInterface.SHOW_QUESTION, new ShowQuestionRequestHandler(this));
+        hostProxy.addPlayerRequestHandler(PlayerMessageContract.SHOW_QUESTION, new ShowQuestionRequestHandler(this));
         hostProxy.addHostResponseHandler(HostRequestContract.GET_PLAYERS, new GetPlayersResponseHandler(this));
-        hostProxy.addPlayerRequestHandler(PlayerMessageInterface.INTERRUPT, new InterruptRequestHandler(this));
-        hostProxy.addPlayerRequestHandler(PlayerMessageInterface.GAME_OVER, new GameOverRequestHandler(this));
+        hostProxy.addPlayerRequestHandler(PlayerMessageContract.INTERRUPT, new InterruptRequestHandler(this));
+        hostProxy.addPlayerRequestHandler(PlayerMessageContract.GAME_OVER, new GameOverRequestHandler(this));
+        hostProxy.addPlayerRequestHandler(PlayerMessageContract.SEND_PLAYER_NAMES, new SendPlayerNamesRequestHandler(this));
     }
 
 
@@ -101,24 +103,22 @@ public class Player implements PlayerActions {
     }
 
 
-    public interface ShowQuestionable {
-        void showQuestion(Question question);
-    }
-
-
     @Override
     public void showQuestion(Question question) {
         Log.i(TAG, "showQuestion: invoked, activity is null? " + (activity == null));
         if(activity != null) {
-            ((ShowQuestionable) activity).showQuestion(question);
+            ((Playable) activity).showQuestion(question);
         }
     }
 
 
-    public interface Interruptable {
+    public interface Playable {
+        void showQuestion(Question question);
         void showTimeout();
         void showSomebodySucceeded(String playerName);
         void showEveryoneFailed();
+        void showGameOver(List<Participant> players);
+        void updatePlayersNames(List<String> names);
     }
 
 
@@ -126,7 +126,7 @@ public class Player implements PlayerActions {
     public void timeout() {
         Log.i(TAG, "timeout: invoked, activity is null? " + (activity == null));
         if(activity != null) {
-            ((Interruptable) activity).showTimeout();
+            ((Playable) activity).showTimeout();
         }
     }
 
@@ -134,13 +134,8 @@ public class Player implements PlayerActions {
     public void success(String playerName) {
         Log.i(TAG, "success: invoked, activity is null? " + (activity == null));
         if(activity != null) {
-            ((Interruptable) activity).showSomebodySucceeded(playerName);
+            ((Playable) activity).showSomebodySucceeded(playerName);
         }
-    }
-
-
-    public interface ShowGameOverable {
-        void showGameOver(List<Participant> players);
     }
 
 
@@ -148,7 +143,7 @@ public class Player implements PlayerActions {
     public void gameOver(List<Participant> players) {
         Log.i(TAG, "gameOver: invoked, activity is null? " + (activity == null));
         if(activity != null) {
-            ((ShowGameOverable) activity).showGameOver(players);
+            ((Playable) activity).showGameOver(players);
         }
     }
 
@@ -157,7 +152,7 @@ public class Player implements PlayerActions {
     public void everyoneFailed() {
         Log.i(TAG, "everyoneFailed: invoked, activity is null? " + (activity == null));
         if(activity != null) {
-            ((Interruptable) activity).showEveryoneFailed();
+            ((Playable) activity).showEveryoneFailed();
         }
     }
 
@@ -174,6 +169,17 @@ public class Player implements PlayerActions {
 
     public void sendName(String name) {
         hostProxy.sendName(name);
+    }
+
+
+    public void updatePlayerNames(List<String> names) {
+        Log.i(TAG, "updatePlayerNames: invoked");
+
+        if(activity != null) {
+            ((Playable) activity).updatePlayersNames(names);
+        } else {
+            Log.i(TAG, "updatePlayerNames: could not find the activity");
+        }
     }
 
 }

@@ -26,7 +26,7 @@ public class ShowQuestionRequest extends Request {
 
     public void setIdentifier() {
         try {
-            put(JsonMessage.IDENTIFIER, PlayerMessageInterface.SHOW_QUESTION);
+            put(JsonMessage.IDENTIFIER, PlayerMessageContract.SHOW_QUESTION);
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -6,6 +6,7 @@ import android.util.Log;
 
 import org.json.JSONException;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -66,6 +67,18 @@ public class PlayerProxy implements PlayerActions {
 
         request.serialize(question);
 
+        request.addSender(connection);
+        request.send();
+    }
+
+
+    public void sendPlayerNames(List<Participant> players) {
+        List<String> names = new ArrayList<>();
+        for(Participant participant : players) {
+            names.add(participant.name);
+        }
+        SendPlayerNamesRequest request = new SendPlayerNamesRequest();
+        request.serialize(names);
         request.addSender(connection);
         request.send();
     }

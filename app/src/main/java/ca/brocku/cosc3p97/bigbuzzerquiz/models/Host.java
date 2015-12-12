@@ -112,6 +112,7 @@ public class Host implements HostActions, TimeoutListener {
 
     public void removePlayer(Sender sender) {
         players.remove(playerProxy.getPlayerIndex(sender));
+        playerProxy.sendPlayerNames(players);
     }
 
 
@@ -126,6 +127,7 @@ public class Host implements HostActions, TimeoutListener {
 
     public void updateName(String name, int playerIndex) {
         players.get(playerIndex).name = name;
+        playerProxy.sendPlayerNames(players);
     }
 
 

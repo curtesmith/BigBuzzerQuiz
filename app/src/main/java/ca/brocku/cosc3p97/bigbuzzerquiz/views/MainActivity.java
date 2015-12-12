@@ -28,8 +28,7 @@ import ca.brocku.cosc3p97.bigbuzzerquiz.models.WiFiConnectionsModel;
 
 public class MainActivity extends AppCompatActivity
         implements StartFragment.OnClickListener, MasterSetupFragment.OnClickListener,
-        Player.ShowQuestionable, Player.Interruptable, Player.ShowGameOverable,
-        QuestionFragment.QuestionFragmentListener, Observer {
+        Player.Playable, QuestionFragment.QuestionFragmentListener, Observer {
     private static final String TAG = "MainActivity";
     private static final String START_FRAGMENT = "START_FRAGMENT";
     private static final String MASTER_SETUP_FRAGMENT = "MASTER_SETUP_FRAGMENT";
@@ -39,6 +38,7 @@ public class MainActivity extends AppCompatActivity
     private WiFiConnectionsModel wifi;
     private Player player;
     private Host host;
+    private MasterSetupFragment masterSetupFragment;
 
 
     @Override
@@ -163,11 +163,11 @@ public class MainActivity extends AppCompatActivity
 
     private void onMasterConnectionSetup() {
         Toast.makeText(this, "Connected to host", Toast.LENGTH_SHORT).show();
-        Fragment fragment = MasterSetupFragment.newInstance(wifi);
-        fragment.setArguments(getIntent().getExtras());
+        masterSetupFragment = MasterSetupFragment.newInstance(wifi);
+        masterSetupFragment.setArguments(getIntent().getExtras());
 
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, fragment)
+                .replace(R.id.fragment_container, masterSetupFragment)
                 .addToBackStack(MASTER_SETUP_FRAGMENT)
                 .commit();
     }
@@ -321,6 +321,18 @@ public class MainActivity extends AppCompatActivity
                     }
                 });
         timeoutDialog.show();
+    }
+
+    @Override
+    public void updatePlayersNames(List<String> names) {
+        Log.i(TAG, "updatePlayerNames: invoked");
+
+        if (masterSetupFragment != null) {
+            masterSetupFragment.updatePlayerNames(names);
+        } else {
+            Log.i(TAG, "updatePlayerNames: could not find the fragment");
+        }
+
     }
 
 

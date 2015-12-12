@@ -27,7 +27,7 @@ public class InterruptRequest extends Request {
 
     public void setIdentifier() {
         try {
-            put(JsonMessage.IDENTIFIER, PlayerMessageInterface.INTERRUPT);
+            put(JsonMessage.IDENTIFIER, PlayerMessageContract.INTERRUPT);
         } catch (JSONException e) {
             e.printStackTrace();
         }

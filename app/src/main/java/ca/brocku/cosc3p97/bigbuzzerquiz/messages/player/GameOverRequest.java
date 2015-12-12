@@ -23,7 +23,7 @@ public class GameOverRequest extends Request {
 
     public void setIdentifier() {
         try {
-            put(JsonMessage.IDENTIFIER, PlayerMessageInterface.GAME_OVER);
+            put(JsonMessage.IDENTIFIER, PlayerMessageContract.GAME_OVER);
         } catch (JSONException e) {
             e.printStackTrace();
         }
