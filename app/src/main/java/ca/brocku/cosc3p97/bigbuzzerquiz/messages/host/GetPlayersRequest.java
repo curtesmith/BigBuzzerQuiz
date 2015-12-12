@@ -17,7 +17,7 @@ public class GetPlayersRequest extends Request {
 
     public void setIdentifier() {
         try {
-            put(JsonMessage.IDENTIFIER, HostRequestInterface.GET_PLAYERS);
+            put(JsonMessage.IDENTIFIER, HostRequestContract.GET_PLAYERS);
         } catch (JSONException e) {
             e.printStackTrace();
         }

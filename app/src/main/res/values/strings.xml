@@ -4,10 +4,12 @@
 
     <!-- Start Activity -->
     <string name="title_activity_start">Big Buzzer Quiz </string>
+    <string name="name_hint">What is your name?</string>
     <string name="choseMode"> Please chose your mode </string>
     <string name="masterDescription"> The Master Mode adds the other players and sets up the game.
         The master can play the quiz as well. You need one person with master mode per game </string>
     <string name="playerDescription"> The Player plays the game without setting up anything. </string>
+
 
     <!-- Master Activity -->
     <string name="message_instructions">You can add players that are in the same Wi-Fi Direct network as you to a Game.</string>

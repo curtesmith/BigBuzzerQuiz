@@ -68,21 +68,16 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onResume() {
         super.onResume();
+
         Log.i(TAG, "onResume: invoked");
-
         wifi.registerReceiver(this);
-
-        //player = wifi.getPlayer();
-
-//        if (player != null) {
-//            player.setActivity(this);
-//        }
     }
 
 
     @Override
     public void onPause() {
         super.onPause();
+
         Log.i(TAG, "onPause: invoked");
         wifi.unregisterReceiver(this);
     }
@@ -90,19 +85,15 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
@@ -124,14 +115,14 @@ public class MainActivity extends AppCompatActivity
 
 
     @Override
-    public void masterButtonClicked() {
+    public void masterButtonClicked(String name) {
         Log.i(TAG, "Connecting as an MC");
-        setupPlayer(true);
+        setupPlayer(name, true);
 
     }
 
 
-    public void setupPlayer(final boolean isMaster) {
+    public void setupPlayer(final String name, final boolean isMaster) {
         final AppCompatActivity me = this;
 
         if (host != null) {
@@ -143,6 +134,8 @@ public class MainActivity extends AppCompatActivity
         player.setConnectedListener(new HostConnection.ConnectedListener() {
             @Override
             public void onConnected() {
+                player.sendName(name);
+
                 if (isMaster) {
                     onMasterConnectionSetup();
                 } else {
@@ -162,8 +155,8 @@ public class MainActivity extends AppCompatActivity
 
 
     @Override
-    public void playerButtonClicked() {
-        setupPlayer(false);
+    public void playerButtonClicked(String name) {
+        setupPlayer(name ,false);
 
     }
 

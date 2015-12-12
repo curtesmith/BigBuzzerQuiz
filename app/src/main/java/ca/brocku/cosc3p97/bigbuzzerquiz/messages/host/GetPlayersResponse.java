@@ -24,7 +24,7 @@ public class GetPlayersResponse extends Response {
     @Override
     public void setIdentifier() {
         try {
-            put(JsonMessage.IDENTIFIER, HostRequestInterface.GET_PLAYERS);
+            put(JsonMessage.IDENTIFIER, HostRequestContract.GET_PLAYERS);
         } catch (JSONException e) {
             e.printStackTrace();
         }

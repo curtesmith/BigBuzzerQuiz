@@ -16,9 +16,10 @@ import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Sender;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.AnswerRequestHandler;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.GetPlayersRequestHandler;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.HostActions;
-import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.HostRequestInterface;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.HostRequestContract;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.PlayRequestHandler;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.ReadyRequestHandler;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.SendNameRequestHandler;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.PlayerProxy;
 
 
@@ -59,10 +60,11 @@ public class Host implements HostActions, TimeoutListener {
 
 
     private void addRequestHandlers() {
-        playerProxy.addRequestHandler(HostRequestInterface.GET_PLAYERS, new GetPlayersRequestHandler(this));
-        playerProxy.addRequestHandler(HostRequestInterface.PLAY, new PlayRequestHandler(this));
-        playerProxy.addRequestHandler(HostRequestInterface.READY, new ReadyRequestHandler(this));
-        playerProxy.addRequestHandler(HostRequestInterface.ANSWER, new AnswerRequestHandler(this));
+        playerProxy.addRequestHandler(HostRequestContract.GET_PLAYERS, new GetPlayersRequestHandler(this));
+        playerProxy.addRequestHandler(HostRequestContract.PLAY, new PlayRequestHandler(this));
+        playerProxy.addRequestHandler(HostRequestContract.READY, new ReadyRequestHandler(this));
+        playerProxy.addRequestHandler(HostRequestContract.ANSWER, new AnswerRequestHandler(this));
+        playerProxy.addRequestHandler(HostRequestContract.SEND_NAME, new SendNameRequestHandler(this));
     }
 
 
@@ -119,6 +121,11 @@ public class Host implements HostActions, TimeoutListener {
         player.name = name;
         player.score = 0;
         players.add(player);
+    }
+
+
+    public void updateName(String name, int playerIndex) {
+        players.get(playerIndex).name = name;
     }
 
 
@@ -185,16 +192,9 @@ public class Host implements HostActions, TimeoutListener {
         //ignoring for now
     }
 
-
-    private boolean isEverybodyReady() {
-        return readyCounter == players.size();
-    }
-
-
-    private boolean isGameOver() {
-        Log.i(TAG, String.format("isGameOver: counter=%d, maxQuestions=%d ... returning? %s",
-                questionCounter, maxQuestions, (questionCounter == maxQuestions)));
-        return questionCounter == maxQuestions;
+    @Override
+    public void sendName(String name) {
+        //ignoring for now
     }
 
 
@@ -206,6 +206,18 @@ public class Host implements HostActions, TimeoutListener {
                 playerProxy.everyoneFailed();
             }
         }
+    }
+
+
+    private boolean isEverybodyReady() {
+        return readyCounter == players.size();
+    }
+
+
+    private boolean isGameOver() {
+        Log.i(TAG, String.format("isGameOver: counter=%d, maxQuestions=%d ... returning? %s",
+                questionCounter, maxQuestions, (questionCounter == maxQuestions)));
+        return questionCounter == maxQuestions;
     }
 
 

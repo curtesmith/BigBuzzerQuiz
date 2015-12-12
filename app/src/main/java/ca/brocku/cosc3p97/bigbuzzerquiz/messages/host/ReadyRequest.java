@@ -18,7 +18,7 @@ public class ReadyRequest extends Request {
 
     public void setIdentifier() {
         try {
-            put(JsonMessage.IDENTIFIER, HostRequestInterface.READY);
+            put(JsonMessage.IDENTIFIER, HostRequestContract.READY);
         } catch (JSONException e) {
             e.printStackTrace();
         }

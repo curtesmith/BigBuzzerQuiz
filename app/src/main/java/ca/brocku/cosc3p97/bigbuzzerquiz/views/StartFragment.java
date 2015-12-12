@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -18,6 +19,7 @@ import ca.brocku.cosc3p97.bigbuzzerquiz.models.WiFiConnectionsModel;
 public class StartFragment extends Fragment implements Observer {
     private static final String TAG = "StartFragment";
     private WiFiConnectionsModel wifi;
+    private View view;
 
 
     private OnClickListener mListener;
@@ -60,7 +62,8 @@ public class StartFragment extends Fragment implements Observer {
         Log.i(TAG, "onCreateView: invoked");
 
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_start, container, false);
+        view =  inflater.inflate(R.layout.fragment_start, container, false);
+        return view;
     }
 
 
@@ -68,6 +71,7 @@ public class StartFragment extends Fragment implements Observer {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        final View me = view;
 
         Log.i(TAG, "onActivityCreated: invoked");
 
@@ -85,14 +89,14 @@ public class StartFragment extends Fragment implements Observer {
         getActivity().findViewById(R.id.masterButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mListener.masterButtonClicked();
+                mListener.masterButtonClicked(((EditText) me.findViewById(R.id.nameEditText)).getText().toString());
             }
         });
 
         getActivity().findViewById(R.id.playerButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mListener.playerButtonClicked();
+                mListener.playerButtonClicked(((EditText) me.findViewById(R.id.nameEditText)).getText().toString());
             }
         });
     }
@@ -161,8 +165,8 @@ public class StartFragment extends Fragment implements Observer {
 
     public interface OnClickListener {
         void wifiSetupButtonClicked();
-        void masterButtonClicked();
-        void playerButtonClicked();
+        void masterButtonClicked(String name);
+        void playerButtonClicked(String name);
     }
 
 }

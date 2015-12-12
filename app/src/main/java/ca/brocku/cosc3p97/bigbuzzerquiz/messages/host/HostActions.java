@@ -18,4 +18,6 @@ public interface HostActions {
     void ready();
 
     void answer(boolean correct);
+
+    void sendName(String name);
 }

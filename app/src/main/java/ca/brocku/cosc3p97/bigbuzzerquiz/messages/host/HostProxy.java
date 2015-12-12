@@ -129,4 +129,16 @@ public class HostProxy implements HostActions {
         request.send();
     }
 
+    @Override
+    public void sendName(String name) {
+        try {
+            SendNameRequest request = new SendNameRequest();
+            request.put(SendNameRequest.NAME, name);
+            request.addSender(connection);
+            request.send();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
