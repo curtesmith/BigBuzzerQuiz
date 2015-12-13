@@ -17,19 +17,6 @@ public class GetPlayersRequestHandler extends HostRequestHandler {
         super(host);
     }
 
-    @Override
-    public void handle(Request request, Request.Callback callback) {
-        //we can ignore the request of the request object
-
-        Response response = getPlayers();
-
-        if (response == null) {
-            callback.reply(null);
-        } else {
-            callback.reply(response.toString());
-        }
-    }
-
 
     @Override
     public void handle(Request request, Sender replyToSender) {

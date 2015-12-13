@@ -18,12 +18,6 @@ public class PlayerRequestHandler extends RequestHandler {
 
 
     @Override
-    public void handle(Request request, Request.Callback callback) {
-        throw new RuntimeException("Stub");
-
-    }
-
-    @Override
     public void handle(Request request, Sender replyToSender) {
         throw new RuntimeException("Stub");
     }
