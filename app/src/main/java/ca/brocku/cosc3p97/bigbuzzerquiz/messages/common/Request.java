@@ -9,7 +9,6 @@ import org.json.JSONException;
  */
 public class Request extends JsonMessage {
     public static final String REQUEST = "REQUEST";
-    private Callback callback;
 
 
     /**
