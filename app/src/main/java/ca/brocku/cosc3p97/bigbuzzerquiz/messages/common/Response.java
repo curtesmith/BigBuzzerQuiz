@@ -3,9 +3,9 @@ package ca.brocku.cosc3p97.bigbuzzerquiz.messages.common;
 
 import org.json.JSONException;
 
-public class Response extends JsonMessage implements Sendable {
+public class Response extends JsonMessage {
     public static final String RESPONSE = "RESPONSE";
-    private Sender sender;
+
 
     public Response(String string) throws JSONException {
         super(string);
@@ -28,17 +28,5 @@ public class Response extends JsonMessage implements Sendable {
 
     public Object getResult() {
         throw new RuntimeException("Stub");
-    }
-
-
-    @Override
-    public void send() {
-        sender.send(this.toString());
-    }
-
-
-    @Override
-    public void addSender(Sender sender) {
-        this.sender = sender;
     }
 }
