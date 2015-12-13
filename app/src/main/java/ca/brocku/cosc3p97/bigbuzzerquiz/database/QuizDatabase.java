@@ -13,6 +13,10 @@ import java.util.Stack;
 import ca.brocku.cosc3p97.bigbuzzerquiz.R;
 
 
+/**
+ * Responsible for the database functions that are required to support the application
+ */
+
 public class QuizDatabase extends SQLiteOpenHelper {
     public static final String TAG = "QuizDatabase";
     public static final String DATABASE_NAME = "QuizDatabase";
@@ -21,6 +25,10 @@ public class QuizDatabase extends SQLiteOpenHelper {
     private Context context;
 
 
+    /**
+     * A constructor that accepts the context with which this database is to be associated
+     * @param context the context that will be associated with this database
+     */
     public QuizDatabase(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context;
@@ -28,6 +36,11 @@ public class QuizDatabase extends SQLiteOpenHelper {
     }
 
 
+    /**
+     * Invoked when the database instance is created. It will create the table definitions
+     * and initialize them with data
+     * @param db an instance of the database to use
+     */
     @Override
     public void onCreate(SQLiteDatabase db) {
         createTables(db);
@@ -36,12 +49,25 @@ public class QuizDatabase extends SQLiteOpenHelper {
     }
 
 
+    /**
+     * Invoked by the onCreate method, this method will create the Categories and the
+     * Questions tables
+     * @param db an instance of the database to use
+     */
     private void createTables(SQLiteDatabase db) {
         db.execSQL(context.getString(R.string.createTableCategoriesQuery));
         db.execSQL(context.getString(R.string.createTableQuestionsQuery));
     }
 
 
+    /**
+     * Invoked when the version of the database has changed. It will drop an existing
+     * instance of the database and recreate it using any new definitions or initialization
+     * required
+     * @param db the instance of the database
+     * @param previousVersion the previous version of the database
+     * @param currentVersion the new/current version of the database
+     */
     @Override
     public void onUpgrade(SQLiteDatabase db, int previousVersion, int currentVersion) {
         dropTables(db);
@@ -49,12 +75,20 @@ public class QuizDatabase extends SQLiteOpenHelper {
     }
 
 
+    /**
+     * Remove the Question and Categories tables from the database
+     * @param db the instance of the database
+     */
     public void dropTables(SQLiteDatabase db) {
         db.execSQL(context.getString(R.string.dropTableQuestionsQuery));
         db.execSQL(context.getString(R.string.dropTableCategoriesQuery));
     }
 
 
+    /**
+     * Load the Questions and Categories tables with data
+     * @param db the instance of the database
+     */
     private void initializeTables(SQLiteDatabase db) {
         insertCategories("Categories", db);
         insertArtQuestions("Questions", db);
@@ -63,6 +97,11 @@ public class QuizDatabase extends SQLiteOpenHelper {
     }
 
 
+    /**
+     * Insert rows into the Categories table
+     * @param tableName
+     * @param databaseName
+     */
     private void insertCategories(String tableName, SQLiteDatabase databaseName) {
         String art = "INSERT INTO " + tableName + " VALUES(\'Art and Culture\')";
         String science = "INSERT INTO " + tableName + " VALUES(\'Science\')";
@@ -74,6 +113,11 @@ public class QuizDatabase extends SQLiteOpenHelper {
     }
 
 
+    /**
+     * Insert rows into the Questions table for the Art category
+     * @param tableName the name of the table to insert data into
+     * @param databaseName a reference to the instance of the database
+     */
     private void insertArtQuestions(String tableName, SQLiteDatabase databaseName) {
 
         String art1 = "INSERT INTO " + tableName + " VALUES(" +
@@ -121,6 +165,11 @@ public class QuizDatabase extends SQLiteOpenHelper {
     }
 
 
+    /**
+     * Insert rows into the questions table for the science category
+     * @param tableName the name of the table to insert rows into
+     * @param databaseName a reference to the instance of the database
+     */
     private void insertScienceQuestions(String tableName, SQLiteDatabase databaseName) {
         String science1 = "INSERT INTO " + tableName + " VALUES(" +
                 "'What is the biggest Planet in our System?', 'The Sun', 'Jupiter', 'Saturn', " +
@@ -166,6 +215,11 @@ public class QuizDatabase extends SQLiteOpenHelper {
     }
 
 
+    /**
+     * Insert rows into the questions table for the geography category
+     * @param tableName the name of the table to insert rows into
+     * @param databaseName a reference to the database
+     */
     private void insertGeographyQuestions(String tableName, SQLiteDatabase databaseName) {
 
         String geography1 = "INSERT INTO " + tableName + " VALUES(" +
@@ -214,6 +268,13 @@ public class QuizDatabase extends SQLiteOpenHelper {
     }
 
 
+    /**
+     * Retrieve a set of rows from the questions table that match the selection criteria passed
+     * in to the method as arguments
+     * @param numberOfQuestions the limit number of questions that will be retrieved
+     * @param categories the desired categories to select
+     * @return a stack of questions
+     */
     public Stack<QuestionContract> selectQuestions(int numberOfQuestions, List<Integer> categories) {
         StringBuilder sql = new StringBuilder();
         sql.append("SELECT Question, Answer0, Answer1, Answer2, Answer3, " +
