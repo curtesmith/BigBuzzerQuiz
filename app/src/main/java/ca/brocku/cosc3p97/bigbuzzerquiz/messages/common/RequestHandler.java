@@ -2,7 +2,7 @@ package ca.brocku.cosc3p97.bigbuzzerquiz.messages.common;
 
 
 /**
- * An abstract class that all request handler will extend from and override the handle method
+ * An abstract class that all request handlers will extend from and override the handle method
  */
 public abstract class RequestHandler {
 
