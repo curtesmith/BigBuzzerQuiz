@@ -1,7 +1,9 @@
 package ca.brocku.cosc3p97.bigbuzzerquiz.messages.common;
 
+
 /**
- * Created by Curtis on 2015-12-07.
+ * An interface which exposes that an implementer's of this interface will have the ability
+ * to be sent as a message and also to add a sender to itself
  */
 public interface Sendable {
 

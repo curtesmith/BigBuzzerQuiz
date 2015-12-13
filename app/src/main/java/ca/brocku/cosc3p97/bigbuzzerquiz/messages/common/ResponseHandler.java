@@ -6,8 +6,12 @@ package ca.brocku.cosc3p97.bigbuzzerquiz.messages.common;
 public abstract class ResponseHandler {
     public Request.Callback callback;
 
+    /**
+     * The constructor
+     */
     public ResponseHandler() {
     }
+
 
     /**
      * Invoked when a request message has been received and needs to be processed
