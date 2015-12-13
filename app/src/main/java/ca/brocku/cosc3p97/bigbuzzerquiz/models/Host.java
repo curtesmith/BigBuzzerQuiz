@@ -10,7 +10,7 @@ import java.util.Stack;
 
 import ca.brocku.cosc3p97.bigbuzzerquiz.communication.PlayerConnection;
 import ca.brocku.cosc3p97.bigbuzzerquiz.communication.TcpConnection;
-import ca.brocku.cosc3p97.bigbuzzerquiz.database.Question;
+import ca.brocku.cosc3p97.bigbuzzerquiz.database.QuestionContract;
 import ca.brocku.cosc3p97.bigbuzzerquiz.database.QuizDatabase;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Sender;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.AnswerRequestHandler;
@@ -30,7 +30,7 @@ public class Host implements HostActions, TimeoutListener {
     private PlayerProxy playerProxy;
     private List<Participant> players = new ArrayList<>();
     private Turn turn;
-    private Stack<Question> questions;
+    private Stack<QuestionContract> questions;
     private QuizDatabase quizDatabase;
 
     @Override
@@ -158,7 +158,7 @@ public class Host implements HostActions, TimeoutListener {
     }
 
 
-    private Stack<Question> getSomeQuestions(int numberOfQuestions, List<Integer> keys) {
+    private Stack<QuestionContract> getSomeQuestions(int numberOfQuestions, List<Integer> keys) {
         return quizDatabase.selectQuestions(numberOfQuestions, keys);
     }
 
@@ -245,7 +245,7 @@ public class Host implements HostActions, TimeoutListener {
     }
 
 
-    private void sendNextQuestion(Question question) {
+    private void sendNextQuestion(QuestionContract question) {
         questionCounter++;
         readyCounter = 0;
 

@@ -12,7 +12,7 @@ import java.util.List;
 
 import ca.brocku.cosc3p97.bigbuzzerquiz.communication.PlayerConnection;
 import ca.brocku.cosc3p97.bigbuzzerquiz.communication.TcpConnection;
-import ca.brocku.cosc3p97.bigbuzzerquiz.database.Question;
+import ca.brocku.cosc3p97.bigbuzzerquiz.database.QuestionContract;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Request;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.RequestHandler;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Sender;
@@ -61,7 +61,7 @@ public class PlayerProxy implements PlayerActions {
 
 
     @Override
-    public void showQuestion(Question question) {
+    public void showQuestion(QuestionContract question) {
         Log.i(TAG, "showQuestion: invoked");
         ShowQuestionRequest request = new ShowQuestionRequest();
 

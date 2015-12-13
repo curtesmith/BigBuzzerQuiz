@@ -214,7 +214,7 @@ public class QuizDatabase extends SQLiteOpenHelper {
     }
 
 
-    public Stack<Question> selectQuestions(int numberOfQuestions, List<Integer> categories) {
+    public Stack<QuestionContract> selectQuestions(int numberOfQuestions, List<Integer> categories) {
         StringBuilder sql = new StringBuilder();
         sql.append("SELECT Question, Answer0, Answer1, Answer2, Answer3, " +
                         "rightAnswer, Category FROM Questions WHERE Category IN (");
@@ -231,11 +231,11 @@ public class QuizDatabase extends SQLiteOpenHelper {
 
         Log.i(TAG, String.format("select questions: sql={%s}", sql));
         final Cursor cursor = instance.rawQuery(sql.toString(), new String[]{});
-        Stack<Question> questions = new Stack<>();
+        Stack<QuestionContract> questions = new Stack<>();
 
         cursor.moveToFirst();
         while(!cursor.isAfterLast()) {
-            Question question = new Question();
+            QuestionContract question = new QuestionContract();
             question.text = cursor.getString(cursor.getColumnIndex("Question"));
             question.answers = new String[4];
             question.answers[0] = cursor.getString(cursor.getColumnIndex("Answer0"));

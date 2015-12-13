@@ -10,14 +10,14 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import ca.brocku.cosc3p97.bigbuzzerquiz.R;
-import ca.brocku.cosc3p97.bigbuzzerquiz.database.Question;
+import ca.brocku.cosc3p97.bigbuzzerquiz.database.QuestionContract;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.ShowQuestionRequest;
 
 
 public class QuestionFragment extends Fragment implements View.OnClickListener {
     private View view;
     private QuestionFragmentListener listener;
-    private Question question;
+    private QuestionContract question;
 
     @Override
     public void onClick(View view) {
@@ -58,7 +58,7 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        question = new Question();
+        question = new QuestionContract();
         question.indexOfCorrectAnswer = getArguments().getInt(ShowQuestionRequest.CORRECT_ANSWER);
         question.text = getArguments().getString(ShowQuestionRequest.TEXT);
         question.answers = getArguments().getStringArray(ShowQuestionRequest.ANSWERS);

@@ -9,7 +9,7 @@ import java.net.InetAddress;
 import java.util.List;
 
 import ca.brocku.cosc3p97.bigbuzzerquiz.communication.HostConnection;
-import ca.brocku.cosc3p97.bigbuzzerquiz.database.Question;
+import ca.brocku.cosc3p97.bigbuzzerquiz.database.QuestionContract;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.GetPlayersResponseHandler;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.HostActions;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.HostProxy;
@@ -104,7 +104,7 @@ public class Player implements PlayerActions {
 
 
     @Override
-    public void showQuestion(Question question) {
+    public void showQuestion(QuestionContract question) {
         Log.i(TAG, "showQuestion: invoked, activity is null? " + (activity == null));
         if(activity != null) {
             ((Playable) activity).showQuestion(question);
@@ -113,7 +113,7 @@ public class Player implements PlayerActions {
 
 
     public interface Playable {
-        void showQuestion(Question question);
+        void showQuestion(QuestionContract question);
         void showTimeout();
         void showSomebodySucceeded(String playerName);
         void showEveryoneFailed();

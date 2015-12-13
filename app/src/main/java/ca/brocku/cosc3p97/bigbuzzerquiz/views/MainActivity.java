@@ -18,7 +18,7 @@ import java.util.Observer;
 import ca.brocku.cosc3p97.bigbuzzerquiz.R;
 import ca.brocku.cosc3p97.bigbuzzerquiz.communication.HostConnection;
 import ca.brocku.cosc3p97.bigbuzzerquiz.communication.PlayerConnection;
-import ca.brocku.cosc3p97.bigbuzzerquiz.database.Question;
+import ca.brocku.cosc3p97.bigbuzzerquiz.database.QuestionContract;
 import ca.brocku.cosc3p97.bigbuzzerquiz.database.QuizDatabase;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.ShowQuestionRequest;
 import ca.brocku.cosc3p97.bigbuzzerquiz.models.Host;
@@ -198,7 +198,7 @@ public class MainActivity extends AppCompatActivity
 
 
     @Override
-    public void showQuestion(Question question) {
+    public void showQuestion(QuestionContract question) {
         if(questionFragment != null) {
             getSupportFragmentManager().popBackStack();
         }

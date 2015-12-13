@@ -4,7 +4,7 @@ package ca.brocku.cosc3p97.bigbuzzerquiz.messages.player;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import ca.brocku.cosc3p97.bigbuzzerquiz.database.Question;
+import ca.brocku.cosc3p97.bigbuzzerquiz.database.QuestionContract;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.JsonMessage;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Request;
 
@@ -33,7 +33,7 @@ public class ShowQuestionRequest extends Request {
     }
 
 
-    public void serialize(Question question) {
+    public void serialize(QuestionContract question) {
         try {
             put(ShowQuestionRequest.TEXT, question.text);
             JSONArray answers = new JSONArray();
@@ -50,8 +50,8 @@ public class ShowQuestionRequest extends Request {
     }
 
 
-    public Question deserialize() {
-        Question question = new Question();
+    public QuestionContract deserialize() {
+        QuestionContract question = new QuestionContract();
         try {
             question.text = getString(ShowQuestionRequest.TEXT);
             question.indexOfCorrectAnswer = getInt(ShowQuestionRequest.CORRECT_ANSWER);
