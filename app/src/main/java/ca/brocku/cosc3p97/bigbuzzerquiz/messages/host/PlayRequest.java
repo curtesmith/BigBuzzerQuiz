@@ -71,7 +71,7 @@ public class PlayRequest extends Request {
 
 
     /**
-     * Convert the internal value of the GAME attribute into a boolean value and return
+     * Convert the internal value of the GAME attribute into a GameContract value and return
      * it to the calling method
      */
     @Override

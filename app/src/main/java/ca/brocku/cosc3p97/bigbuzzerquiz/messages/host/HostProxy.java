@@ -49,7 +49,7 @@ public class HostProxy implements HostActions {
         Log.i(TAG, String.format("handlePlayerRequest: invoked for request identifier [%s]",
                 request.getIdentifier()));
 
-        if(playerRequestHandlers.containsKey(request.getIdentifier())) {
+        if (playerRequestHandlers.containsKey(request.getIdentifier())) {
             playerRequestHandlers.get(request.getIdentifier())
                     .handle(new Request(request.toString()), connection);
         }
@@ -58,7 +58,7 @@ public class HostProxy implements HostActions {
 
     public void handleHostResponse(JsonMessage response) throws JSONException {
         Log.i(TAG, String.format("handleHostResponse: invoked for identifier [%s]", response.getIdentifier()));
-        if(hostResponseHandlers.containsKey(response.getIdentifier())) {
+        if (hostResponseHandlers.containsKey(response.getIdentifier())) {
             hostResponseHandlers.get(response.getIdentifier())
                     .handle(new Response(response.toString()), connection);
         }
@@ -126,14 +126,10 @@ public class HostProxy implements HostActions {
 
     @Override
     public void sendName(String name) {
-        try {
-            SendNameRequest request = new SendNameRequest();
-            request.put(SendNameRequest.NAME, name);
-            request.addSender(connection);
-            request.send();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        SendNameRequest request = new SendNameRequest();
+        request.serialize(name);
+        request.addSender(connection);
+        request.send();
     }
 
 }
