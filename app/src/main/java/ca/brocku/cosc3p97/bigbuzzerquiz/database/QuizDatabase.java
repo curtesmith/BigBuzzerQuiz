@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import android.widget.Toast;
 
-import java.util.List;
 import java.util.Stack;
 
 import ca.brocku.cosc3p97.bigbuzzerquiz.R;
@@ -275,7 +274,7 @@ public class QuizDatabase extends SQLiteOpenHelper {
      * @param categories the desired categories to select
      * @return a stack of questions
      */
-    public Stack<QuestionContract> selectQuestions(int numberOfQuestions, List<Integer> categories) {
+    public Stack<QuestionContract> selectQuestions(int numberOfQuestions, int[] categories) {
         StringBuilder sql = new StringBuilder();
         sql.append("SELECT Question, Answer0, Answer1, Answer2, Answer3, " +
                         "rightAnswer, Category FROM Questions WHERE Category IN (");

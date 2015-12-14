@@ -10,6 +10,7 @@ import java.util.List;
 
 import ca.brocku.cosc3p97.bigbuzzerquiz.communication.HostConnection;
 import ca.brocku.cosc3p97.bigbuzzerquiz.database.QuestionContract;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.GameContract;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.GetPlayersResponseHandler;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.HostActions;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.HostProxy;
@@ -99,7 +100,13 @@ public class Player implements PlayerActions {
 
 
     public void play(int numberOfQuestions, List<Integer> categories) {
-        hostProxy.play(numberOfQuestions, categories);
+        GameContract game = new GameContract();
+        game.numberOfQuestions = numberOfQuestions;
+        game.categoryKeys = new int[categories.size()];
+        for(int i=0; i<categories.size(); i++) {
+            game.categoryKeys[i] = categories.get(i);
+        }
+        hostProxy.play(game);
     }
 
 

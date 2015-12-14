@@ -12,6 +12,7 @@ import ca.brocku.cosc3p97.bigbuzzerquiz.communication.PlayerConnection;
 import ca.brocku.cosc3p97.bigbuzzerquiz.communication.TcpConnection;
 import ca.brocku.cosc3p97.bigbuzzerquiz.database.QuestionContract;
 import ca.brocku.cosc3p97.bigbuzzerquiz.database.QuizDatabase;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.GameContract;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Sender;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.AnswerRequestHandler;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.GetPlayersRequestHandler;
@@ -142,15 +143,15 @@ public class Host implements HostActions, TimeoutListener {
 
 
     @Override
-    public void play(int numberOfQuestions, List<Integer> keys) {
+    public void play(GameContract game) {
         Log.i(TAG, "play: invoked");
         if (state == State.Stop) {
             state = State.Play;
-            maxQuestions = numberOfQuestions;
+            maxQuestions = game.numberOfQuestions;
             questionCounter = 0;
             resetPlayerScores();
 
-            questions = getSomeQuestions(numberOfQuestions, keys);
+            questions = getSomeQuestions(game.numberOfQuestions, game.categoryKeys);
             if(questions.size() > 0) {
                 sendNextQuestion(questions.pop());
             }
@@ -158,7 +159,7 @@ public class Host implements HostActions, TimeoutListener {
     }
 
 
-    private Stack<QuestionContract> getSomeQuestions(int numberOfQuestions, List<Integer> keys) {
+    private Stack<QuestionContract> getSomeQuestions(int numberOfQuestions, int[] keys) {
         return quizDatabase.selectQuestions(numberOfQuestions, keys);
     }
 

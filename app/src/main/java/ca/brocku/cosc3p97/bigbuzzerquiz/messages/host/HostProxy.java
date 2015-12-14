@@ -3,7 +3,6 @@ package ca.brocku.cosc3p97.bigbuzzerquiz.messages.host;
 
 import android.util.Log;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.net.InetAddress;
@@ -11,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import ca.brocku.cosc3p97.bigbuzzerquiz.communication.HostConnection;
+import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.GameContract;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.JsonMessage;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Request;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Response;
@@ -74,6 +74,7 @@ public class HostProxy implements HostActions {
         connection.stop();
     }
 
+
     @Override
     public void addPlayer(String name) {
 
@@ -98,18 +99,9 @@ public class HostProxy implements HostActions {
 
 
     @Override
-    public void play(int numberOfQuestions, List<Integer>categories) {
+    public void play(GameContract game) {
         PlayRequest request = new PlayRequest();
-        try {
-            request.put(PlayRequest.NUMBER_OF_QUESTIONS, numberOfQuestions);
-            JSONArray jsonKeys = new JSONArray();
-            for(int key : categories) {
-                jsonKeys.put(key);
-            }
-            request.put(PlayRequest.KEYS, jsonKeys);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        request.serialize(game);
         request.addSender(connection);
         request.send();
     }
@@ -130,6 +122,7 @@ public class HostProxy implements HostActions {
         request.addSender(connection);
         request.send();
     }
+
 
     @Override
     public void sendName(String name) {
