@@ -61,6 +61,7 @@ public class Request extends JsonMessage {
     public interface Callback {
         void reply(Object result);
     }
+
 }
 
 

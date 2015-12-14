@@ -76,6 +76,25 @@ public class JsonMessage extends JSONObject implements Sendable {
 
 
     /**
+     * Convert the internal structure of the message into an object
+     * @return an object of a specific type
+     * @throws JSONException
+     */
+    public Object deserialize() throws JSONException {
+        throw new RuntimeException("Stub");
+    }
+
+
+    /**
+     * Convert an object passed as an argument and transform it into a JSON structure
+     * @param toBeSerialized the object to be serialized
+     */
+    public void serialize(Object toBeSerialized) {
+        throw new RuntimeException("Stub");
+    }
+
+
+    /**
      * Intended to set the IDENTIFIER attribute of the object which any derived class must
      * override
      */

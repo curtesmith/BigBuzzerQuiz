@@ -114,6 +114,7 @@ public class HostProxy implements HostActions {
         request.send();
     }
 
+
     @Override
     public void ready() {
         ReadyRequest request = new ReadyRequest();
@@ -121,10 +122,11 @@ public class HostProxy implements HostActions {
         request.send();
     }
 
+
     @Override
     public void answer(boolean correct) {
         AnswerRequest request = new AnswerRequest();
-        request.setCorrect(correct);
+        request.serialize(correct);
         request.addSender(connection);
         request.send();
     }
