@@ -7,7 +7,7 @@ import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Request;
 
 /**
  * A request object responsible for sending a request to the host from the player with
- * and answer to the current question and passing along an argument to inform the host
+ * an answer to the current question and passing along an argument to inform the host
  * if the player was correct or incorrect.
  */
 public class AnswerRequest extends Request {

@@ -11,6 +11,9 @@ import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.JsonMessage;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Response;
 
 public class GetPlayersResponse extends Response {
+    public static final String NAMES = "NAMES";
+
+
     public GetPlayersResponse(String string) throws JSONException {
         super(string);
     }
@@ -45,5 +48,22 @@ public class GetPlayersResponse extends Response {
         }
 
         return names;
+    }
+
+
+    @Override
+    public void serialize(Object toBeSerialized) {
+        List<String> names = (List<String>) toBeSerialized;
+
+        try {
+            JSONArray jsonNames = new JSONArray();
+            for (String name : names) {
+                jsonNames.put(name);
+            }
+
+            put("NAMES", jsonNames);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }
