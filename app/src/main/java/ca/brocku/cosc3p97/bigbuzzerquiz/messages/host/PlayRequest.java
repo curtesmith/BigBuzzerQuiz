@@ -37,7 +37,7 @@ public class PlayRequest extends Request {
 
 
     /**
-     * Override the setIdentifier method with the value ANSWER
+     * Override the setIdentifier method with the value PLAY
      */
     public void setIdentifier() {
         try {
