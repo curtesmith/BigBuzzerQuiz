@@ -167,6 +167,7 @@ public class MasterSetupFragment extends Fragment implements View.OnClickListene
             playersAdapter.clear();
             playersAdapter.addAll(players);
             playersAdapter.notifyDataSetChanged();
+            adjustHeight((ListView)getActivity().findViewById(R.id.playerListView));
         } else {
             Log.i(TAG, "updatePlayersNames: playersAdapter is null");
         }
