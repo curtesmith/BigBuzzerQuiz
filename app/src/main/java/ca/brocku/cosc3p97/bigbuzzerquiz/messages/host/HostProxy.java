@@ -129,7 +129,7 @@ public class HostProxy implements HostActions {
 
     /**
      * Makes a call to the host to obtain a list of the connected player names
-     * @param callback
+     * @param callback the callback to invoke when the method processing is completed
      */
     @Override
     public void getPlayers(final GetPlayersCallback callback) {
