@@ -21,7 +21,6 @@ public class PlayerConnection implements Handler.Callback, TcpConnection.Listene
     private Host host;
     private Handler threadHandler = new Handler(this);
     private List<SetupListener> listeners = new ArrayList<>();
-    private ServerSocketThread serverSocketThread;
     private TcpConnection.Listener playerTcpListener;
     private List<TcpConnection> tcpConnections = new ArrayList<>();
     private PlayerProxy playerProxy;
@@ -65,7 +64,7 @@ public class PlayerConnection implements Handler.Callback, TcpConnection.Listene
         Log.i(TAG, "startServerSocket: invoked");
 
         try {
-            serverSocketThread = new ServerSocketThread(threadHandler);
+            ServerSocketThread serverSocketThread = new ServerSocketThread(threadHandler);
             serverSocketThread.addListener(new ServerSocketThread.ServerSocketListener() {
                 @Override
                 public void onSetup() {
@@ -84,7 +83,6 @@ public class PlayerConnection implements Handler.Callback, TcpConnection.Listene
     @Override
     public boolean handleMessage(Message msg) {
         Log.i(TAG, "handleMessage: invoked");
-        TcpConnection t;
 
         switch (msg.what) {
             case TcpConnection.HANDLE:
