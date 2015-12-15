@@ -26,6 +26,9 @@ import ca.brocku.cosc3p97.bigbuzzerquiz.models.Participant;
 import ca.brocku.cosc3p97.bigbuzzerquiz.models.Player;
 import ca.brocku.cosc3p97.bigbuzzerquiz.models.WiFiConnectionsModel;
 
+/**
+ * The Main Activity
+ */
 public class MainActivity extends AppCompatActivity
         implements StartFragment.OnClickListener, MasterSetupFragment.OnClickListener,
         Player.Playable, QuestionFragment.QuestionFragmentListener, Observer {
@@ -122,7 +125,12 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-
+    /**
+     * Sets up a player, checks if he is the groupOwner and calls a SetupMethod accordingly
+     *
+     * @param name
+     * @param isMaster
+     */
     public void setupPlayer(final String name, final boolean isMaster) {
         final AppCompatActivity me = this;
 
@@ -160,7 +168,9 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-
+    /**
+     * The group owner Setup
+     */
     private void onMasterConnectionSetup() {
         Toast.makeText(this, "Connected to host", Toast.LENGTH_SHORT).show();
         masterSetupFragment = MasterSetupFragment.newInstance(wifi);
@@ -173,6 +183,9 @@ public class MainActivity extends AppCompatActivity
     }
 
 
+    /**
+     * The player Setup
+     */
     private void onConnectionSetup() {
         Toast.makeText(this, "Connected to host", Toast.LENGTH_SHORT).show();
         Fragment fragment = StartPlayerFragment.newInstance();
@@ -242,10 +255,7 @@ public class MainActivity extends AppCompatActivity
                     }
                 });
 
-
-
                 Log.i(TAG, "update: player is null? " + (player == null));
-
             }
 
             TextView statusTextView = (TextView) findViewById(R.id.mainStatusTextView);
@@ -257,11 +267,15 @@ public class MainActivity extends AppCompatActivity
     }
 
 
+    /**
+     * {@inheritDoc}
+     * Shows the Timeout-Dialog
+     */
     @Override
     public void showTimeout() {
         AlertDialog interruptDialog = new AlertDialog.Builder(MainActivity.this).create();
         interruptDialog.setTitle(("Timeout"));
-        interruptDialog.setMessage("Time is up!");
+        interruptDialog.setMessage("Your time to answer is up!");
         interruptDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Ready for next question?",
                 new DialogInterface.OnClickListener() {
                     @Override

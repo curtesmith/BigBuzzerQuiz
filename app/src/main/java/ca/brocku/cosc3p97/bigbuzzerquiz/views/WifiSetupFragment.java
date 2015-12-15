@@ -19,23 +19,32 @@ import ca.brocku.cosc3p97.bigbuzzerquiz.R;
 import ca.brocku.cosc3p97.bigbuzzerquiz.models.Player;
 import ca.brocku.cosc3p97.bigbuzzerquiz.models.WiFiConnectionsModel;
 
-
+/**
+ * This Fragment lets the player connect to other devices
+ */
 public class WifiSetupFragment extends Fragment implements Observer, View.OnClickListener {
     private static final String TAG = "WifiSetupFragment";
     private WiFiConnectionsModel wifi;
     private Player player;
 
 
+    /**
+     * Factory Method
+     * @param wifi
+     * @return
+     */
     public static WifiSetupFragment newInstance(WiFiConnectionsModel wifi) {
         WifiSetupFragment fragment = new WifiSetupFragment();
         fragment.wifi = wifi;
         return fragment;
     }
 
+    /**
+     * Default empty constructor
+     */
     public WifiSetupFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,6 +62,13 @@ public class WifiSetupFragment extends Fragment implements Observer, View.OnClic
     }
 
 
+    /**
+     * {@inheritDoc}
+     *
+     * It fills the ListView with discovered peers and sets the OnClickListener for the ScanWifi-button
+     *
+     * @param savedInstanceState
+     */
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -96,7 +112,6 @@ public class WifiSetupFragment extends Fragment implements Observer, View.OnClic
         wifi.deleteObserver(this);
     }
 
-
     @Override
     public void onClick(View view) {
         switch(view.getId()) {
@@ -105,7 +120,6 @@ public class WifiSetupFragment extends Fragment implements Observer, View.OnClic
                 break;
         }
     }
-
 
     @Override
     public void onAttach(Activity activity) {
@@ -125,7 +139,6 @@ public class WifiSetupFragment extends Fragment implements Observer, View.OnClic
 
     }
 
-
     @Override
     public void update(Observable observable, Object o) {
         WiFiConnectionsModel model = (WiFiConnectionsModel) observable;
@@ -140,6 +153,10 @@ public class WifiSetupFragment extends Fragment implements Observer, View.OnClic
         }
     }
 
+    /**
+     * Handles the Visibility of the elements
+     * @param isVisible
+     */
     private void setScanningWidgetVisibility(boolean isVisible) {
         if(isVisible) {
             getActivity().findViewById(R.id.scanWifiButton).setVisibility(View.INVISIBLE);
@@ -150,6 +167,5 @@ public class WifiSetupFragment extends Fragment implements Observer, View.OnClic
             getActivity().findViewById(R.id.scanWifiTextView).setVisibility(View.GONE);
             getActivity().findViewById(R.id.scanWifiProgressBar).setVisibility(View.GONE);
         }
-
     }
 }

@@ -22,6 +22,14 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
     private QuestionFragmentListener listener;
     private QuestionContract question;
 
+    /**
+     * {@inheritDoc}
+     *
+     * Handles the click on a Answer.
+     * If the player answers a question wrong, the buttons are enabled
+     *
+     * @param view
+     */
     @Override
     public void onClick(View view) {
         int answer = -1;
@@ -54,7 +62,7 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
     }
 
     /**
-     * An interface that handles the click on a answer-button
+     * An interface that provides the method for the click on a answer-button
      */
     public interface QuestionFragmentListener {
         /**
@@ -77,6 +85,16 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
 
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * It receivs the Question and Answer.
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -90,6 +108,13 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
     }
 
 
+    /**
+     * {@inheritDoc}
+     *
+     * It also sets the Text of the question and the answers onto the button
+     *
+     * @param savedInstanceState
+     */
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);

@@ -53,8 +53,6 @@ public class StartFragment extends Fragment implements Observer {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.i(TAG, "onCreate: invoked");
-
-
     }
 
     // #3 during startup
@@ -151,7 +149,6 @@ public class StartFragment extends Fragment implements Observer {
 
 
     // #1 when being shut down
-
     /**
      * {@inheritDoc}
      * and it deletes this Fragment from the wifi Observer

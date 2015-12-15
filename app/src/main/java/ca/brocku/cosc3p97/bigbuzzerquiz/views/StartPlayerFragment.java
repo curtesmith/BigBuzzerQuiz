@@ -10,15 +10,24 @@ import android.view.ViewGroup;
 import ca.brocku.cosc3p97.bigbuzzerquiz.R;
 import ca.brocku.cosc3p97.bigbuzzerquiz.models.Player;
 
-
+/**
+ * The Fragment that handles when the Player has to wait for the master to set up and start the game.
+ */
 public class StartPlayerFragment extends Fragment {
     Player player;
 
+    /**
+     * Factory Method for the StartPlayerFragment
+     * @return
+     */
     public static StartPlayerFragment newInstance() {
         StartPlayerFragment fragment = new StartPlayerFragment();
         return fragment;
     }
 
+    /**
+     * The default empty constructor
+     */
     public StartPlayerFragment() {
         // Required empty public constructor
     }

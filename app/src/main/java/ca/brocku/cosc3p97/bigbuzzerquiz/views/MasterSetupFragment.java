@@ -21,7 +21,9 @@ import ca.brocku.cosc3p97.bigbuzzerquiz.messages.host.HostActions;
 import ca.brocku.cosc3p97.bigbuzzerquiz.models.Player;
 import ca.brocku.cosc3p97.bigbuzzerquiz.models.WiFiConnectionsModel;
 
-
+/**
+ * The Fragment for the Master to Setup the Game
+ */
 public class MasterSetupFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = "MasterSetupFragment";
     private WiFiConnectionsModel wifi;
@@ -33,19 +35,24 @@ public class MasterSetupFragment extends Fragment implements View.OnClickListene
     List<Integer> categories = new ArrayList<>();
     ArrayAdapter<String> playersAdapter;
 
-
+    /**
+     * The default empty constructor
+     */
     public MasterSetupFragment() {
         // Required empty public constructor
     }
 
-
+    /**
+     * Factory Method
+     * @param wifi
+     * @return
+     */
     public static MasterSetupFragment newInstance(WiFiConnectionsModel wifi) {
         MasterSetupFragment fragment = new MasterSetupFragment();
         fragment.wifi = wifi;
 
         return fragment;
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,7 +67,16 @@ public class MasterSetupFragment extends Fragment implements View.OnClickListene
                 playerNames.size()));
     }
 
-
+    /**
+     * {@inheritDoc}
+     *
+     * It also sets the onClickListeners for the Checkboxes and Buttons
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -97,7 +113,12 @@ public class MasterSetupFragment extends Fragment implements View.OnClickListene
         return view;
     }
 
-
+    /**
+     * Loads the players into the ListView
+     *
+     * @param listView
+     * @param players
+     */
     private void loadListView(final ListView listView, List<String> players) {
         playerNames = players;
         playersAdapter = new ArrayAdapter<>(getContext(),

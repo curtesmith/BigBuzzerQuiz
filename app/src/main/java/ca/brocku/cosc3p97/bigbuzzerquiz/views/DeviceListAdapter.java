@@ -26,7 +26,9 @@ import ca.brocku.cosc3p97.bigbuzzerquiz.R;
 import ca.brocku.cosc3p97.bigbuzzerquiz.models.WifiP2pDeviceDecorator;
 import ca.brocku.cosc3p97.bigbuzzerquiz.models.WifiP2pHelper;
 
-
+/**
+ * The Adapter for the ListView of the Devices in the WifiSetupFragment
+ */
 public class DeviceListAdapter extends BaseAdapter {
     private static final String TAG = "DeviceListAdapter";
     private List<WifiP2pDeviceDecorator> peers;
@@ -80,6 +82,16 @@ public class DeviceListAdapter extends BaseAdapter {
     }
 
 
+    /**
+     * {@inheritDoc}
+     *
+     * Handles how the devices are displayed
+     *
+     * @param index
+     * @param view
+     * @param viewGroup
+     * @return
+     */
     @Override
     public View getView(final int index, View view, ViewGroup viewGroup) {
         if (view == null) {
@@ -100,6 +112,7 @@ public class DeviceListAdapter extends BaseAdapter {
     }
 
     /**
+     *  Handles the connection to the devices
      *
      * @param index
      * @return
