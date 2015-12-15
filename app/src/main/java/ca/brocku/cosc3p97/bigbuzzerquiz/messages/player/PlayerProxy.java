@@ -116,7 +116,7 @@ public class PlayerProxy implements PlayerActions {
     public void gameOver(List<Participant> players) {
         Log.i(TAG, String.format("gameOver: invoked with %s players", players.size()));
         GameOverRequest request = new GameOverRequest();
-        request.setPlayers(players);
+        request.serialize(players);
         request.addSender(connection);
         request.send();
     }
