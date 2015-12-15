@@ -9,38 +9,25 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="ca.brocku.cosc3p97.bigbuzzerquiz.views.StartFragment">
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="top">
 
-        <EditText
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/nameEditText"
-            android:layout_gravity="center_horizontal"
-            android:hint="@string/name_hint"
-            android:gravity="clip_vertical"
-            android:textSize="@dimen/defaultHeadingSize"
-            android:backgroundTint="@color/colorAccent"
-            android:textColorHint="@color/colorPrimaryDark"/>
-    </LinearLayout>
+            android:id="@+id/playersName"
+            android:text="This is your name:"
+            android:textSize="@dimen/defaultTextSize"
+            android:gravity="center_horizontal"
+            android:textColor="@color/colorPrimaryDark"/>
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="4"
-        android:gravity="center_vertical">
+
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:text="@string/choseMode"
-            android:textSize="@dimen/defaultHeadingSize" />
+            android:textSize="@dimen/defaultHeadingSize"
+            android:layout_marginTop="20dp"/>
 
         <Button
             android:id="@+id/masterButton"
@@ -77,14 +64,6 @@
             android:gravity="center"
             android:text="@string/playerDescription"
             android:textSize="@dimen/defaultHintSize" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="bottom">
 
         <Button
             android:id="@+id/wiFiSetupButton"
@@ -92,7 +71,8 @@
             android:layout_height="wrap_content"
             android:text="Wi-Fi Setup"
             android:textSize="@dimen/defaultButtonSize"
-            android:textColor="@color/colorPrimaryDark"/>
-    </LinearLayout>
+            android:textColor="@color/colorPrimaryDark"
+            android:layout_marginTop="30dp"/>
+
 
 </LinearLayout>

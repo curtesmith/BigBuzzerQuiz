@@ -3,6 +3,7 @@ package ca.brocku.cosc3p97.bigbuzzerquiz.views;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,7 +27,7 @@ public class WifiSetupFragment extends Fragment implements Observer, View.OnClic
     private static final String TAG = "WifiSetupFragment";
     private WiFiConnectionsModel wifi;
     private Player player;
-
+//    private onClickListener2 mListener;
 
     /**
      * Factory Method
@@ -90,6 +91,13 @@ public class WifiSetupFragment extends Fragment implements Observer, View.OnClic
 
         Button scanWifi = (Button) getActivity().findViewById(R.id.scanWifiButton);
         scanWifi.setOnClickListener(this);
+
+//        getActivity().findViewById(R.id.masterButton).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                mListener.letsPlayButtonClicked();
+//            }
+//        });
     }
 
 
@@ -125,14 +133,15 @@ public class WifiSetupFragment extends Fragment implements Observer, View.OnClic
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-
+//            mListener = (onClickListener2) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement some listener interface");
         }
     }
 
-    @Override
+
+   @Override
     public void onDetach() {
         super.onDetach();
         Log.i(TAG, "onDetach: invoked");

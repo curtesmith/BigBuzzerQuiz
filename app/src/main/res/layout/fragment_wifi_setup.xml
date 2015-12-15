@@ -91,14 +91,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="@dimen/defaultHintSize"
-        android:text="If everyone is connected, hit the button:"/>
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Let's play!"
-        android:textSize="@dimen/defaultButtonSize"
-        android:textColor="@color/colorPrimaryDark"/>
+        android:text="If everyone is connected, hit back."/>
 
 </LinearLayout>
 

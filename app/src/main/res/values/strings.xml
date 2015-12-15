@@ -77,6 +77,16 @@
         \nThere is a Timer of 10seconds for every question. If it is over, you are not allowed to answer to this question anymore.
     </string>
     <string name="listPlayersHint">Here is a list of players that are already registert (by clicking Player). If you see everyone you want to play with, you can Start the Game</string>
+    <string name="title_activity_enter_name">EnterNameActivity</string>
+
+    <!-- Enter Name Activity -->
+    <string name="welcomeString">Welcome to this awesome game!</string>
+    <string name="welcomeManual">
+        This is a multiplayer quiz game. You connect your device via an amazing technology
+        called WiFi Direct to other devices around you. (You have to enable your WiFiDirect Settings first.)
+        \n\nInsert your name and press the button to connect to other devices and set up the game.
+
+    </string>
 
 
 </resources>

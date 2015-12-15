@@ -1,9 +1,12 @@
 package ca.brocku.cosc3p97.bigbuzzerquiz.views;
 
 import android.app.AlertDialog;
+import android.app.FragmentTransaction;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -43,7 +46,7 @@ public class MainActivity extends AppCompatActivity
     private Host host;
     private MasterSetupFragment masterSetupFragment;
     private QuestionFragment questionFragment;
-
+    private String playerName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +58,9 @@ public class MainActivity extends AppCompatActivity
         if (savedInstanceState != null) {
             return;
         }
+
+        Intent intent = getIntent();
+        playerName = intent.getStringExtra("playersName");
 
         wifi = new WiFiConnectionsModel(this);
         wifi.addObserver(this);
@@ -117,6 +123,9 @@ public class MainActivity extends AppCompatActivity
                 .commit();
     }
 
+    public void clickHitButton(){
+
+    }
 
     @Override
     public void masterButtonClicked(String name) {
@@ -208,6 +217,14 @@ public class MainActivity extends AppCompatActivity
             e.printStackTrace();
         }
     }
+
+//    @Override
+//    public void letsPlayButtonClicked(){
+//
+//        FragmentManager fm = this.getSupportFragmentManager();
+//        fm.popBackStack();
+//
+//    }
 
 
     @Override
@@ -365,6 +382,9 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    public String getPlayerName(){
+        return playerName;
+    }
 
     @Override
     public void onAnswerButtonClick(boolean isCorrect) {

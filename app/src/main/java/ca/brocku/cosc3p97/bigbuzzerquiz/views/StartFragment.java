@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Observable;
@@ -63,7 +64,11 @@ public class StartFragment extends Fragment implements Observer {
 
         // Inflate the layout for this fragment
         view =  inflater.inflate(R.layout.fragment_start, container, false);
+
+
+
         return view;
+
     }
 
 
@@ -85,6 +90,9 @@ public class StartFragment extends Fragment implements Observer {
             return;
         }
 
+        TextView tview = (TextView) getActivity().findViewById(R.id.playersName);
+        tview.setText("Your name is: " + ((MainActivity) getActivity()).getPlayerName());
+
         getActivity().findViewById(R.id.wiFiSetupButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -95,24 +103,16 @@ public class StartFragment extends Fragment implements Observer {
         getActivity().findViewById(R.id.masterButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String name =  ((EditText) me.findViewById(R.id.nameEditText)).getText().toString();
-                if (name.matches("")){
-                    Toast.makeText(getActivity(), "Please enter your name", Toast.LENGTH_SHORT).show();
-                } else {
-                    mListener.masterButtonClicked(name);
-                }
+                String name = ((MainActivity)getActivity()).getPlayerName();
+                mListener.masterButtonClicked(name);
             }
         });
 
         getActivity().findViewById(R.id.playerButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String name =  ((EditText) me.findViewById(R.id.nameEditText)).getText().toString();
-                if (name.matches("")){
-                    Toast.makeText(getActivity(), "Please enter your name", Toast.LENGTH_SHORT).show();
-                } else {
-                    mListener.playerButtonClicked(name);
-                }
+                String name =  ((MainActivity)getActivity()).getPlayerName();
+                mListener.playerButtonClicked(name);
             }
         });
     }
