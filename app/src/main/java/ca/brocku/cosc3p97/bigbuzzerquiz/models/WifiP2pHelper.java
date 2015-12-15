@@ -3,7 +3,17 @@ package ca.brocku.cosc3p97.bigbuzzerquiz.models;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pManager;
 
+
+/**
+ * Responsible for several supporting functions for WifiP2p processing
+ */
 public class WifiP2pHelper {
+
+    /**
+     * Convert the status passed as an argument into a String value
+     * @param status integer value of the status
+     * @return english translation of the status
+     */
     public static String convertStatus(int status) {
         String result = "";
 
@@ -28,6 +38,12 @@ public class WifiP2pHelper {
         return result;
     }
 
+
+    /**
+     * Convert the failure status passed as an argument into a String value
+     * @param status integer value of the status
+     * @return english translation of the status
+     */
     public static String convertFailureStatus(int status) {
         String result = "";
         switch(status){
