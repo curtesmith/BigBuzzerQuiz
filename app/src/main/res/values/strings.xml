@@ -33,7 +33,7 @@
     <string name="startGame">Start Game</string>
 
     <!--- Start Player Activity -->
-    <string name="playerHint"> Just Wait  </string>
+    <string name="playerHint"> Please wait for the master player to start the game.  </string>
 
     <!-- For the Database -->
      <string name="createTableQuestionsQuery">

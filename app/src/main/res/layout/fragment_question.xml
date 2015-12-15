@@ -30,6 +30,7 @@
         android:layout_weight="1"
         android:text="Answer 1"
         android:textSize="@dimen/defaultTextSize"
+        android:textColor="@color/colorPrimaryDark"
         />
 
     <Button
@@ -38,7 +39,8 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:textSize="@dimen/defaultTextSize"
-        android:text="Answer 2"/>
+        android:text="Answer 2"
+        android:textColor="@color/colorPrimaryDark"/>
 
     <Button
         android:id="@+id/answer3"
@@ -46,7 +48,8 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:textSize="@dimen/defaultTextSize"
-        android:text="Answer 3"/>
+        android:text="Answer 3"
+        android:textColor="@color/colorPrimaryDark"/>
 
     <Button
         android:id="@+id/answer4"
@@ -54,6 +57,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:textSize="@dimen/defaultTextSize"
-        android:text="Answer 4"/>
+        android:text="Answer 4"
+        android:textColor="@color/colorPrimaryDark"/>
 
 </LinearLayout>

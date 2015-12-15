@@ -11,6 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="@dimen/defaultTextSize"
-        android:gravity="center"/>
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:layout_marginTop="20dp"/>
 
 </FrameLayout>
