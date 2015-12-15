@@ -275,8 +275,8 @@ public class MainActivity extends AppCompatActivity
     public void showTimeout() {
         AlertDialog interruptDialog = new AlertDialog.Builder(MainActivity.this).create();
         interruptDialog.setTitle(("Timeout"));
-        interruptDialog.setMessage("Your time to answer is up!");
-        interruptDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Ready for next question?",
+        interruptDialog.setMessage("Your time to answer is up! \nAre you ready for the next question?");
+        interruptDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Yes",
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int which) {
@@ -284,6 +284,7 @@ public class MainActivity extends AppCompatActivity
                         player.ready();
                     }
                 });
+        interruptDialog.setCanceledOnTouchOutside(false);
         interruptDialog.show();
     }
 
@@ -291,9 +292,9 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void showSomebodySucceeded(String playerName) {
         AlertDialog interruptDialog = new AlertDialog.Builder(MainActivity.this).create();
-        interruptDialog.setTitle(("Turn Success"));
-        interruptDialog.setMessage(String.format("%s answered this question successfully", playerName));
-        interruptDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Ready for next question?",
+        interruptDialog.setTitle(("Question Answered Correclty"));
+        interruptDialog.setMessage(String.format("%s answered this question successfully! \nAre you ready for the  next question?", playerName));
+        interruptDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Yes",
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int which) {
@@ -301,6 +302,7 @@ public class MainActivity extends AppCompatActivity
                         player.ready();
                     }
                 });
+        interruptDialog.setCanceledOnTouchOutside(false);
         interruptDialog.show();
     }
 
@@ -308,9 +310,9 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void showEveryoneFailed() {
         AlertDialog interruptDialog = new AlertDialog.Builder(MainActivity.this).create();
-        interruptDialog.setTitle(("Turn Failure"));
-        interruptDialog.setMessage("Well, nobody got that one right");
-        interruptDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Ready for next question?",
+        interruptDialog.setTitle(("Fail!"));
+        interruptDialog.setMessage("What a pity, nobody got that one right. \nAre you ready for the next question?");
+        interruptDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Yes",
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int which) {
@@ -318,6 +320,7 @@ public class MainActivity extends AppCompatActivity
                         player.ready();
                     }
                 });
+        interruptDialog.setCanceledOnTouchOutside(false);
         interruptDialog.show();
     }
 
@@ -345,6 +348,7 @@ public class MainActivity extends AppCompatActivity
                         }
                     }
                 });
+        timeoutDialog.setCanceledOnTouchOutside(false);
         timeoutDialog.show();
     }
 
