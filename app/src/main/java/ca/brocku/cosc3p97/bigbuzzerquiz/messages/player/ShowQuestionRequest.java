@@ -8,6 +8,10 @@ import ca.brocku.cosc3p97.bigbuzzerquiz.database.QuestionContract;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.JsonMessage;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.common.Request;
 
+/**
+ * A request object responsible for sending a request to the player from the host to provide
+ * the player with the next question of the quiz
+ */
 public class ShowQuestionRequest extends Request {
     public static final String TEXT = "TEXT";
     public static final String ANSWERS = "ANSWERS";
@@ -15,15 +19,28 @@ public class ShowQuestionRequest extends Request {
     public static final String CATEGORY_KEY = "CATEGORY_KEY";
 
 
+    /**
+     * Constructor which uses the constructor of the super class that allows the internal
+     * JSONObject of this class to be populated from the JSON string passed as an argument
+     * @param string JSON string used to load this instance
+     * @throws JSONException
+     */
     public ShowQuestionRequest(String string) throws JSONException {
         super(string);
     }
 
+
+    /**
+     * Constructor
+     */
     public ShowQuestionRequest() {
         super();
     }
 
 
+    /**
+     * Override the setIdentifier method with the value READY
+     */
     public void setIdentifier() {
         try {
             put(JsonMessage.IDENTIFIER, PlayerMessageContract.SHOW_QUESTION);
@@ -33,7 +50,13 @@ public class ShowQuestionRequest extends Request {
     }
 
 
-    public void serialize(QuestionContract question) {
+    /**
+     * Create the attributes of the question and assign to it the value passed as an argument
+     * @param toBeSerialized the boolean value to assign to the attribute
+     */
+    @Override
+    public void serialize(Object toBeSerialized) {
+        QuestionContract question = (QuestionContract) toBeSerialized;
         try {
             put(ShowQuestionRequest.TEXT, question.text);
             JSONArray answers = new JSONArray();
@@ -50,7 +73,12 @@ public class ShowQuestionRequest extends Request {
     }
 
 
-    public QuestionContract deserialize() {
+    /**
+     * Convert the internal value of the question contract attribute into a QuestionContract
+     * value and return it to the calling method
+     */
+    @Override
+    public Object deserialize() {
         QuestionContract question = new QuestionContract();
         try {
             question.text = getString(ShowQuestionRequest.TEXT);
