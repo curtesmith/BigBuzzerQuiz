@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Turn implements TimeoutListener {
     private static final String TAG = "Turn";
-    private static final int MAXTIME = 5000;
+    private static final int MAXTIME = 10000;
     public boolean blocked;
     private List<Participant> participants;
     private Thread timer;
