@@ -38,6 +38,9 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
                 break;
         }
 
+        // do a check to see if it was the correct answer -> block the player
+
+
         listener.onAnswerButtonClick(answer == question.indexOfCorrectAnswer);
     }
 
