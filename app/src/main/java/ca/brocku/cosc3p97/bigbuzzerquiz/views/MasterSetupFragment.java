@@ -7,8 +7,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -124,8 +126,35 @@ public class MasterSetupFragment extends Fragment implements View.OnClickListene
         playersAdapter = new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_list_item_1, android.R.id.text1, playerNames);
 
+       adjustHeight(listView);
+//        listView.setScrollContainer(false);
         listView.setAdapter(playersAdapter);
+        adjustHeight(listView);
+    }
 
+    /**
+     * Adjusts the height of the ListView so you don't have to scroll
+     * @param listView
+     */
+    private void adjustHeight(ListView listView) {
+
+       ListAdapter adapter = listView.getAdapter();
+
+        if (adapter == null) {
+            return;
+        }
+        ViewGroup viewGroup = listView;
+        int totalHeight = 0;
+        for (int i = 0; i < adapter.getCount(); i++) {
+            View listItem = adapter.getView(i, null, viewGroup);
+            listItem.measure(0, 0);
+            totalHeight += listItem.getMeasuredHeight();
+        }
+
+        ViewGroup.LayoutParams param = listView.getLayoutParams();
+        param.height = totalHeight + (listView.getDividerHeight() * (adapter.getCount() - 1));
+        listView.setLayoutParams(param);
+        listView.requestLayout();
     }
 
 

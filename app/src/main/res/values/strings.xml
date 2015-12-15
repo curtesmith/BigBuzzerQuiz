@@ -6,13 +6,13 @@
     <string name="title_activity_start">Big Buzzer Quiz </string>
     <string name="name_hint">What is your name?</string>
     <string name="choseMode"> Please chose your mode </string>
-    <string name="masterDescription"> The Master Mode adds the other players and sets up the game.
-        The master can play the quiz as well. You need one person with master mode per game </string>
-    <string name="playerDescription"> The Player plays the game without setting up anything. </string>
-
+    <string name="masterDescription"> The Master Mode adds the other players, sets up the game and starts it.
+        The master can play the quiz as well. You need exactly one person with master mode per game. </string>
+    <string name="playerDescription"> The Player plays the game without setting up anything.
+        You press this button and wait until the master starts the game.  </string>
 
     <!-- Master Activity -->
-    <string name="message_instructions">You can add players that are in the same Wi-Fi Direct network as you to a Game.</string>
+    <string name="message_instructions">You can add players that are in the same Wi-Fi Direct network as you to a game.</string>
     <string name="peers_label">Peers:</string>
     <string name="action_settings">Settings</string>
     <string name="action_discover">Discover peers</string>
@@ -76,6 +76,7 @@
         \nIf you chose the wrong answer, you lose a point and are not allowed to give an answer to this question again.
         \nThere is a Timer of 10seconds for every question. If it is over, you are not allowed to answer to this question anymore.
     </string>
+    <string name="listPlayersHint">Here is a list of players that are already registert (by clicking Player). If you see everyone you want to play with, you can Start the Game</string>
 
 
 </resources>

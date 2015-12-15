@@ -54,12 +54,14 @@
             android:visibility="gone" />
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/button_scan_wifi"
             android:id="@+id/scanWifiButton"
             android:textSize="@dimen/defaultButtonSize"
-            android:layout_marginBottom="10dp"/>
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/colorPrimaryDark"
+            />
 
     </LinearLayout>
 
@@ -67,7 +69,8 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="3">
+        android:layout_weight="3"
+        android:layout_marginBottom="10dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -80,9 +83,22 @@
             android:id="@+id/devicesList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"></ListView>
+            android:layout_weight="1"/>
 
     </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/defaultHintSize"
+        android:text="If everyone is connected, hit the button:"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Let's play!"
+        android:textSize="@dimen/defaultButtonSize"
+        android:textColor="@color/colorPrimaryDark"/>
 
 </LinearLayout>
 
