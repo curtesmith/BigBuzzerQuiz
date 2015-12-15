@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -89,14 +90,24 @@ public class StartFragment extends Fragment implements Observer {
         getActivity().findViewById(R.id.masterButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mListener.masterButtonClicked(((EditText) me.findViewById(R.id.nameEditText)).getText().toString());
+                String name =  ((EditText) me.findViewById(R.id.nameEditText)).getText().toString();
+                if (name.matches("")){
+                    Toast.makeText(getActivity(), "Please enter your name", Toast.LENGTH_SHORT).show();
+                } else {
+                    mListener.masterButtonClicked(name);
+                }
             }
         });
 
         getActivity().findViewById(R.id.playerButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mListener.playerButtonClicked(((EditText) me.findViewById(R.id.nameEditText)).getText().toString());
+                String name =  ((EditText) me.findViewById(R.id.nameEditText)).getText().toString();
+                if (name.matches("")){
+                    Toast.makeText(getActivity(), "Please enter your name", Toast.LENGTH_SHORT).show();
+                } else {
+                    mListener.playerButtonClicked(name);
+                }
             }
         });
     }

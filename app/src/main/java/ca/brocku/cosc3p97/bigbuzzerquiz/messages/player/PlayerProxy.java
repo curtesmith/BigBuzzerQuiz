@@ -190,5 +190,4 @@ public class PlayerProxy implements PlayerActions {
         request.addSender(connection);
         request.send();
     }
-
 }
