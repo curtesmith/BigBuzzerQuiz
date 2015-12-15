@@ -14,7 +14,9 @@ import ca.brocku.cosc3p97.bigbuzzerquiz.R;
 import ca.brocku.cosc3p97.bigbuzzerquiz.database.QuestionContract;
 import ca.brocku.cosc3p97.bigbuzzerquiz.messages.player.ShowQuestionRequest;
 
-
+/**
+ * This Fragment handels a Question
+ */
 public class QuestionFragment extends Fragment implements View.OnClickListener {
     private View view;
     private QuestionFragmentListener listener;
@@ -42,15 +44,29 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
         // do a check to see if it was the correct answer -> block the player
         if (answer != question.indexOfCorrectAnswer) {
             Toast.makeText(getActivity(), "Your answer is wrong. Your not allowed to give another answer now", Toast.LENGTH_LONG).show();
+            getActivity().findViewById(R.id.answer1).setEnabled(false);
+            getActivity().findViewById(R.id.answer2).setEnabled(false);
+            getActivity().findViewById(R.id.answer3).setEnabled(false);
+            getActivity().findViewById(R.id.answer4).setEnabled(false);
         }
 
         listener.onAnswerButtonClick(answer == question.indexOfCorrectAnswer);
     }
 
+    /**
+     * An interface that handles the click on a answer-button
+     */
     public interface QuestionFragmentListener {
+        /**
+         * This method handle the click on an answer button
+         * @param correct if the correct answer was clicked or not
+         */
         void onAnswerButtonClick(boolean correct);
     }
 
+    /**
+     * The empty default constructor
+     */
     public QuestionFragment() {
         // Required empty public constructor
     }
