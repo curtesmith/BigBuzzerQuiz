@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import ca.brocku.cosc3p97.bigbuzzerquiz.R;
 import ca.brocku.cosc3p97.bigbuzzerquiz.database.QuestionContract;
@@ -39,7 +40,9 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
         }
 
         // do a check to see if it was the correct answer -> block the player
-
+        if (answer != question.indexOfCorrectAnswer) {
+            Toast.makeText(getActivity(), "Your answer is wrong. Your not allowed to give another answer now", Toast.LENGTH_LONG).show();
+        }
 
         listener.onAnswerButtonClick(answer == question.indexOfCorrectAnswer);
     }
