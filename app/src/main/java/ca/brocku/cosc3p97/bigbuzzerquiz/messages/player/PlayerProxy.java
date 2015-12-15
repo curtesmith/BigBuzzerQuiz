@@ -74,7 +74,7 @@ public class PlayerProxy implements PlayerActions {
 
     public void sendPlayerNames(List<Participant> players) {
         List<String> names = new ArrayList<>();
-        for(Participant participant : players) {
+        for (Participant participant : players) {
             names.add(participant.name);
         }
         SendPlayerNamesRequest request = new SendPlayerNamesRequest();
@@ -126,11 +126,7 @@ public class PlayerProxy implements PlayerActions {
     public void everyoneFailed() {
         Log.i(TAG, "everyone: invoked");
         InterruptRequest request = new InterruptRequest();
-        try {
-            request.put(InterruptRequest.INTERRUPT_TYPE, InterruptRequest.InterruptionType.EVERYONE_FAILED);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        request.serialize(InterruptRequest.InterruptionType.EVERYONE_FAILED);
         request.addSender(connection);
         request.send();
     }
