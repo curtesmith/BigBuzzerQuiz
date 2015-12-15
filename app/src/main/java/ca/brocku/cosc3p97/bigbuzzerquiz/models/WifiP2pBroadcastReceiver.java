@@ -10,6 +10,9 @@ import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.util.Log;
 
+/**
+ * Responsible for receiving the WifiP2p intent broadcasts and handling them accordingly
+ */
 public class WifiP2pBroadcastReceiver extends BroadcastReceiver{
     private WifiP2pManager manager;
     private Channel channel;
@@ -17,11 +20,22 @@ public class WifiP2pBroadcastReceiver extends BroadcastReceiver{
     private WifiP2pBroadcastListener listener;
 
 
+    /**
+     * An interface which exposes some callbacks for some key events
+     */
     public interface WifiP2pBroadcastListener {
         void onPeersAvailable(WifiP2pDeviceList devices);
         void onConnectionInfoAvailable(NetworkInfo networkInfo, WifiP2pInfo wifiP2pInfo);
     }
 
+
+    /**
+     * Constructor
+     * @param manager the WifiP2pManager required to interact with the WifiP2p framework
+     * @param channel a channel with which to communicate over wifi
+     * @param listener a reference to an object that implemenets the WifiP2pBroadcastListener interface
+     *                 that exposes callback methods to be invoked when certain events occur
+     */
     public WifiP2pBroadcastReceiver(WifiP2pManager manager, Channel channel, WifiP2pBroadcastListener listener) {
         this.manager = manager;
         this.channel = channel;
@@ -29,6 +43,12 @@ public class WifiP2pBroadcastReceiver extends BroadcastReceiver{
     }
 
 
+    /**
+     * Invoked when a filtered intent is received. This class is filtering for the
+     * WIFI_P2P_PEERS_CHANGED_ACTION intent and the WIFI_P2P_CONNECTION_CHANGED_ACTION intent.
+     * @param context a reference to the activity
+     * @param intent a reference to the intent that was caught
+     */
     @Override
     public void onReceive(Context context, Intent intent) {
         switch (intent.getAction()) {
