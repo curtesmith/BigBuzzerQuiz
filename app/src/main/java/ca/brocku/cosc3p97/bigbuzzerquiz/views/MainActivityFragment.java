@@ -15,7 +15,9 @@ import ca.brocku.cosc3p97.bigbuzzerquiz.R;
 public class MainActivityFragment extends Fragment {
     private static final String TAG = "MainActivityFragment";
 
-
+    /**
+     * The default constructor
+     */
     public MainActivityFragment() {
     }
 

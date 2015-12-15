@@ -16,21 +16,31 @@ import java.util.Observer;
 import ca.brocku.cosc3p97.bigbuzzerquiz.R;
 import ca.brocku.cosc3p97.bigbuzzerquiz.models.WiFiConnectionsModel;
 
-
+/**
+ * In the StartFragment, the player has to enter his/her name.
+ *
+ * If some devices are already connected, you can start and call the player / master fragments
+ * and if not, you can call the WifiSetupFragments
+ */
 public class StartFragment extends Fragment implements Observer {
     private static final String TAG = "StartFragment";
     private WiFiConnectionsModel wifi;
     private View view;
 
-
     private OnClickListener mListener;
 
-
+    /**
+     * The default empty constructor
+     */
     public StartFragment() {
         // Required empty public constructor
     }
 
-
+    /**
+     * Factory-method to create a new StartFragment
+     * @param wifi the WiFiConnectionModel the Fragment should use
+     * @return
+     */
     public static StartFragment newInstance(WiFiConnectionsModel wifi) {
         StartFragment fragment = new StartFragment();
         fragment.wifi = wifi;
@@ -38,10 +48,7 @@ public class StartFragment extends Fragment implements Observer {
     }
 
 
-    /**
-     * #2 during startup
-     * @param savedInstanceState
-     */
+    // @param savedInstanceState
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,13 +57,7 @@ public class StartFragment extends Fragment implements Observer {
 
     }
 
-    /**
-     * #3 during startup
-     * @param inflater
-     * @param container
-     * @param savedInstanceState
-     * @return
-     */
+    // #3 during startup
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -68,7 +69,13 @@ public class StartFragment extends Fragment implements Observer {
     }
 
 
-
+    /**
+     * {@inheritDoc}
+     *
+     * It also implements the methods of the OnClickListeners of the three Buttons.
+     *
+     * @param savedInstanceState
+     */
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -113,8 +120,12 @@ public class StartFragment extends Fragment implements Observer {
     }
 
 
+    // #7 during startup
+
     /**
-     * #7 during startup
+     * {@inheritDoc}
+     *
+     * And it updates the Observer
      */
     @Override
     public void onResume() {
@@ -126,10 +137,7 @@ public class StartFragment extends Fragment implements Observer {
 
 
 
-    /**
-     * #1 during startup
-     * @param activity
-     */
+    // #1 during startup
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -142,8 +150,11 @@ public class StartFragment extends Fragment implements Observer {
     }
 
 
+    // #1 when being shut down
+
     /**
-     * #1 when being shut down
+     * {@inheritDoc}
+     * and it deletes this Fragment from the wifi Observer
      */
     @Override
     public void onPause() {
@@ -153,9 +164,7 @@ public class StartFragment extends Fragment implements Observer {
         wifi.deleteObserver(this);
     }
 
-    /**
-     * #5 when being shut down
-     */
+    // #5 when being shut down
     @Override
     public void onDetach() {
         super.onDetach();
@@ -164,6 +173,14 @@ public class StartFragment extends Fragment implements Observer {
     }
 
 
+    /**
+     * {@inheritDoc}
+     *
+     * If the device is connected, the Master and Player Buttons are enabled
+     *
+     * @param observable
+     * @param o
+     */
     @Override
     public void update(Observable observable, Object o) {
         boolean isConnected = ((WiFiConnectionsModel) observable).isConnected();
@@ -174,6 +191,9 @@ public class StartFragment extends Fragment implements Observer {
     }
 
 
+    /**
+     * The interface for the Listener that handles the Clicks on all three Buttons
+     */
     public interface OnClickListener {
         void wifiSetupButtonClicked();
         void masterButtonClicked(String name);

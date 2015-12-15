@@ -35,7 +35,13 @@ public class DeviceListAdapter extends BaseAdapter {
     WifiP2pManager manager;
     Channel channel;
 
-
+    /**
+     * Constructor
+     * @param activity
+     * @param manager
+     * @param channel
+     * @param peers
+     */
     public DeviceListAdapter(Activity activity, WifiP2pManager manager, Channel channel, List<WifiP2pDeviceDecorator> peers) {
         this.activity = activity;
         this.manager = manager;
@@ -44,7 +50,11 @@ public class DeviceListAdapter extends BaseAdapter {
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-
+    /**
+     * Copys all devices of the List into a new List
+     * @param list WifiP2pDeviceList
+     * @return List<WifiP2pDeviceDecorator>
+     */
     public static List<WifiP2pDeviceDecorator> copy (WifiP2pDeviceList list) {
         List<WifiP2pDeviceDecorator> result = new ArrayList<>();
         for(WifiP2pDevice device : list.getDeviceList()) {
@@ -89,6 +99,11 @@ public class DeviceListAdapter extends BaseAdapter {
         return view;
     }
 
+    /**
+     *
+     * @param index
+     * @return
+     */
     private CompoundButton.OnCheckedChangeListener getOnCheckedChangeListener(final int index) {
         return new CompoundButton.OnCheckedChangeListener() {
             @Override
